@@ -23,6 +23,7 @@
 		65C3EB9C2981DBDE00766659 /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65C3EB9B2981DBDE00766659 /* SignUpView.swift */; };
 		65C3EB9E2981DC4500766659 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65C3EB9D2981DC4500766659 /* ProfileView.swift */; };
 		65C3EBA02981DC4F00766659 /* MessagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65C3EB9F2981DC4F00766659 /* MessagesView.swift */; };
+		65C3EBA62981F69400766659 /* TabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65C3EBA52981F69400766659 /* TabView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +38,7 @@
 		65C3EB9B2981DBDE00766659 /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
 		65C3EB9D2981DC4500766659 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		65C3EB9F2981DC4F00766659 /* MessagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesView.swift; sourceTree = "<group>"; };
+		65C3EBA52981F69400766659 /* TabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +105,7 @@
 		65C3EB8D2981DAF500766659 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				65C3EBA52981F69400766659 /* TabView.swift */,
 				65C3EB9A2981DBCE00766659 /* Login */,
 				65C3EB8C2981DAEB00766659 /* Home */,
 				65C3EB8E2981DAFE00766659 /* Map */,
@@ -237,6 +240,7 @@
 			files = (
 				65C3EB952981DB7800766659 /* HomeView.swift in Sources */,
 				65C3EB9C2981DBDE00766659 /* SignUpView.swift in Sources */,
+				65C3EBA62981F69400766659 /* TabView.swift in Sources */,
 				65C3EB972981DB9500766659 /* MapView.swift in Sources */,
 				65C3EB992981DBA100766659 /* CreateListingView.swift in Sources */,
 				65C3EBA02981DC4F00766659 /* MessagesView.swift in Sources */,

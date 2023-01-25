@@ -8,8 +8,25 @@
 import SwiftUI
 
 struct CreateListingView: View {
+    
+    @Environment(\.presentationMode) var presentationMode
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ZStack {
+            VStack {
+                Button {
+                    presentationMode.wrappedValue.dismiss()
+                } label: {
+                    Text("Dismiss")
+                        .foregroundColor(.blue)
+                        .font(.system(size: 35))
+                }
+
+            
+                
+            }
+        }.frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(CustomColor.sxcgreen)
     }
 }
 

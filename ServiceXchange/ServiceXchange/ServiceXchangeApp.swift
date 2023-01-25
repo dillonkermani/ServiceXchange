@@ -27,8 +27,12 @@ struct ServiceXchangeApp: App {
   var body: some Scene {
     WindowGroup {
       NavigationView {
-        ContentView()
+        TabView()
       }
     }
   }
+}
+
+struct CustomColor {
+    static let sxcgreen = Color("sxcgreen")
 }
