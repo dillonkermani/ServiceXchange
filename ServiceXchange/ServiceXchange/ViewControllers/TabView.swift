@@ -29,7 +29,7 @@ struct TabView: View {
                     NavigationView {
                         VStack {
                             HomeView()
-                        }.navigationTitle("Home")
+                        }
                     }
                 case 1:
                     NavigationView {
