@@ -21,6 +21,13 @@ struct TabView: View {
         "person"
     ]
     
+    let iconNames = [
+        "Home",
+        "Map",
+        "Message",
+        "Profile"
+    ]
+    
     var body: some View {
         VStack {
             ZStack {
@@ -67,6 +74,8 @@ struct TabView: View {
             Spacer()
             
             Divider()
+                .offset(y: 10)
+    
             HStack {
                 ForEach(0..<5, id: \.self) { i in
                     Spacer()
@@ -85,10 +94,15 @@ struct TabView: View {
                                               weight: .regular,
                                               design: .default))
                                 .foregroundColor(.white)
-                                .frame(width: 70, height: 70)
+                                .frame(width: 80, height: 80)
                                 .background(CustomColor.sxcgreen)
-                                .cornerRadius(35)
-                                .shadow(color: .black.opacity(0.3), radius: 3)
+                                .cornerRadius(40)
+                                .shadow(color: .black.opacity(0.3), radius: 10)
+                                .overlay(
+                                        RoundedRectangle(cornerRadius: 40)
+                                            .stroke(.black, lineWidth: 2)
+                                    )
+                
                         } else {
                             Image(systemName: selectedIndex == i ? icons[i]+".fill" : icons[i])
                                 .font(.system(size: 25,
@@ -98,7 +112,7 @@ struct TabView: View {
                         }
                         
                     }.fullScreenCover(isPresented: $postPressed) {
-                        CreateListingView()
+                        SignUpView()
                     }
                     Spacer()
 
