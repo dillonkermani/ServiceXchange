@@ -20,10 +20,12 @@ struct LoginView: View {
         VStack {
             ZStack {
                 if signupPressed {
-                    if signinPressed {
-                        signinFields()
-                    } else {
-                        signupFields()
+                    ScrollView {
+                        if signinPressed {
+                            signinFields()
+                        } else {
+                            signupFields()
+                        }
                     }
                     
                 }
@@ -56,7 +58,7 @@ struct LoginView: View {
     private func SignUpButton() -> some View {
         return Button {
             UIImpactFeedbackGenerator(style: .rigid).impactOccurred()
-            withAnimation(.easeInOut(duration: 0.5)) {
+            withAnimation(.spring()) {
                 signupPressed.toggle()
                 loginVM.clear()
             }
@@ -84,7 +86,7 @@ struct LoginView: View {
         return Button {
             withAnimation(.easeInOut(duration: 0.5)) {
                 if !signupPressed {
-                    withAnimation(.easeInOut(duration: 0.5)) {
+                    withAnimation(.spring()) {
                         signinPressed.toggle()
                         signupPressed.toggle()
                     }
