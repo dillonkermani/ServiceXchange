@@ -12,7 +12,8 @@ struct TabView: View {
     
     @State var selectedIndex = 0
     @State var postPressed = false
-    
+    @EnvironmentObject var session: SessionStore
+
     let icons = [
         "house",
         "map",
@@ -27,6 +28,8 @@ struct TabView: View {
         "Message",
         "Profile"
     ]
+    
+    
     
     var body: some View {
         VStack {
@@ -112,13 +115,17 @@ struct TabView: View {
                         }
                         
                     }.fullScreenCover(isPresented: $postPressed) {
-                        LoginView()
+                        if session.isLoggedIn {
+                            CreateListingView()
+                        } else {
+                            LoginView()
+                        }
                     }
                     Spacer()
 
                 }
             }
-        }
+        }.onAppear{session.listenAuthenticationState()}
     }
 }
 

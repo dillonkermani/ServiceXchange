@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct HomeView: View {
+    
+    @EnvironmentObject var session: SessionStore
+    
     var body: some View {
         ZStack {
             VStack {
@@ -16,6 +19,12 @@ struct HomeView: View {
                     .cornerRadius(40)
                     .scaledToFit()
                     .padding()
+                
+                if session.isLoggedIn {
+                    Text("Logged In")
+                } else {
+                    Text("Not logged in")
+                }
                 
                 // Custom Search Bar()
                 

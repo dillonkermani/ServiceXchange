@@ -9,6 +9,7 @@ import SwiftUI
 
 
 struct LoginView: View {
+    @EnvironmentObject var session: SessionStore
     @Environment(\.presentationMode) var presentationMode
     
     @ObservedObject var loginVM = LoginViewModel()
@@ -99,16 +100,27 @@ struct LoginView: View {
                     loginVM.clear()
                 }else if signinPressed {
                     print("Sign In user")
-                    loginVM.signin()
+                    loginVM.signin(onSuccess: {user in
+                        print("Sign In Success: \(user.email)")
+                        presentationMode.wrappedValue.dismiss()
+                    }, onError: {errorMessage in
+                        print("Sign In Failure: \(errorMessage)")
+                    })
                 } else {
                     print("Sign up user")
-                    loginVM.signup()
+                    loginVM.signup(onSuccess: {user in
+                        print("Sign Up Success: \(user.email)")
+                        presentationMode.wrappedValue.dismiss()
+                    }, onError: {errorMessage in
+                        print("Sign Up Failure: \(errorMessage)")
+                        
+                    })
                 }
             }
             UIImpactFeedbackGenerator(style: .rigid).impactOccurred()
         } label: {
             
-            if (!signinPressed && (loginVM.firstName.isEmpty || loginVM.lastName.isEmpty || loginVM.email.isEmpty || loginVM.phone.isEmpty || loginVM.password.isEmpty || loginVM.confirmPassword.isEmpty)) || (signinPressed && (loginVM.email.isEmpty || loginVM.password.isEmpty)) {
+            if (!signinPressed && (loginVM.firstName.isEmpty || loginVM.lastName.isEmpty || loginVM.email.isEmpty || loginVM.password.isEmpty || loginVM.confirmPassword.isEmpty)) || (signinPressed && (loginVM.email.isEmpty || loginVM.password.isEmpty)) {
                 
                 ZStack {
                     Rectangle()

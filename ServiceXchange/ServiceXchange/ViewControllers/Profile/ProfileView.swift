@@ -8,8 +8,19 @@
 import SwiftUI
 
 struct ProfileView: View {
+    
+    @StateObject var session = SessionStore()
+
+    
     var body: some View {
         Text("ProfileView")
+        
+        Button {
+            session.logout()
+        } label: {
+            Text("Logout")
+        }
+
     }
 }
 
