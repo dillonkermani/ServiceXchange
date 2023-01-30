@@ -93,11 +93,11 @@ struct TabView: View {
                                 .font(.system(size: 25,
                                               weight: .regular,
                                               design: .default))
-                                .foregroundColor(.white)
+                                .foregroundColor(.black)
                                 .frame(width: 80, height: 80)
                                 .background(CustomColor.sxcgreen)
                                 .cornerRadius(40)
-                                .shadow(color: .black.opacity(0.3), radius: 10)
+                                .shadow(color: .gray, radius: 5, x: 0, y: 0)
                                 .overlay(
                                         RoundedRectangle(cornerRadius: 40)
                                             .stroke(.black, lineWidth: 2)
@@ -112,7 +112,7 @@ struct TabView: View {
                         }
                         
                     }.fullScreenCover(isPresented: $postPressed) {
-                        SignUpView()
+                        LoginView()
                     }
                     Spacer()
 
