@@ -26,7 +26,7 @@ struct CreateListingView: View {
                 
             }
         }.frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(.white)
+            .background(.gray)
     }
 }
 

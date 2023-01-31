@@ -28,7 +28,7 @@ struct ServiceXchangeApp: App {
   var body: some Scene {
     WindowGroup {
       NavigationView {
-        TabView()
+        ContentView()
             .environmentObject(session)
       }
     }

@@ -10,7 +10,7 @@ import SwiftUI
 struct HomeView: View {
     
     @EnvironmentObject var session: SessionStore
-    
+        
     var body: some View {
         ZStack {
             VStack {
@@ -20,8 +20,10 @@ struct HomeView: View {
                     .scaledToFit()
                     .padding()
                 
-                if session.isLoggedIn {
-                    Text("Logged In")
+                if session.userSession != nil {
+                    if session.isLoggedIn {
+                        Text("Welcome, \(session.userSession!.firstName)")
+                    }
                 } else {
                     Text("Not logged in")
                 }

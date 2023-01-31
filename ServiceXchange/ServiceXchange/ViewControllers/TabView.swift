@@ -12,6 +12,7 @@ struct TabView: View {
     
     @State var selectedIndex = 0
     @State var postPressed = false
+    @State var promptLogin = false
     @EnvironmentObject var session: SessionStore
 
     let icons = [
@@ -28,8 +29,6 @@ struct TabView: View {
         "Message",
         "Profile"
     ]
-    
-    
     
     var body: some View {
         VStack {
@@ -56,13 +55,18 @@ struct TabView: View {
                 case 3:
                     NavigationView {
                         VStack {
-                            MessagesView()
+                            if session.isLoggedIn {
+                                MessagesView()
+                            }
                         }.navigationTitle("Messages")
                     }
                 case 4:
                     NavigationView {
                         VStack {
-                            ProfileView()
+                            if session.isLoggedIn {
+                                ProfileView()
+                            }
+                            
                         }.navigationTitle("Profile")
                     }
                 default:
@@ -83,8 +87,15 @@ struct TabView: View {
                 ForEach(0..<5, id: \.self) { i in
                     Spacer()
                     Button {
+                        if session.isLoggedIn == false {
+                            if i != 0 { // Don't promptLogin for HomeView
+                                promptLogin.toggle()
+                            }
+                        }
                         if i == 2 {
-                            postPressed.toggle()
+                            if session.isLoggedIn {
+                                postPressed.toggle()
+                            }
                         } else {
                             self.selectedIndex = i
                         }
@@ -115,17 +126,16 @@ struct TabView: View {
                         }
                         
                     }.fullScreenCover(isPresented: $postPressed) {
-                        if session.isLoggedIn {
-                            CreateListingView()
-                        } else {
-                            LoginView()
-                        }
+                        CreateListingView()
+                    }
+                    .fullScreenCover(isPresented: $promptLogin) {
+                        LoginView()
                     }
                     Spacer()
 
                 }
             }
-        }.onAppear{session.listenAuthenticationState()}
+        }
     }
 }
 

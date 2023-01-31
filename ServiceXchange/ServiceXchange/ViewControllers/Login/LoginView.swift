@@ -91,7 +91,7 @@ struct LoginView: View {
                         signinPressed.toggle()
                         signupPressed.toggle()
                     }
-                } else if !signinPressed && (loginVM.firstName.isEmpty || loginVM.lastName.isEmpty || loginVM.email.isEmpty || loginVM.phone.isEmpty || loginVM.password.isEmpty || loginVM.confirmPassword.isEmpty){
+                } else if !signinPressed && (loginVM.firstName.isEmpty || loginVM.lastName.isEmpty || loginVM.email.isEmpty || loginVM.password.isEmpty || loginVM.confirmPassword.isEmpty){
                     signupPressed = false
                     loginVM.clear()
                 } else if signinPressed && (loginVM.email.isEmpty || loginVM.password.isEmpty){

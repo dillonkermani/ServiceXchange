@@ -21,6 +21,7 @@ class SessionStore: ObservableObject {
     var handle: AuthStateDidChangeListenerHandle?
     
     func listenAuthenticationState() {
+        print("ListenAuthenticationState called")
         self.isLoadingLogin = true
         handle = Auth.auth().addStateDidChangeListener({ (auth, user) in
             if let user = user {
@@ -33,9 +34,10 @@ class SessionStore: ObservableObject {
                       }
                   }
                 self.isLoadingLogin = false
+                print("Logged In")
                 self.isLoggedIn = true
             } else {
-                print("isLoggedIn is false")
+                print("Logged Out")
                 self.isLoadingLogin = false
                 self.isLoggedIn = false
                 self.userSession = nil
