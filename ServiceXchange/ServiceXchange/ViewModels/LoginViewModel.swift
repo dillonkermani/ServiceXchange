@@ -57,7 +57,12 @@ class LoginViewModel: ObservableObject {
                     let userRef = Ref.FIRESTORE_DOCUMENT_USERID(userId: userId)
                                   
                     // Add user to Firebase/users
-                    let user = User.init(userId: userId, firstName: self.firstName, lastName: self.lastName, email: self.email, isServiceProvider: false, listingIDs: [])
+                    let user = User.init(userId: userId,
+                                         firstName: self.firstName,
+                                         lastName: self.lastName,
+                                         email: self.email,
+                                         isServiceProvider: false,
+                                         listingIDs: [])
                                                             
                     guard let dict = try? user.toDictionary() else {return}
 

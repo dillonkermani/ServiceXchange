@@ -49,8 +49,8 @@ struct TabView: View {
                 case 2:
                     NavigationView {
                         VStack {
-                            Text("")
-                        }.navigationTitle("Post")
+                            CreateListingView()
+                        }.navigationTitle("Offer A Service")
                     }
                 case 3:
                     NavigationView {
@@ -92,13 +92,9 @@ struct TabView: View {
                                 promptLogin.toggle()
                             }
                         }
-                        if i == 2 {
-                            if session.isLoggedIn {
-                                postPressed.toggle()
-                            }
-                        } else {
-                            self.selectedIndex = i
-                        }
+                        
+                        self.selectedIndex = i
+                        
                         UIImpactFeedbackGenerator(style: .rigid).impactOccurred()
                         // Present CreateListingView() as a full screen modal.
                     } label: {
@@ -125,10 +121,7 @@ struct TabView: View {
                                 .foregroundColor(selectedIndex == i ? CustomColor.sxcgreen : colorScheme == .dark ? .white : .black)
                         }
                         
-                    }.fullScreenCover(isPresented: $postPressed) {
-                        CreateListingView()
-                    }
-                    .fullScreenCover(isPresented: $promptLogin) {
+                    }.fullScreenCover(isPresented: $promptLogin) {
                         LoginView()
                     }
                     Spacer()

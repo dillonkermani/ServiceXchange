@@ -35,11 +35,11 @@ class ListingViewModel: ObservableObject {
         }
     }
     
-    func addListing(onSuccess: @escaping(_ listing: Listing) -> Void, onError: @escaping(_ errorMessage: String) -> Void) {
+    func addListing(posterId: String, onSuccess: @escaping(_ listing: Listing) -> Void, onError: @escaping(_ errorMessage: String) -> Void) {
         
         let listingId = Ref.FIRESTORE_COLLECTION_LISTINGS.document().documentID
 
-        let listing = Listing(listingId: listingId, posterId: self.posterId, cardImage: self.cardImage, title: self.title, description: self.description, datePosted: Date().timeIntervalSince1970)
+        let listing = Listing(listingId: listingId, posterId: posterId, cardImage: self.cardImage, title: self.title, description: self.description, datePosted: Date().timeIntervalSince1970)
         
         guard let dict = try? listing.toDictionary() else { return }
         

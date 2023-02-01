@@ -13,12 +13,13 @@ struct CreateListingControls {
     var pickedImage = Image("user-placeholder")
     var pickedImageData = Data()
     var width = (UIScreen.main.bounds.width * 0.43)
-    var height = (UIScreen.main.bounds.width * 0.43) * 1.4
+    var height = (UIScreen.main.bounds.width * 0.43)
 }
 
 struct CreateListingView: View {
     
     @Environment(\.presentationMode) var presentationMode
+    @EnvironmentObject var session: SessionStore
     
     @ObservedObject var listingVM = ListingViewModel()
     
@@ -26,55 +27,73 @@ struct CreateListingView: View {
     
     var body: some View {
         ZStack {
-            VStack {
-                
-                VStack(alignment: .leading) {
-                    Text("Service Image")
-                        .bold()
-                    Button(action: {
-                        UIImpactFeedbackGenerator(style: .light).impactOccurred()
-                        controls.pickedImageType = "card"
-                        controls.showImagePicker = true
-                    }) {
-                        if controls.pickedImage == Image("user-placeholder") {
-                            ZStack {
-                                Rectangle()
-                                    .fill(Color.blue)
+            ScrollView {
+                VStack {
+                    
+                    underlinedTextField(title: "Service Name", text: $listingVM.title, width: 310, height: 40, color: CustomColor.sxcgreen)
+                    underlinedTextField(title: "Details about service provided", text: $listingVM.description, width: 310, height: 40, color: CustomColor.sxcgreen)
+                    
+                    
+                    
+                    HStack() {
+                        Button(action: {
+                            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                            controls.pickedImageType = "card"
+                            controls.showImagePicker = true
+                        }) {
+                            if controls.pickedImage == Image("user-placeholder") {
+                                ZStack {
+                                    Rectangle()
+                                        .fill(CustomColor.sxcgreen)
+                                        .frame(width: controls.width, height: controls.height)
+                                        .cornerRadius(5)
+                                    Text("Add Image")
+                                        .foregroundColor(.white)
+                                }
+                            } else {
+                                controls.pickedImage
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
                                     .frame(width: controls.width, height: controls.height)
                                     .cornerRadius(5)
-                                Text("Add Image")
-                                    .foregroundColor(.white)
                             }
-                        } else {
-                            controls.pickedImage
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(width: controls.width, height: controls.height)
-                                .cornerRadius(5)
                         }
+                        .padding(35)
+                        Spacer()
                     }
+                    
+                    postListingButton()
+                    
+                    
                 }
-                
-                underlinedTextField(title: "Title", text: $listingVM.title, width: 310, height: 40, color: .blue)
-                underlinedTextField(title: "Description", text: $listingVM.description, width: 310, height: 40, color: .blue)
-                
-                Button {
-                    presentationMode.wrappedValue.dismiss()
-                } label: {
-                    Text("Dismiss")
-                        .foregroundColor(.blue)
-                        .font(.system(size: 20))
-                }
-
-            
-                
             }
         }.frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(CustomColor.sxcgreen)
             .sheet(isPresented: $controls.showImagePicker, content: {
                 ImagePicker(showImagePicker: $controls.showImagePicker, pickedImage: $controls.pickedImage, imageData: $controls.pickedImageData, sourceType: .photoLibrary)
                     
             })
+    }
+    
+    private func postListingButton() -> some View {
+        return Button {
+            listingVM.addListing(posterId: session.userSession!.userId, onSuccess: { listing in
+                print("Succesfully posted Listing: \(listingVM.title)")
+            }, onError: { errorMessage in
+                print("Error posting Listing: \(listingVM.title)\nError: \(errorMessage)")
+            })
+        } label: {
+            ZStack {
+                Rectangle()
+                    .frame(width: UIScreen.main.bounds.width / 1.2, height: 50)
+                    .cornerRadius(15)
+                    .foregroundColor(.blue)
+                Text("Post Listing")
+                    .foregroundColor(.white)
+            }
+        }
+
+            
+
     }
 }
 
