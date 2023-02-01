@@ -7,13 +7,10 @@
 
 import Foundation
 import SwiftUI
-import FirebaseCore
-import FirebaseStorage
 
 class ListingViewModel: ObservableObject {
         
-    @Published var cardImageData: Data = Data()
-    @Published var cardImageUrl: String = ""
+    @Published var cardImage: String = ""
     @Published var posterId: String = ""
     @Published var title: String = ""
     @Published var description: String = ""
@@ -41,25 +38,8 @@ class ListingViewModel: ObservableObject {
     func addListing(onSuccess: @escaping(_ listing: Listing) -> Void, onError: @escaping(_ errorMessage: String) -> Void) {
         
         let listingId = Ref.FIRESTORE_COLLECTION_LISTINGS.document().documentID
-        let storage = Storage.storage()
-        let image_name = "\(listingId).jpg"
-        let img_ref = storage.reference().child(image_name)
-        img_ref.putData(cardImageData) {(metadata, error) in
-            guard let metadata = metadata else {
-                print("uh oh spagetti oh")
-                return
-            }
-            let size = metadata.size
-            img_ref.downloadURL { (url, error) in
-                guard let downloadURL = url else {
-                    // Uh-oh, an error occurred!
-                    return
-                }
-                print(downloadURL)
-            }
-        }
 
-        let listing = Listing(listingId: listingId, posterId: self.posterId, cardImageUrl: self.cardImageUrl, title: self.title, description: self.description, datePosted: Date().timeIntervalSince1970)
+        let listing = Listing(listingId: listingId, posterId: self.posterId, cardImage: self.cardImage, title: self.title, description: self.description, datePosted: Date().timeIntervalSince1970)
         
         guard let dict = try? listing.toDictionary() else { return }
         
@@ -68,7 +48,6 @@ class ListingViewModel: ObservableObject {
                 onError(error.localizedDescription)
                 return
             }
-            
             onSuccess(listing)
         }
     }

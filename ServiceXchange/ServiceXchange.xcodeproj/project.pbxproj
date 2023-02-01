@@ -35,7 +35,6 @@
 		65FE2B46298749220077F505 /* ImageMorphing in Frameworks */ = {isa = PBXBuildFile; productRef = 65FE2B45298749220077F505 /* ImageMorphing */; };
 		65FE2B4929874C140077F505 /* UIComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65FE2B4829874C140077F505 /* UIComponents.swift */; };
 		65FE2B4C29874C6C0077F505 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65FE2B4B29874C6C0077F505 /* LoginViewModel.swift */; };
-		DFF3C26A298B1C02007CDAA9 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = DFF3C269298B1C02007CDAA9 /* FirebaseStorage */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -61,7 +60,6 @@
 		65E992752989F5AC00C3C5BA /* ListingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListingViewModel.swift; sourceTree = "<group>"; };
 		65FE2B4829874C140077F505 /* UIComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIComponents.swift; sourceTree = "<group>"; };
 		65FE2B4B29874C6C0077F505 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
-		DFF3C26B298B2032007CDAA9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,7 +72,6 @@
 				65522C092980DD3800CC898F /* FirebaseFirestoreSwift in Frameworks */,
 				65522C012980DD3800CC898F /* FirebaseAnalytics in Frameworks */,
 				65522C072980DD3800CC898F /* FirebaseFirestore in Frameworks */,
-				DFF3C26A298B1C02007CDAA9 /* FirebaseStorage in Frameworks */,
 				65522C032980DD3800CC898F /* FirebaseAuth in Frameworks */,
 				65522C052980DD3800CC898F /* FirebaseDynamicLinks in Frameworks */,
 			);
@@ -88,7 +85,6 @@
 			children = (
 				65522BEE2980DB5600CC898F /* ServiceXchange */,
 				65522BED2980DB5600CC898F /* Products */,
-				DFF3C268298B1C02007CDAA9 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -103,7 +99,6 @@
 		65522BEE2980DB5600CC898F /* ServiceXchange */ = {
 			isa = PBXGroup;
 			children = (
-				DFF3C26B298B2032007CDAA9 /* Info.plist */,
 				65522BEF2980DB5600CC898F /* ServiceXchangeApp.swift */,
 				65C3EB8D2981DAF500766659 /* ViewControllers */,
 				65FE2B4A29874C5F0077F505 /* ViewModels */,
@@ -225,13 +220,6 @@
 			path = ViewModels;
 			sourceTree = "<group>";
 		};
-		DFF3C268298B1C02007CDAA9 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -256,7 +244,6 @@
 				65522C082980DD3800CC898F /* FirebaseFirestoreSwift */,
 				65522C0A2980DD3800CC898F /* FirebaseMessaging */,
 				65FE2B45298749220077F505 /* ImageMorphing */,
-				DFF3C269298B1C02007CDAA9 /* FirebaseStorage */,
 			);
 			productName = ServiceXchange;
 			productReference = 65522BEC2980DB5600CC898F /* ServiceXchange.app */;
@@ -468,7 +455,6 @@
 				DEVELOPMENT_TEAM = GYVU2SNZW9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = ServiceXchange/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = ServiceXchange;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.business";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -503,7 +489,6 @@
 				DEVELOPMENT_TEAM = GYVU2SNZW9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = ServiceXchange/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = ServiceXchange;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.business";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -604,11 +589,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 65FE2B44298749220077F505 /* XCRemoteSwiftPackageReference "ImageMorphing" */;
 			productName = ImageMorphing;
-		};
-		DFF3C269298B1C02007CDAA9 /* FirebaseStorage */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 65522BFF2980DD3800CC898F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseStorage;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
