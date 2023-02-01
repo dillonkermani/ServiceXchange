@@ -22,13 +22,19 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 struct ServiceXchangeApp: App {
   // register app delegate for Firebase setup
   @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+    @StateObject var session = SessionStore()
 
 
   var body: some Scene {
     WindowGroup {
       NavigationView {
         ContentView()
+            .environmentObject(session)
       }
     }
   }
+}
+
+struct CustomColor {
+    static let sxcgreen = Color("sxcgreen")
 }

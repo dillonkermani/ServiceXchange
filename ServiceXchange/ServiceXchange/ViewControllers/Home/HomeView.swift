@@ -8,8 +8,37 @@
 import SwiftUI
 
 struct HomeView: View {
+    
+    @EnvironmentObject var session: SessionStore
+        
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ZStack {
+            VStack {
+                Image("sxc_title")
+                    .resizable()
+                    .cornerRadius(40)
+                    .scaledToFit()
+                    .padding()
+                
+                if session.userSession != nil {
+                    if session.isLoggedIn {
+                        Text("Welcome, \(session.userSession!.firstName)")
+                    }
+                } else {
+                    Text("Not logged in")
+                }
+                
+                // Custom Search Bar()
+                
+                // Horizontally Scrollable Category Picker
+                
+                // Load all listing thumbnails
+                
+                Spacer()
+                    
+            }
+        }.frame(maxWidth: .infinity, maxHeight: .infinity)
+            
     }
 }
 
