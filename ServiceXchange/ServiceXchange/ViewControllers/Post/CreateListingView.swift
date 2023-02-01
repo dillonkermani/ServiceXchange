@@ -17,7 +17,7 @@ struct CreateListingView: View {
                 Button {
                     presentationMode.wrappedValue.dismiss()
                 } label: {
-                    Text("Dismiss")
+                    Text("Create Listing")
                         .foregroundColor(.blue)
                         .font(.system(size: 35))
                 }
@@ -26,7 +26,7 @@ struct CreateListingView: View {
                 
             }
         }.frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(CustomColor.sxcgreen)
+            .background(.gray)
     }
 }
 
