@@ -208,12 +208,12 @@ struct LoginView: View {
                         .padding([.top, .bottom], 75)
                 }
                 HStack {
-                    loginTextField(title: "First Name", text: $loginVM.firstName, width: 140, height: 40)
-                    loginTextField(title: "Last Name", text: $loginVM.lastName, width: 140, height: 40)
+                    underlinedTextField(title: "First Name", text: $loginVM.firstName, width: 140, height: 40, color: CustomColor.sxcgreen)
+                    underlinedTextField(title: "First Name", text: $loginVM.lastName, width: 140, height: 40, color: CustomColor.sxcgreen)
                 }
-                loginTextField(title: "Email", text: $loginVM.email, width: 310, height: 40)
+                underlinedTextField(title: "Email", text: $loginVM.email, width: 310, height: 40, color: CustomColor.sxcgreen)
                     .keyboardType(.emailAddress)
-                loginTextField(title: "Phone (recommended)", text: $loginVM.phone, width: 310, height: 40)
+                underlinedTextField(title: "Phone (recommended)", text: $loginVM.phone, width: 310, height: 40, color: CustomColor.sxcgreen)
                     .keyboardType(.phonePad)
                 passwordTextField(title: "Password", text: $loginVM.password, width: 310, height: 40)
                 passwordTextField(title: "Confirm Password", text: $loginVM.confirmPassword, width: 310, height: 40)
@@ -233,7 +233,7 @@ struct LoginView: View {
                         .font(.largeTitle)
                         .padding([.top, .bottom], 75)
                 }
-                loginTextField(title: "Email", text: $loginVM.email, width: 310, height: 40)
+                underlinedTextField(title: "Email", text: $loginVM.email, width: 310, height: 40, color: CustomColor.sxcgreen)
                     .keyboardType(.emailAddress)
                 passwordTextField(title: "Password", text: $loginVM.password, width: 310, height: 40)
                     .padding(.bottom, 40)

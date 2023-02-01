@@ -6,8 +6,14 @@
 //
 
 import Foundation
+import SwiftUI
 
 class ListingViewModel: ObservableObject {
+        
+    @Published var cardImage: String = ""
+    @Published var posterId: String = ""
+    @Published var title: String = ""
+    @Published var description: String = ""
     
     func loadAllListings(onSuccess: @escaping(_ listings: [Listing]) -> Void, onError: @escaping(_ errorMessage: String) -> Void) {
         
@@ -29,12 +35,11 @@ class ListingViewModel: ObservableObject {
         }
     }
     
-    func addListing(posterId: String, coverImage: URL, title: String, description: String, onSuccess: @escaping(_ listing: Listing) -> Void, onError: @escaping(_ errorMessage: String) -> Void) {
+    func addListing(onSuccess: @escaping(_ listing: Listing) -> Void, onError: @escaping(_ errorMessage: String) -> Void) {
         
         let listingId = Ref.FIRESTORE_COLLECTION_LISTINGS.document().documentID
 
-        
-        let listing = Listing(listingId: listingId, posterId: posterId, coverImage: coverImage, title: title, description: description)
+        let listing = Listing(listingId: listingId, posterId: self.posterId, cardImage: self.cardImage, title: self.title, description: self.description, datePosted: Date().timeIntervalSince1970)
         
         guard let dict = try? listing.toDictionary() else { return }
         

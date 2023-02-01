@@ -10,9 +10,10 @@ import Foundation
 struct Listing: Encodable, Decodable {
     var listingId: String
     var posterId: String
-    var coverImage: URL
+    var cardImage: String
     var title: String
     var description: String
+    var datePosted: Double
 
-    var rate: Int?
+    var rate: Double?
 }
