@@ -54,13 +54,14 @@ class LoginViewModel: ObservableObject {
                     
                     guard let userId = authData?.user.uid else { return }
                                         
-                    let firestoreUserRef = Ref.FIRESTORE_DOCUMENT_USERID(userId: userId)
-                                        
-                    let user = User.init(uid: userId, firstName: self.firstName, lastName: self.lastName, email: self.email)
+                    let userRef = Ref.FIRESTORE_DOCUMENT_USERID(userId: userId)
+                                  
+                    // Add user to Firebase/users
+                    let user = User.init(userId: userId, firstName: self.firstName, lastName: self.lastName, email: self.email, isServiceProvider: false, listingIDs: [])
                                                             
                     guard let dict = try? user.toDictionary() else {return}
 
-                    firestoreUserRef.setData(dict) { (error) in
+                    userRef.setData(dict) { (error) in
                         if error != nil {
                             onError(error!.localizedDescription)
                             return

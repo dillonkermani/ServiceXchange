@@ -17,4 +17,10 @@ class Ref {
     static func FIRESTORE_DOCUMENT_USERID(userId: String) -> DocumentReference {
         return FIRESTORE_COLLECTION_USERS.document(userId)
     }
+    
+    // Firestore - Listings
+    static var FIRESTORE_COLLECTION_LISTINGS = FIRESTORE_ROOT.collection("listings")
+    static func FIRESTORE_DOCUMENT_LISTINGID(listingId: String) -> DocumentReference {
+        return FIRESTORE_COLLECTION_LISTINGS.document(listingId)
+    }
 }
