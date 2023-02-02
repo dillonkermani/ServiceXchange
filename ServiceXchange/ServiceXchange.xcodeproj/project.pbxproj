@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		651E548D298B51F6009AEEFD /* ServiceXchangeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 651E548C298B51F6009AEEFD /* ServiceXchangeTests.swift */; };
 		65522BF02980DB5600CC898F /* ServiceXchangeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65522BEF2980DB5600CC898F /* ServiceXchangeApp.swift */; };
 		65522BF42980DB5800CC898F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 65522BF32980DB5800CC898F /* Assets.xcassets */; };
 		65522BF72980DB5800CC898F /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 65522BF62980DB5800CC898F /* Preview Assets.xcassets */; };
@@ -33,24 +32,12 @@
 		65C3EBA62981F69400766659 /* TabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65C3EBA52981F69400766659 /* TabView.swift */; };
 		65E992722989E67900C3C5BA /* Listing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E992712989E67900C3C5BA /* Listing.swift */; };
 		65E992762989F5AC00C3C5BA /* ListingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E992752989F5AC00C3C5BA /* ListingViewModel.swift */; };
+		65FE2B46298749220077F505 /* ImageMorphing in Frameworks */ = {isa = PBXBuildFile; productRef = 65FE2B45298749220077F505 /* ImageMorphing */; };
 		65FE2B4929874C140077F505 /* UIComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65FE2B4829874C140077F505 /* UIComponents.swift */; };
 		65FE2B4C29874C6C0077F505 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65FE2B4B29874C6C0077F505 /* LoginViewModel.swift */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		651E548E298B51F6009AEEFD /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 65522BE42980DB5600CC898F /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 65522BEB2980DB5600CC898F;
-			remoteInfo = ServiceXchange;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
-		651E548A298B51F6009AEEFD /* ServiceXchangeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ServiceXchangeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		651E548C298B51F6009AEEFD /* ServiceXchangeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceXchangeTests.swift; sourceTree = "<group>"; };
-		651E5493298B553C009AEEFD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		65522BEC2980DB5600CC898F /* ServiceXchange.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ServiceXchange.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		65522BEF2980DB5600CC898F /* ServiceXchangeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceXchangeApp.swift; sourceTree = "<group>"; };
 		65522BF32980DB5800CC898F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -76,18 +63,12 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		651E5487298B51F6009AEEFD /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		65522BE92980DB5600CC898F /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				65522C0B2980DD3800CC898F /* FirebaseMessaging in Frameworks */,
+				65FE2B46298749220077F505 /* ImageMorphing in Frameworks */,
 				65522C092980DD3800CC898F /* FirebaseFirestoreSwift in Frameworks */,
 				65522C012980DD3800CC898F /* FirebaseAnalytics in Frameworks */,
 				65522C072980DD3800CC898F /* FirebaseFirestore in Frameworks */,
@@ -99,14 +80,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		651E548B298B51F6009AEEFD /* ServiceXchangeTests */ = {
-			isa = PBXGroup;
-			children = (
-				651E548C298B51F6009AEEFD /* ServiceXchangeTests.swift */,
-			);
-			path = ServiceXchangeTests;
-			sourceTree = "<group>";
-		};
 		65522BE32980DB5600CC898F = {
 			isa = PBXGroup;
 			children = (
@@ -119,7 +92,6 @@
 			isa = PBXGroup;
 			children = (
 				65522BEC2980DB5600CC898F /* ServiceXchange.app */,
-				651E548A298B51F6009AEEFD /* ServiceXchangeTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -127,13 +99,11 @@
 		65522BEE2980DB5600CC898F /* ServiceXchange */ = {
 			isa = PBXGroup;
 			children = (
-				651E5493298B553C009AEEFD /* Info.plist */,
 				65522BEF2980DB5600CC898F /* ServiceXchangeApp.swift */,
 				65C3EB8D2981DAF500766659 /* ViewControllers */,
 				65FE2B4A29874C5F0077F505 /* ViewModels */,
 				658D1CBF298854CD0026DC5B /* Models */,
 				658D1CC22988573D0026DC5B /* Extras */,
-				651E548B298B51F6009AEEFD /* ServiceXchangeTests */,
 				65522BF32980DB5800CC898F /* Assets.xcassets */,
 				65522BFD2980DBBF00CC898F /* GoogleService-Info.plist */,
 				65522BF52980DB5800CC898F /* Preview Content */,
@@ -163,6 +133,7 @@
 			isa = PBXGroup;
 			children = (
 				658D1CC3298857550026DC5B /* Extensions.swift */,
+				658D1CC529885E2B0026DC5B /* SessionStore.swift */,
 				658D1CBD298854250026DC5B /* Ref.swift */,
 			);
 			path = Extras;
@@ -243,7 +214,6 @@
 		65FE2B4A29874C5F0077F505 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
-				658D1CC529885E2B0026DC5B /* SessionStore.swift */,
 				65FE2B4B29874C6C0077F505 /* LoginViewModel.swift */,
 				65E992752989F5AC00C3C5BA /* ListingViewModel.swift */,
 			);
@@ -253,24 +223,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		651E5489298B51F6009AEEFD /* ServiceXchangeTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 651E5490298B51F6009AEEFD /* Build configuration list for PBXNativeTarget "ServiceXchangeTests" */;
-			buildPhases = (
-				651E5486298B51F6009AEEFD /* Sources */,
-				651E5487298B51F6009AEEFD /* Frameworks */,
-				651E5488298B51F6009AEEFD /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				651E548F298B51F6009AEEFD /* PBXTargetDependency */,
-			);
-			name = ServiceXchangeTests;
-			productName = ServiceXchangeTests;
-			productReference = 651E548A298B51F6009AEEFD /* ServiceXchangeTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 		65522BEB2980DB5600CC898F /* ServiceXchange */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 65522BFA2980DB5800CC898F /* Build configuration list for PBXNativeTarget "ServiceXchange" */;
@@ -291,6 +243,7 @@
 				65522C062980DD3800CC898F /* FirebaseFirestore */,
 				65522C082980DD3800CC898F /* FirebaseFirestoreSwift */,
 				65522C0A2980DD3800CC898F /* FirebaseMessaging */,
+				65FE2B45298749220077F505 /* ImageMorphing */,
 			);
 			productName = ServiceXchange;
 			productReference = 65522BEC2980DB5600CC898F /* ServiceXchange.app */;
@@ -306,10 +259,6 @@
 				LastSwiftUpdateCheck = 1420;
 				LastUpgradeCheck = 1420;
 				TargetAttributes = {
-					651E5489298B51F6009AEEFD = {
-						CreatedOnToolsVersion = 14.2;
-						TestTargetID = 65522BEB2980DB5600CC898F;
-					};
 					65522BEB2980DB5600CC898F = {
 						CreatedOnToolsVersion = 14.2;
 					};
@@ -326,25 +275,18 @@
 			mainGroup = 65522BE32980DB5600CC898F;
 			packageReferences = (
 				65522BFF2980DD3800CC898F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				65FE2B44298749220077F505 /* XCRemoteSwiftPackageReference "ImageMorphing" */,
 			);
 			productRefGroup = 65522BED2980DB5600CC898F /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				65522BEB2980DB5600CC898F /* ServiceXchange */,
-				651E5489298B51F6009AEEFD /* ServiceXchangeTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		651E5488298B51F6009AEEFD /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		65522BEA2980DB5600CC898F /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -358,14 +300,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		651E5486298B51F6009AEEFD /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				651E548D298B51F6009AEEFD /* ServiceXchangeTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		65522BE82980DB5600CC898F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -393,51 +327,7 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
-/* Begin PBXTargetDependency section */
-		651E548F298B51F6009AEEFD /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 65522BEB2980DB5600CC898F /* ServiceXchange */;
-			targetProxy = 651E548E298B51F6009AEEFD /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
 /* Begin XCBuildConfiguration section */
-		651E5491298B51F6009AEEFD /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = GYVU2SNZW9;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.sxc.ServiceXchangeTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ServiceXchange.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/ServiceXchange";
-			};
-			name = Debug;
-		};
-		651E5492298B51F6009AEEFD /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = GYVU2SNZW9;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.sxc.ServiceXchangeTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ServiceXchange.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/ServiceXchange";
-			};
-			name = Release;
-		};
 		65522BF82980DB5800CC898F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -565,7 +455,6 @@
 				DEVELOPMENT_TEAM = GYVU2SNZW9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = ServiceXchange/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = ServiceXchange;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.business";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -600,7 +489,6 @@
 				DEVELOPMENT_TEAM = GYVU2SNZW9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = ServiceXchange/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = ServiceXchange;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.business";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -627,15 +515,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		651E5490298B51F6009AEEFD /* Build configuration list for PBXNativeTarget "ServiceXchangeTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				651E5491298B51F6009AEEFD /* Debug */,
-				651E5492298B51F6009AEEFD /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		65522BE72980DB5600CC898F /* Build configuration list for PBXProject "ServiceXchange" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -663,6 +542,14 @@
 			requirement = {
 				branch = master;
 				kind = branch;
+			};
+		};
+		65FE2B44298749220077F505 /* XCRemoteSwiftPackageReference "ImageMorphing" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kodlian/ImageMorphing";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -697,6 +584,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 65522BFF2980DD3800CC898F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseMessaging;
+		};
+		65FE2B45298749220077F505 /* ImageMorphing */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 65FE2B44298749220077F505 /* XCRemoteSwiftPackageReference "ImageMorphing" */;
+			productName = ImageMorphing;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
