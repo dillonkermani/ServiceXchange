@@ -39,6 +39,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		651E5494298B6D93009AEEFD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		65522BEC2980DB5600CC898F /* ServiceXchange.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ServiceXchange.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		65522BEF2980DB5600CC898F /* ServiceXchangeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceXchangeApp.swift; sourceTree = "<group>"; };
 		65522BF32980DB5800CC898F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -102,6 +103,7 @@
 		65522BEE2980DB5600CC898F /* ServiceXchange */ = {
 			isa = PBXGroup;
 			children = (
+				651E5494298B6D93009AEEFD /* Info.plist */,
 				65522BEF2980DB5600CC898F /* ServiceXchangeApp.swift */,
 				65C3EB8D2981DAF500766659 /* ViewControllers */,
 				65FE2B4A29874C5F0077F505 /* ViewModels */,
@@ -127,6 +129,7 @@
 			children = (
 				658D1CC0298855050026DC5B /* User.swift */,
 				65E992712989E67900C3C5BA /* Listing.swift */,
+				659462DC298A17AF0093A71D /* ImagePicker.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -209,7 +212,6 @@
 			isa = PBXGroup;
 			children = (
 				65FE2B4829874C140077F505 /* UIComponents.swift */,
-				659462DC298A17AF0093A71D /* ImagePicker.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -466,9 +468,9 @@
 				DEVELOPMENT_TEAM = GYVU2SNZW9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ServiceXchange/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = ServiceXchange;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.business";
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -500,9 +502,9 @@
 				DEVELOPMENT_TEAM = GYVU2SNZW9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ServiceXchange/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = ServiceXchange;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.business";
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
