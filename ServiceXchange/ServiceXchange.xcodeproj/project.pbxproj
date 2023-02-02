@@ -124,6 +124,7 @@
 			children = (
 				658D1CC0298855050026DC5B /* User.swift */,
 				65E992712989E67900C3C5BA /* Listing.swift */,
+				659462DC298A17AF0093A71D /* ImagePicker.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -206,7 +207,6 @@
 			isa = PBXGroup;
 			children = (
 				65FE2B4829874C140077F505 /* UIComponents.swift */,
-				659462DC298A17AF0093A71D /* ImagePicker.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
