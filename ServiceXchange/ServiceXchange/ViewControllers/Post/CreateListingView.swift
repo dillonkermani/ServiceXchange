@@ -11,7 +11,6 @@ struct CreateListingControls {
     var pickedImageType = ""
     var showImagePicker = false
     var pickedImage = Image("user-placeholder")
-    var pickedImageData = Data()
     var width = (UIScreen.main.bounds.width * 0.43)
     var height = (UIScreen.main.bounds.width * 0.43)
 }
@@ -69,7 +68,7 @@ struct CreateListingView: View {
             }
         }.frame(maxWidth: .infinity, maxHeight: .infinity)
             .sheet(isPresented: $controls.showImagePicker, content: {
-                ImagePicker(showImagePicker: $controls.showImagePicker, pickedImage: $controls.pickedImage, imageData: $controls.pickedImageData, sourceType: .photoLibrary)
+                ImagePicker(showImagePicker: $controls.showImagePicker, pickedImage: $controls.pickedImage, imageData: $listingVM.cardImageData, sourceType: .photoLibrary)
                     
             })
     }

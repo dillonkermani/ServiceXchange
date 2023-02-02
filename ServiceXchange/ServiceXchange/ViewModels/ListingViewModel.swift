@@ -7,10 +7,12 @@
 
 import Foundation
 import SwiftUI
+import FirebaseCore
+import FirebaseStorage
 
 class ListingViewModel: ObservableObject {
         
-    @Published var cardImage: String = ""
+    @Published var cardImageData = Data()
     @Published var posterId: String = ""
     @Published var title: String = ""
     @Published var description: String = ""
@@ -38,18 +40,38 @@ class ListingViewModel: ObservableObject {
     func addListing(posterId: String, onSuccess: @escaping(_ listing: Listing) -> Void, onError: @escaping(_ errorMessage: String) -> Void) {
         
         let listingId = Ref.FIRESTORE_COLLECTION_LISTINGS.document().documentID
-
-        let listing = Listing(listingId: listingId, posterId: posterId, cardImage: self.cardImage, title: self.title, description: self.description, datePosted: Date().timeIntervalSince1970)
+        let storage = Storage.storage()
+        let image_name = "\(listingId).jpg"
+        let img_ref = storage.reference().child(image_name)
+        
+        let listing = Listing(listingId: listingId, posterId: posterId, title: self.title, description: self.description, datePosted: Date().timeIntervalSince1970)
         
         guard let dict = try? listing.toDictionary() else { return }
         
-        Ref.FIRESTORE_COLLECTION_LISTINGS.addDocument(data: dict) { (error) in
+        let listing_ref = Ref.FIRESTORE_COLLECTION_LISTINGS.addDocument(data: dict){ error in
             if let error = error {
                 onError(error.localizedDescription)
                 return
             }
-            onSuccess(listing)
         }
+        if self.cardImageData.isEmpty {
+            onSuccess(listing)
+            return
+        }
+        img_ref.putData(self.cardImageData) {(metadata, error) in
+            guard let _ = metadata else {
+                print("no image metadata...")
+                return
+            }
+            img_ref.downloadURL { (url, error) in
+                guard let downloadURL = url else {
+                    print("image upload failed: no download url")
+                    return
+                }
+                listing_ref.updateData( ["cardImageUrl": downloadURL.absoluteString] )
+            }
+                
+        }
+        onSuccess(listing)
     }
-    
 }

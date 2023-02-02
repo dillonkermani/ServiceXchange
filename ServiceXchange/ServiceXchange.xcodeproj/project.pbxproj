@@ -35,6 +35,7 @@
 		65FE2B46298749220077F505 /* ImageMorphing in Frameworks */ = {isa = PBXBuildFile; productRef = 65FE2B45298749220077F505 /* ImageMorphing */; };
 		65FE2B4929874C140077F505 /* UIComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65FE2B4829874C140077F505 /* UIComponents.swift */; };
 		65FE2B4C29874C6C0077F505 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65FE2B4B29874C6C0077F505 /* LoginViewModel.swift */; };
+		DF96D063298C22C4009C80BB /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = DF96D062298C22C4009C80BB /* FirebaseStorage */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -72,6 +73,7 @@
 				65522C092980DD3800CC898F /* FirebaseFirestoreSwift in Frameworks */,
 				65522C012980DD3800CC898F /* FirebaseAnalytics in Frameworks */,
 				65522C072980DD3800CC898F /* FirebaseFirestore in Frameworks */,
+				DF96D063298C22C4009C80BB /* FirebaseStorage in Frameworks */,
 				65522C032980DD3800CC898F /* FirebaseAuth in Frameworks */,
 				65522C052980DD3800CC898F /* FirebaseDynamicLinks in Frameworks */,
 			);
@@ -85,6 +87,7 @@
 			children = (
 				65522BEE2980DB5600CC898F /* ServiceXchange */,
 				65522BED2980DB5600CC898F /* Products */,
+				DF96D061298C22C4009C80BB /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -220,6 +223,13 @@
 			path = ViewModels;
 			sourceTree = "<group>";
 		};
+		DF96D061298C22C4009C80BB /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -244,6 +254,7 @@
 				65522C082980DD3800CC898F /* FirebaseFirestoreSwift */,
 				65522C0A2980DD3800CC898F /* FirebaseMessaging */,
 				65FE2B45298749220077F505 /* ImageMorphing */,
+				DF96D062298C22C4009C80BB /* FirebaseStorage */,
 			);
 			productName = ServiceXchange;
 			productReference = 65522BEC2980DB5600CC898F /* ServiceXchange.app */;
@@ -589,6 +600,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 65FE2B44298749220077F505 /* XCRemoteSwiftPackageReference "ImageMorphing" */;
 			productName = ImageMorphing;
+		};
+		DF96D062298C22C4009C80BB /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 65522BFF2980DD3800CC898F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
