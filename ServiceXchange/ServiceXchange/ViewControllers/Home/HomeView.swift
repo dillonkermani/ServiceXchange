@@ -20,14 +20,6 @@ struct HomeView: View {
                     .scaledToFit()
                     .padding()
                 
-                if session.userSession != nil {
-                    if session.isLoggedIn {
-                        Text("Welcome, \(session.userSession!.firstName)")
-                    }
-                } else {
-                    Text("Not logged in")
-                }
-                
                 // Custom Search Bar()
                 
                 // Horizontally Scrollable Category Picker

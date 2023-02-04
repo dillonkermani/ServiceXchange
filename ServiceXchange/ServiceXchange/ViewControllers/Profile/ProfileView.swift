@@ -46,48 +46,34 @@ struct ProfileView: View {
         NavigationView{
             VStack{
                 ScrollView {
-                    RedOneView()
+                    ProfileButtons()
                 }
                 
             }
         }
     }
     
-    private func LogoutButton() -> some View {
-        return Button {
-            session.logout()
-            
-        } label: {
-            ZStack {
-                Rectangle()
-                    .frame(width: UIScreen.main.bounds.width / 1.2, height: 50)
-                    .cornerRadius(30)
-                    .foregroundColor(.gray.opacity(0.7))
-                Text("Logout")
-                    .foregroundColor(.red)
-                    
-            }
-            .shadow(radius: 5)
-        }
-    }
-    
-    private func RedOneView() -> some View {
+  
+    private func ProfileButtons() -> some View {
         //FirebaseApp.configure()
         //let db = Firestore.firestore()
         
         
         
-        VStack{
+        VStack(spacing: 15){
             
             HStack{
                 //account settings icon --> find the settings icon fo swift
                 //I want in top right corner
                 //text, Welcome back NAME --> find out how to get the nam of the person
-                Text("Welcome, \(session.userSession!.firstName)")
-                    .font(.system(size: 30,
-                                  weight: .regular,
-                                  design: .default))
-                    .padding(.trailing, 30)
+                if session.userSession != nil {
+                    Text("Welcome, \(session.userSession!.firstName)")
+                        .font(.system(size: 30,
+                                      weight: .regular,
+                                      design: .default))
+                        .padding(.trailing, 30)
+                }
+                
                 
                 //will go to an account settings page once I make that page and figure out what in the
                 //world would be included in it
@@ -104,50 +90,54 @@ struct ProfileView: View {
                 })
             }
             
-           //alter this so that it loads previous image if you already have one
-           addProfilePhoto()
+            //alter this so that it loads previous image if you already have one
+            addProfilePhoto()
                 .padding(.bottom, 20)
             
-            //edit service provider profile button --> does this become a create listing once you have done it?
-            NavigationLink(destination: CreateView(), label: {
-                Text("edit provider profile")
-                    .bold()
-                    .frame(width: 200, height: 50)
-                    .background(CustomColor.sxcgreen)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
-            })
             
-            Spacer()
-            
-            LogoutButton()
+            ScrollView(.vertical) {
+                VStack(spacing: 30) {
+                    Spacer()
+                    
+                    //edit service provider profile button --> does this become a create listing once you have done it?
+                    NavigationLink(destination: CreateView(), label: {
+                        CustomProfileButtonView(title: "View Provider Account", foregroundColor: .white, backgroundColor: CustomColor.sxcgreen)
+                    })
+                    
+                    //saved listings --> goes to a page that has the saved listing posts
+                    NavigationLink(destination: CreateView(), label: {
+                        CustomProfileButtonView(title: "Saved Listings", foregroundColor: .white, backgroundColor: .blue.opacity(0.3))
+                    })
+                    
+                    //sign out --> do a spike on this and maybe nav link goes to home view
+                    //maybe not a nav link maybe more like a button with an action that goes to homeView
+                    //will change later
+                    Button {
+                        session.logout()
+                    } label: {
+                        CustomProfileButtonView(title: "Sign Out", foregroundColor: .red, backgroundColor: .gray.opacity(0.5))
 
-            //saved listings --> goes to a page that has the saved listing posts
-            NavigationLink(destination: CreateView(), label: {
-                Text("saved Listings")
-                    .bold()
-                    .frame(width: 200, height: 50)
-                    .background(CustomColor.sxcgreen)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
-            })
+                    }
+                    
+                    //navigation link sends to new destinatin view
+                    //label is basically the button that takes you there
+                }
+            }
             
-            //sign out --> do a spike on this and maybe nav link goes to home view
-            //maybe not a nav link maybe more like a button with an action that goes to homeView
-            //will change later
-            NavigationLink(destination: HomeView(), label: {
-                Text("sign out")
-                    .bold()
-                    .frame(width: 150, height: 35)
-                    .background(Color.gray)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
-            })
             
-            //navigation link sends to new destinatin view
-            //label is basically the button that takes you there
-
         }
+    }
+    
+    private func CustomProfileButtonView(title: String, foregroundColor: Color, backgroundColor: Color) -> some View {
+        return ZStack {
+            Rectangle()
+                .frame(width: UIScreen.main.bounds.width / 1.3, height: 50)
+                .shadow(radius: 5)
+                .foregroundColor(backgroundColor)
+            Text(title)
+                .font(.system(size: 17)).bold()
+                .foregroundColor(foregroundColor)
+        }.cornerRadius(30)
     }
     
 
