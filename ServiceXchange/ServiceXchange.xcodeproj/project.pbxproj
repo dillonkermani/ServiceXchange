@@ -83,6 +83,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6527E2C5298E31ED0085FA05 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				658D1CC7298893B30026DC5B /* ContentView.swift */,
+				65C3EBA52981F69400766659 /* TabView.swift */,
+			);
+			path = Main;
+			sourceTree = "<group>";
+		};
 		65522BE32980DB5600CC898F = {
 			isa = PBXGroup;
 			children = (
@@ -155,8 +164,7 @@
 		65C3EB8D2981DAF500766659 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				658D1CC7298893B30026DC5B /* ContentView.swift */,
-				65C3EBA52981F69400766659 /* TabView.swift */,
+				6527E2C5298E31ED0085FA05 /* Main */,
 				65C3EB9A2981DBCE00766659 /* Login */,
 				65C3EB8C2981DAEB00766659 /* Home */,
 				65C3EB8E2981DAFE00766659 /* Map */,
