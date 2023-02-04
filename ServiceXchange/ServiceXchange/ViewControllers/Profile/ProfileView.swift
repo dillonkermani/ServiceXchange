@@ -74,15 +74,46 @@ struct ProfileView: View {
     private func RedOneView() -> some View {
         //FirebaseApp.configure()
         //let db = Firestore.firestore()
+        
+        
+        
         VStack{
             
-            //navigation link sends to new destinatin view
-            //label is basically the button that takes you there
+            HStack{
+                //account settings icon --> find the settings icon fo swift
+                //I want in top right corner
+                //text, Welcome back NAME --> find out how to get the nam of the person
+                Text("Welcome, \(session.userSession!.firstName)")
+                    .font(.system(size: 30,
+                                  weight: .regular,
+                                  design: .default))
+                    .padding(.trailing, 30)
+                
+                //will go to an account settings page once I make that page and figure out what in the
+                //world would be included in it
+                NavigationLink(destination: CreateView(), label: {
+                    Image(systemName: "gear")
+                    
+                        .font(.system(size: 35,
+                                      weight: .regular,
+                                      design: .default))
+                        .foregroundColor(.black)
+                        .frame(width: 50, height: 50)
+                        .background(CustomColor.sxcgreen)
+                        .cornerRadius(40)
+                })
+            }
+            
+           //alter this so that it loads previous image if you already have one
+           addProfilePhoto()
+                .padding(.bottom, 20)
+            
+            //edit service provider profile button --> does this become a create listing once you have done it?
             NavigationLink(destination: CreateView(), label: {
-                Text("create profile")
+                Text("edit provider profile")
                     .bold()
                     .frame(width: 200, height: 50)
-                    .background(Color.blue)
+                    .background(CustomColor.sxcgreen)
                     .foregroundColor(.white)
                     .cornerRadius(10)
             })
@@ -90,6 +121,32 @@ struct ProfileView: View {
             Spacer()
             
             LogoutButton()
+
+            //saved listings --> goes to a page that has the saved listing posts
+            NavigationLink(destination: CreateView(), label: {
+                Text("saved Listings")
+                    .bold()
+                    .frame(width: 200, height: 50)
+                    .background(CustomColor.sxcgreen)
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
+            })
+            
+            //sign out --> do a spike on this and maybe nav link goes to home view
+            //maybe not a nav link maybe more like a button with an action that goes to homeView
+            //will change later
+            NavigationLink(destination: HomeView(), label: {
+                Text("sign out")
+                    .bold()
+                    .frame(width: 150, height: 35)
+                    .background(Color.gray)
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
+            })
+            
+            //navigation link sends to new destinatin view
+            //label is basically the button that takes you there
+
         }
     }
     
@@ -206,7 +263,7 @@ struct ProfileView: View {
     }
 }
 */
- 
+
 struct ProfileView_Previews: PreviewProvider {
     static var previews: some View {
         ProfileView()
