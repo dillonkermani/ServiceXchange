@@ -22,8 +22,8 @@ struct CreateProfileControls {
 
 struct ProfileView: View {
     
-    @Environment(\.presentationMode) var presentationMode //not sure
-    @EnvironmentObject var session: SessionStore //not sure
+    @Environment(\.presentationMode) var presentationMode // Allows us to dismiss views.
+    @EnvironmentObject var session: SessionStore // Stores user's login status.
     
     @ObservedObject var listingVM = ListingViewModel() //this is a reference to the listing class metadata I think
                                                        //create one for profile later
@@ -53,6 +53,23 @@ struct ProfileView: View {
         }
     }
     
+    private func LogoutButton() -> some View {
+        return Button {
+            session.logout()
+            
+        } label: {
+            ZStack {
+                Rectangle()
+                    .frame(width: UIScreen.main.bounds.width / 1.2, height: 50)
+                    .cornerRadius(30)
+                    .foregroundColor(.gray.opacity(0.7))
+                Text("Logout")
+                    .foregroundColor(.red)
+                    
+            }
+            .shadow(radius: 5)
+        }
+    }
     
     private func RedOneView() -> some View {
         //FirebaseApp.configure()
@@ -69,6 +86,10 @@ struct ProfileView: View {
                     .foregroundColor(.white)
                     .cornerRadius(10)
             })
+            
+            Spacer()
+            
+            LogoutButton()
         }
     }
     

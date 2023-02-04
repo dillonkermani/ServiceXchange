@@ -33,49 +33,60 @@ struct TabView: View {
     var body: some View {
         VStack {
             ZStack {
-                switch selectedIndex {
-                case 0:
+                if !session.isLoggedIn {
                     NavigationView {
                         VStack {
                             HomeView()
+                        }.onAppear {
+                            self.selectedIndex = 0
                         }
                     }
-                case 1:
-                    NavigationView {
-                        VStack {
-                            MapView()
-                        }.navigationTitle("Map")
-                    }
-                case 2:
-                    NavigationView {
-                        VStack {
-                            CreateListingView()
-                        }.navigationTitle("Offer A Service")
-                    }
-                case 3:
-                    NavigationView {
-                        VStack {
-                            if session.isLoggedIn {
-                                MessagesView()
+                } else {
+                    switch selectedIndex {
+                    case 0:
+                        NavigationView {
+                            VStack {
+                                HomeView()
                             }
-                        }.navigationTitle("Messages")
-                    }
-                case 4:
-                    NavigationView {
-                        VStack {
-                            if session.isLoggedIn {
-                                ProfileView()
-                            }
-                            
-                        }.navigationTitle("Profile")
-                    }
-                default:
-                    NavigationView {
-                        VStack {
-                            
                         }
-                    }.navigationTitle("Default")
+                    case 1:
+                        NavigationView {
+                            VStack {
+                                MapView()
+                            }.navigationTitle("Map")
+                        }
+                    case 2:
+                        NavigationView {
+                            VStack {
+                                CreateListingView()
+                            }.navigationTitle("Offer A Service")
+                        }
+                    case 3:
+                        NavigationView {
+                            VStack {
+                                if session.isLoggedIn {
+                                    MessagesView()
+                                }
+                            }.navigationTitle("Messages")
+                        }
+                    case 4:
+                        NavigationView {
+                            VStack {
+                                if session.isLoggedIn {
+                                    ProfileView()
+                                }
+                                
+                            }.navigationTitle("Profile")
+                        }
+                    default:
+                        NavigationView {
+                            VStack {
+                                
+                            }
+                        }.navigationTitle("Default")
+                    }
                 }
+                
             }
             
             Spacer()

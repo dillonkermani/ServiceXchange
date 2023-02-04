@@ -24,9 +24,9 @@ class LoginViewModel: ObservableObject {
     
     
     func signin(onSuccess: @escaping(_ user: User) -> Void, onError: @escaping(_ errorMessage: String) -> Void) {
-        Auth.auth().signIn(withEmail: self.email, password: self.password) { (authData, error) in
+        Auth.auth().signIn(withEmail: email, password: password) { (authData, error) in
+            print("Attempting Sign in with email: \(self.email) , pass: \(self.password)")
                 if error != nil {
-                    print(error!.localizedDescription)
                     onError(error!.localizedDescription)
                     return
                 }
@@ -46,7 +46,7 @@ class LoginViewModel: ObservableObject {
     
     func signup(onSuccess: @escaping(_ user: User) -> Void, onError: @escaping(_ errorMessage: String) -> Void) {
         
-                Auth.auth().createUser(withEmail: email, password: password) { (authData, error) in
+        Auth.auth().createUser(withEmail: email, password: self.password) { (authData, error) in
                     if error != nil {
                         onError(error!.localizedDescription)
                         return
