@@ -87,13 +87,19 @@ struct TabView: View {
                 ForEach(0..<5, id: \.self) { i in
                     Spacer()
                     Button {
-                        if session.isLoggedIn == false {
+                        if session.isLoggedIn == false { // if NOT logged in
                             if i != 0 { // Don't promptLogin for HomeView
                                 promptLogin.toggle()
+                                
+                            } else {
+                                self.selectedIndex = i
                             }
+                            
+                        } else if session.isLoggedIn == true { // if logged in
+                            self.selectedIndex = i
                         }
                         
-                        self.selectedIndex = i
+                        
                         
                         UIImpactFeedbackGenerator(style: .rigid).impactOccurred()
                         // Present CreateListingView() as a full screen modal.

@@ -6,15 +6,8 @@
 //
 
 import SwiftUI
-
-
-
 import FirebaseCore
 import FirebaseFirestore
-
-
-
-
 
 struct CreateProfileControls {
     var pickedImageType = ""
