@@ -15,6 +15,8 @@ struct CreateProfileControls {
     var pickedImage = Image("user-placeholder")
     var width = (UIScreen.main.bounds.width * 0.43)
     var height = (UIScreen.main.bounds.width * 0.43)
+    var showAlert = false
+    var alertMessage = ""
 }
 
 
@@ -42,90 +44,89 @@ struct ProfileView: View {
     
     
     
+    
     var body: some View {
         NavigationView{
             VStack{
-                ScrollView {
-                    ProfileButtons()
+                HStack{
+                    //account settings icon --> find the settings icon fo swift
+                    //I want in top right corner
+                    //text, Welcome back NAME --> find out how to get the nam of the person
+                    if session.userSession != nil {
+                        Text("Welcome, \(session.userSession!.firstName)")
+                            .font(.system(size: 30,
+                                          weight: .regular,
+                                          design: .default))
+                            .padding(.trailing, 30)
+                    }
+                    
+                    
+                    //will go to an account settings page once I make that page and figure out what in the
+                    //world would be included in it
+                    NavigationLink(destination: CreateView(), label: {
+                        Image(systemName: "gear")
+                        
+                            .font(.system(size: 35,
+                                          weight: .regular,
+                                          design: .default))
+                            .foregroundColor(.black)
+                            .frame(width: 50, height: 50)
+                            .background(CustomColor.sxcgreen)
+                            .cornerRadius(40)
+                    })
                 }
                 
+                ScrollView {
+                    ButtonStack()
+                }
+                
+            }.alert(isPresented: $controls.showAlert) {
+                
+                Alert(title: Text(controls.alertMessage),
+                    message: Text(""),
+                    dismissButton: Alert.Button.default(
+                        Text("OK"), action: {
+                            
+                        }
+                    )
+                )
             }
         }
     }
     
   
-    private func ProfileButtons() -> some View {
-        //FirebaseApp.configure()
-        //let db = Firestore.firestore()
-        
-        
-        
-        VStack(spacing: 15){
-            
-            HStack{
-                //account settings icon --> find the settings icon fo swift
-                //I want in top right corner
-                //text, Welcome back NAME --> find out how to get the nam of the person
-                if session.userSession != nil {
-                    Text("Welcome, \(session.userSession!.firstName)")
-                        .font(.system(size: 30,
-                                      weight: .regular,
-                                      design: .default))
-                        .padding(.trailing, 30)
-                }
-                
-                
-                //will go to an account settings page once I make that page and figure out what in the
-                //world would be included in it
-                NavigationLink(destination: CreateView(), label: {
-                    Image(systemName: "gear")
-                    
-                        .font(.system(size: 35,
-                                      weight: .regular,
-                                      design: .default))
-                        .foregroundColor(.black)
-                        .frame(width: 50, height: 50)
-                        .background(CustomColor.sxcgreen)
-                        .cornerRadius(40)
-                })
-            }
-            
-            //alter this so that it loads previous image if you already have one
+    private func ButtonStack() -> some View {
+        return VStack(spacing: 30) {
             addProfilePhoto()
                 .padding(.bottom, 20)
-            
-            
-            ScrollView(.vertical) {
-                VStack(spacing: 30) {
-                    Spacer()
-                    
-                    //edit service provider profile button --> does this become a create listing once you have done it?
-                    NavigationLink(destination: CreateView(), label: {
-                        CustomProfileButtonView(title: "View Provider Account", foregroundColor: .white, backgroundColor: CustomColor.sxcgreen)
-                    })
-                    
-                    //saved listings --> goes to a page that has the saved listing posts
-                    NavigationLink(destination: CreateView(), label: {
-                        CustomProfileButtonView(title: "Saved Listings", foregroundColor: .white, backgroundColor: .blue.opacity(0.3))
-                    })
-                    
-                    //sign out --> do a spike on this and maybe nav link goes to home view
-                    //maybe not a nav link maybe more like a button with an action that goes to homeView
-                    //will change later
-                    Button {
-                        session.logout()
-                    } label: {
-                        CustomProfileButtonView(title: "Sign Out", foregroundColor: .red, backgroundColor: .gray.opacity(0.5))
 
-                    }
-                    
-                    //navigation link sends to new destinatin view
-                    //label is basically the button that takes you there
-                }
+            
+            Spacer()
+            
+            //edit service provider profile button --> does this become a create listing once you have done it?
+            NavigationLink(destination: CreateView(), label: {
+                CustomProfileButtonView(title: "View Provider Account", foregroundColor: .white, backgroundColor: CustomColor.sxcgreen)
+            })
+            
+            //saved listings --> goes to a page that has the saved listing posts
+            NavigationLink(destination: CreateView(), label: {
+                CustomProfileButtonView(title: "Saved Listings", foregroundColor: .white, backgroundColor: .blue.opacity(0.3))
+            })
+            
+
+            Button {
+                session.logout()
+                controls.alertMessage = "Sucessfully Logged Out"
+                controls.showAlert.toggle()
+            } label: {
+                CustomProfileButtonView(title: "Sign Out", foregroundColor: .red, backgroundColor: .gray.opacity(0.5))
+
             }
-            
-            
         }
+            
+            
+            
+        
     }
     
     private func CustomProfileButtonView(title: String, foregroundColor: Color, backgroundColor: Color) -> some View {
