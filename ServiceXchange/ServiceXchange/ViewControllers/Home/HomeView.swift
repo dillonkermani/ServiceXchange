@@ -13,8 +13,11 @@ struct HomeView: View {
     
 // Custom Search Bar() components
     private var listOfCountry = countryList
+    private var listOfPosts = posts
     @State var searchText = ""
 
+    
+    
     var countries: [String] {
         let lcCountries = listOfCountry.map { $0.lowercased() }
 
@@ -29,62 +32,77 @@ struct HomeView: View {
         
     var body: some View {
         ZStack {
-            VStack {
-
-                /*
-                if session.userSession != nil {
-                    if session.isLoggedIn {
-                        Text("Welcome, \(session.userSession!.firstName)")
-                    }
-                } else {
-                    Text("Not logged in")
-                }
-                 */
-
-                // Custom Search Bar()
-                NavigationView {
-                    List {
-                        ForEach(countries, id: \.self) { country in
-                            HStack {
-                                Text(country.capitalized)
-                                Spacer()
-                                Image(systemName: "figure.walk")
-                                    .foregroundColor(Color.blue)
+            
+            NavigationStack {
+                VStack {
+                    ScrollView (.horizontal, showsIndicators: false) {
+                        HStack(spacing: 10) {
+                            ForEach(listOfPosts, id: \.self) { x in
+                                Button(action: {print("You clicked")}){
+                                    Text("\(x)")
+                                        .foregroundColor(.white)
+                                        .font(.subheadline)
+                                        .frame(width: 90, height: 40)
+                                        .background(.green)
+                                        .cornerRadius(25)
+//                                        .overlay(
+//                                            RoundedRectangle(cornerRadius: 25)
+//                                                .stroke(.black, lineWidth: 2)
+//                                        )
+                                }
                             }
-                            .padding()
                         }
-                    }
-                    .searchable(text: $searchText)
-                    .navigationTitle("ServiceXchange")
+                    }.padding([.leading, .trailing], 10)
+                    
+                    
+                    List {
+                        ForEach(0..<4) {_ in
+                            HStack() {
+                                AsyncImage(url: URL(string: "https://www.shutterstock.com/shutterstock/photos/764462584/display_1500/stock-vector-dice-icon-iage-764462584.jpg")) { image in
+                                    image.resizable()
+                                } placeholder: {
+                                    ProgressView()
+                                }
+                                .aspectRatio(contentMode: .fit)
+                                AsyncImage(url: URL(string: "https://www.shutterstock.com/shutterstock/photos/764462584/display_1500/stock-vector-dice-icon-iage-764462584.jpg")) { image in
+                                    image.resizable()
+                                } placeholder: {
+                                    ProgressView()
+                                }
+                                .aspectRatio(contentMode: .fit)
+                            }
+                        }
+                    }.navigationTitle("ServiceXchange")
                 }
-
+            }
+            .searchable(text: $searchText)
+            
+            VStack {
+                
+                /*
+                 if session.userSession != nil {
+                 if session.isLoggedIn {
+                 Text("Welcome, \(session.userSession!.firstName)")
+                 }
+                 } else {
+                 Text("Not logged in")
+                 }
+                 */
+                
+                // Custom Search Bar()
+                
                 // Horizontally Scrollable Category Picker
                 
-                ScrollView (.horizontal, showsIndicators: false) {
-                    HStack(spacing: 20) {
-                        ForEach(0..<10) {
-                            Text("Item \($0)")
-                                .foregroundColor(.white)
-                                .font(.title)
-                                .frame(width: 100, height: 40)
-                                .background(.green)
-                                .cornerRadius(25)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 25)
-                                        .stroke(.black, lineWidth: 2)
-                                )
-                        }
-                    }
-                }
-                
-
-                // Load all listing thumbnails
-
 
                 Spacer()
 
             }
-        }.frame(maxWidth: .infinity, maxHeight: .infinity)
+            .padding()
+        }
+        .onAppear {
+            print(listOfTags)
+            print(listOfPosts)
+        }
     }
 }
 
