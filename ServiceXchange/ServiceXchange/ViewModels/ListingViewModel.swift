@@ -11,7 +11,7 @@ import FirebaseCore
 import FirebaseStorage
 
 class ListingViewModel: ObservableObject {
-        
+    
     @Published var cardImageData = Data()
     @Published var posterId: String = ""
     @Published var title: String = ""
@@ -39,12 +39,11 @@ class ListingViewModel: ObservableObject {
     
     func addListing(posterId: String, onSuccess: @escaping(_ listing: Listing) -> Void, onError: @escaping(_ errorMessage: String) -> Void) {
         
-        let listingId = Ref.FIRESTORE_COLLECTION_LISTINGS.document().documentID
+
         let storage = Storage.storage()
-        let image_name = "\(listingId).jpg"
-        let img_ref = storage.reference().child(image_name)
         
-        let listing = Listing(listingId: listingId, posterId: posterId, title: self.title, description: self.description, datePosted: Date().timeIntervalSince1970)
+        
+        let listing = Listing(posterId: posterId, title: self.title, description: self.description, datePosted: Date().timeIntervalSince1970)
         
         guard let dict = try? listing.toDictionary() else { return }
         
@@ -58,6 +57,8 @@ class ListingViewModel: ObservableObject {
             onSuccess(listing)
             return
         }
+        let image_name = "\(listing_ref.documentID).jpg"
+        let img_ref = storage.reference().child(image_name)
         img_ref.putData(self.cardImageData) {(metadata, error) in
             guard let _ = metadata else {
                 print("no image metadata...")
@@ -68,7 +69,10 @@ class ListingViewModel: ObservableObject {
                     print("image upload failed: no download url")
                     return
                 }
-                listing_ref.updateData( ["cardImageUrl": downloadURL.absoluteString] )
+                listing_ref.updateData( [
+                    "cardImageUrl": downloadURL.absoluteString,
+                    "listingId": listing_ref.documentID,
+                ] )
             }
                 
         }
