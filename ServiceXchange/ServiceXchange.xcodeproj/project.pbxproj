@@ -31,12 +31,9 @@
 		65C3EBA62981F69400766659 /* TabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65C3EBA52981F69400766659 /* TabView.swift */; };
 		65E992722989E67900C3C5BA /* Listing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E992712989E67900C3C5BA /* Listing.swift */; };
 		65E992762989F5AC00C3C5BA /* ListingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E992752989F5AC00C3C5BA /* ListingViewModel.swift */; };
-		65F932DE29919DDB00A63F37 /* ShimmerPlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F932DD29919DDB00A63F37 /* ShimmerPlaceholderView.swift */; };
-		65F932E129919E6000A63F37 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 65F932E029919E6000A63F37 /* Kingfisher */; };
 		65FE2B46298749220077F505 /* ImageMorphing in Frameworks */ = {isa = PBXBuildFile; productRef = 65FE2B45298749220077F505 /* ImageMorphing */; };
 		65FE2B4929874C140077F505 /* SignupComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65FE2B4829874C140077F505 /* SignupComponents.swift */; };
 		65FE2B4C29874C6C0077F505 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65FE2B4B29874C6C0077F505 /* LoginViewModel.swift */; };
-		FDE10DFE298B0A29006803D3 /* SampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDE10DFD298B0A29006803D3 /* SampleData.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -59,10 +56,8 @@
 		65C3EBA52981F69400766659 /* TabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabView.swift; sourceTree = "<group>"; };
 		65E992712989E67900C3C5BA /* Listing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Listing.swift; sourceTree = "<group>"; };
 		65E992752989F5AC00C3C5BA /* ListingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListingViewModel.swift; sourceTree = "<group>"; };
-		65F932DD29919DDB00A63F37 /* ShimmerPlaceholderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShimmerPlaceholderView.swift; sourceTree = "<group>"; };
 		65FE2B4829874C140077F505 /* SignupComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupComponents.swift; sourceTree = "<group>"; };
 		65FE2B4B29874C6C0077F505 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
-		FDE10DFD298B0A29006803D3 /* SampleData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleData.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,7 +69,6 @@
 				65FE2B46298749220077F505 /* ImageMorphing in Frameworks */,
 				65522C092980DD3800CC898F /* FirebaseFirestoreSwift in Frameworks */,
 				65522C012980DD3800CC898F /* FirebaseAnalytics in Frameworks */,
-				65F932E129919E6000A63F37 /* Kingfisher in Frameworks */,
 				65522C072980DD3800CC898F /* FirebaseFirestore in Frameworks */,
 				65522C032980DD3800CC898F /* FirebaseAuth in Frameworks */,
 				65522C052980DD3800CC898F /* FirebaseDynamicLinks in Frameworks */,
@@ -146,7 +140,6 @@
 			isa = PBXGroup;
 			children = (
 				65C3EB942981DB7800766659 /* HomeView.swift */,
-				FDE10DFD298B0A29006803D3 /* SampleData.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -211,7 +204,6 @@
 			isa = PBXGroup;
 			children = (
 				65FE2B4829874C140077F505 /* SignupComponents.swift */,
-				65F932DD29919DDB00A63F37 /* ShimmerPlaceholderView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -249,7 +241,6 @@
 				65522C082980DD3800CC898F /* FirebaseFirestoreSwift */,
 				65522C0A2980DD3800CC898F /* FirebaseMessaging */,
 				65FE2B45298749220077F505 /* ImageMorphing */,
-				65F932E029919E6000A63F37 /* Kingfisher */,
 			);
 			productName = ServiceXchange;
 			productReference = 65522BEC2980DB5600CC898F /* ServiceXchange.app */;
@@ -282,7 +273,6 @@
 			packageReferences = (
 				65522BFF2980DD3800CC898F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				65FE2B44298749220077F505 /* XCRemoteSwiftPackageReference "ImageMorphing" */,
-				65F932DF29919E6000A63F37 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			productRefGroup = 65522BED2980DB5600CC898F /* Products */;
 			projectDirPath = "";
@@ -317,9 +307,7 @@
 				65C3EB9C2981DBDE00766659 /* LoginView.swift in Sources */,
 				65C3EBA62981F69400766659 /* TabView.swift in Sources */,
 				658D1CBE298854250026DC5B /* Ref.swift in Sources */,
-				65F932DE29919DDB00A63F37 /* ShimmerPlaceholderView.swift in Sources */,
 				65E992762989F5AC00C3C5BA /* ListingViewModel.swift in Sources */,
-				FDE10DFE298B0A29006803D3 /* SampleData.swift in Sources */,
 				65C3EB972981DB9500766659 /* MapView.swift in Sources */,
 				65C3EB992981DBA100766659 /* CreateListingView.swift in Sources */,
 				65FE2B4C29874C6C0077F505 /* LoginViewModel.swift in Sources */,
@@ -470,13 +458,12 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0.1;
-				PRODUCT_BUNDLE_IDENTIFIER = ServiceXchange;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sxc.ServiceXchange;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -505,13 +492,12 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0.1;
-				PRODUCT_BUNDLE_IDENTIFIER = ServiceXchange;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sxc.ServiceXchange;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -549,14 +535,6 @@
 		65522BFF2980DD3800CC898F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
-			requirement = {
-				branch = master;
-				kind = branch;
-			};
-		};
-		65F932DF29919E6000A63F37 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
 			requirement = {
 				branch = master;
 				kind = branch;
@@ -602,11 +580,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 65522BFF2980DD3800CC898F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseMessaging;
-		};
-		65F932E029919E6000A63F37 /* Kingfisher */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 65F932DF29919E6000A63F37 /* XCRemoteSwiftPackageReference "Kingfisher" */;
-			productName = Kingfisher;
 		};
 		65FE2B45298749220077F505 /* ImageMorphing */ = {
 			isa = XCSwiftPackageProductDependency;
