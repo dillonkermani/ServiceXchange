@@ -1,12 +1,12 @@
-
+// Reusable Custom UI Components
 
 import SwiftUI
 
-func loginTextField(title: String, text: Binding <String>, width: CGFloat, height: CGFloat) -> some View {
+func underlinedTextField(title: String, text: Binding <String>, width: CGFloat, height: CGFloat, color: Color) -> some View {
     return TextField(title, text: text)
         .frame(width: width, height: height)
         .padding(.vertical, 10)
-                    .overlay(Rectangle().frame(height: 2).padding(.top, 35).foregroundColor(CustomColor.sxcgreen))
+                    .overlay(Rectangle().frame(height: 2).padding(.top, 35).foregroundColor(color))
                     .padding(10)
 }
 

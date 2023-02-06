@@ -6,8 +6,16 @@
 //
 
 import Foundation
+import SwiftUI
+import FirebaseCore
+import FirebaseStorage
 
 class ListingViewModel: ObservableObject {
+    
+    @Published var cardImageData = Data()
+    @Published var posterId: String = ""
+    @Published var title: String = ""
+    @Published var description: String = ""
     
     func loadAllListings(onSuccess: @escaping(_ listings: [Listing]) -> Void, onError: @escaping(_ errorMessage: String) -> Void) {
         
@@ -29,22 +37,45 @@ class ListingViewModel: ObservableObject {
         }
     }
     
-    func addListing(posterId: String, coverImage: URL, title: String, description: String, onSuccess: @escaping(_ listing: Listing) -> Void, onError: @escaping(_ errorMessage: String) -> Void) {
+    func addListing(posterId: String, onSuccess: @escaping(_ listing: Listing) -> Void, onError: @escaping(_ errorMessage: String) -> Void) {
         
-        let listingId = Ref.FIRESTORE_COLLECTION_LISTINGS.document().documentID
 
+        let storage = Storage.storage()
         
-        let listing = Listing(listingId: listingId, posterId: posterId, coverImage: coverImage, title: title, description: description)
+        
+        let listing = Listing(posterId: posterId, title: self.title, description: self.description, datePosted: Date().timeIntervalSince1970)
         
         guard let dict = try? listing.toDictionary() else { return }
         
-        Ref.FIRESTORE_COLLECTION_LISTINGS.addDocument(data: dict) { (error) in
+        let listing_ref = Ref.FIRESTORE_COLLECTION_LISTINGS.addDocument(data: dict){ error in
             if let error = error {
                 onError(error.localizedDescription)
                 return
             }
-            onSuccess(listing)
         }
+        if self.cardImageData.isEmpty {
+            onSuccess(listing)
+            return
+        }
+        let image_name = "\(listing_ref.documentID).jpg"
+        let img_ref = storage.reference().child(image_name)
+        img_ref.putData(self.cardImageData) {(metadata, error) in
+            guard let _ = metadata else {
+                print("no image metadata...")
+                return
+            }
+            img_ref.downloadURL { (url, error) in
+                guard let downloadURL = url else {
+                    print("image upload failed: no download url")
+                    return
+                }
+                listing_ref.updateData( [
+                    "cardImageUrl": downloadURL.absoluteString,
+                    "listingId": listing_ref.documentID,
+                ] )
+            }
+                
+        }
+        onSuccess(listing)
     }
-    
 }

@@ -33,49 +33,60 @@ struct TabView: View {
     var body: some View {
         VStack {
             ZStack {
-                switch selectedIndex {
-                case 0:
+                if !session.isLoggedIn {
                     NavigationView {
                         VStack {
                             HomeView()
+                        }.onAppear {
+                            self.selectedIndex = 0
                         }
                     }
-                case 1:
-                    NavigationView {
-                        VStack {
-                            MapView()
-                        }.navigationTitle("Map")
-                    }
-                case 2:
-                    NavigationView {
-                        VStack {
-                            Text("")
-                        }.navigationTitle("Post")
-                    }
-                case 3:
-                    NavigationView {
-                        VStack {
-                            if session.isLoggedIn {
-                                MessagesView()
+                } else {
+                    switch selectedIndex {
+                    case 0:
+                        NavigationView {
+                            VStack {
+                                HomeView()
                             }
-                        }.navigationTitle("Messages")
-                    }
-                case 4:
-                    NavigationView {
-                        VStack {
-                            if session.isLoggedIn {
-                                ProfileView()
-                            }
-                            
-                        }.navigationTitle("Profile")
-                    }
-                default:
-                    NavigationView {
-                        VStack {
-                            
                         }
-                    }.navigationTitle("Default")
+                    case 1:
+                        NavigationView {
+                            VStack {
+                                MapView()
+                            }.navigationTitle("Map")
+                        }
+                    case 2:
+                        NavigationView {
+                            VStack {
+                                CreateListingView()
+                            }.navigationTitle("Offer A Service")
+                        }
+                    case 3:
+                        NavigationView {
+                            VStack {
+                                if session.isLoggedIn {
+                                    MessagesView()
+                                }
+                            }.navigationTitle("Messages")
+                        }
+                    case 4:
+                        NavigationView {
+                            VStack {
+                                if session.isLoggedIn {
+                                    ProfileView()
+                                }
+                                
+                            }.navigationTitle("Profile")
+                        }
+                    default:
+                        NavigationView {
+                            VStack {
+                                
+                            }
+                        }.navigationTitle("Default")
+                    }
                 }
+                
             }
             
             Spacer()
@@ -87,18 +98,20 @@ struct TabView: View {
                 ForEach(0..<5, id: \.self) { i in
                     Spacer()
                     Button {
-                        if session.isLoggedIn == false {
+                        if session.isLoggedIn == false { // if NOT logged in
                             if i != 0 { // Don't promptLogin for HomeView
                                 promptLogin.toggle()
+                                
+                            } else {
+                                self.selectedIndex = i
                             }
-                        }
-                        if i == 2 {
-                            if session.isLoggedIn {
-                                postPressed.toggle()
-                            }
-                        } else {
+                            
+                        } else if session.isLoggedIn == true { // if logged in
                             self.selectedIndex = i
                         }
+                        
+                        
+                        
                         UIImpactFeedbackGenerator(style: .rigid).impactOccurred()
                         // Present CreateListingView() as a full screen modal.
                     } label: {
@@ -125,10 +138,7 @@ struct TabView: View {
                                 .foregroundColor(selectedIndex == i ? CustomColor.sxcgreen : colorScheme == .dark ? .white : .black)
                         }
                         
-                    }.fullScreenCover(isPresented: $postPressed) {
-                        CreateListingView()
-                    }
-                    .fullScreenCover(isPresented: $promptLogin) {
+                    }.fullScreenCover(isPresented: $promptLogin) {
                         LoginView()
                     }
                     Spacer()
