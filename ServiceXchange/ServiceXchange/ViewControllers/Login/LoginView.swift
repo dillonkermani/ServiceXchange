@@ -8,14 +8,23 @@
 import SwiftUI
 
 
+
 struct LoginView: View {
+    
+    
     @EnvironmentObject var session: SessionStore
     @Environment(\.presentationMode) var presentationMode
+     
     
     @ObservedObject var loginVM = LoginViewModel()
     
+    
     @State var signupPressed = false
     @State var signinPressed = false
+    
+    @State var showAlert = false
+    @State var alertMessage = ""
+    @State var dismissLoginView = false
     
     var body: some View {
         VStack {
@@ -31,6 +40,7 @@ struct LoginView: View {
                     
                 }
                 signupSheet()
+                
             }
 
             VStack {
@@ -54,30 +64,46 @@ struct LoginView: View {
             
             
         }.ignoresSafeArea()
+            .alert(isPresented: $showAlert) {
+
+                Alert(title: Text(alertMessage),
+                    message: Text(""),
+                    dismissButton: Alert.Button.default(
+                        Text("OK"), action: {
+                            if dismissLoginView {
+                                presentationMode.wrappedValue.dismiss() // Dismiss LoginView
+                            }
+                            
+                        }
+                    )
+                )
+            }
     }
     
     private func SignUpButton() -> some View {
-        return Button {
-            UIImpactFeedbackGenerator(style: .rigid).impactOccurred()
-            withAnimation(.spring()) {
-                signupPressed.toggle()
-                loginVM.clear()
-            }
-        } label: {
-            ZStack {
-                Rectangle()
-                    .frame(width: 250, height: 50)
-                    .foregroundColor(.white)
-                    .cornerRadius(15)
-                    .shadow(color: .gray, radius: 5, x: 0, y: 0)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: signupPressed ? 40 : 15)
-                            .stroke(.black, lineWidth: 2)
-                    )
-                
-                Text("Sign Up")
-                    .font(.system(size: 25)).bold()
-                    .foregroundColor(.black)
+        return VStack {
+            Button {
+                UIImpactFeedbackGenerator(style: .rigid).impactOccurred()
+                withAnimation(.spring()) {
+                    signupPressed.toggle()
+                    loginVM.clear()
+                }
+            } label: {
+                ZStack {
+                    Rectangle()
+                        .frame(width: 250, height: 50)
+                        .foregroundColor(.white)
+                        .cornerRadius(15)
+                        .shadow(color: .gray, radius: 5, x: 0, y: 0)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: signupPressed ? 40 : 15)
+                                .stroke(.black, lineWidth: 2)
+                        )
+                    
+                    Text("Sign Up")
+                        .font(.system(size: 25)).bold()
+                        .foregroundColor(.black)
+                }
             }
         }
     }
@@ -99,20 +125,31 @@ struct LoginView: View {
                     signinPressed = false
                     loginVM.clear()
                 }else if signinPressed {
-                    print("Sign In user")
+                    signupPressed = false
+                    signinPressed = false
+                    
+                    // Sign In
                     loginVM.signin(onSuccess: {user in
-                        print("Sign In Success: \(user.email)")
-                        presentationMode.wrappedValue.dismiss()
+                        alertMessage = "Sucessfully signed in to \(user.email)"
+                        showAlert.toggle()
+                        print(alertMessage)
+                        dismissLoginView = true
                     }, onError: {errorMessage in
-                        print("Sign In Failure: \(errorMessage)")
+                        alertMessage = errorMessage
+                        showAlert.toggle()
+                        print(alertMessage)
                     })
                 } else {
-                    print("Sign up user")
+                    // Sign Up
                     loginVM.signup(onSuccess: {user in
-                        print("Sign Up Success: \(user.email)")
-                        presentationMode.wrappedValue.dismiss()
+                        alertMessage = "Sucessfully Signed Up!"
+                        showAlert.toggle()
+                        print(alertMessage)
+                        dismissLoginView = true
                     }, onError: {errorMessage in
-                        print("Sign Up Failure: \(errorMessage)")
+                        alertMessage = errorMessage
+                        showAlert.toggle()
+                        print(alertMessage)
                         
                     })
                 }
@@ -208,12 +245,12 @@ struct LoginView: View {
                         .padding([.top, .bottom], 75)
                 }
                 HStack {
-                    loginTextField(title: "First Name", text: $loginVM.firstName, width: 140, height: 40)
-                    loginTextField(title: "Last Name", text: $loginVM.lastName, width: 140, height: 40)
+                    underlinedTextField(title: "First Name", text: $loginVM.firstName, width: 140, height: 40, color: CustomColor.sxcgreen)
+                    underlinedTextField(title: "First Name", text: $loginVM.lastName, width: 140, height: 40, color: CustomColor.sxcgreen)
                 }
-                loginTextField(title: "Email", text: $loginVM.email, width: 310, height: 40)
+                underlinedTextField(title: "Email", text: $loginVM.email, width: 310, height: 40, color: CustomColor.sxcgreen)
                     .keyboardType(.emailAddress)
-                loginTextField(title: "Phone (recommended)", text: $loginVM.phone, width: 310, height: 40)
+                underlinedTextField(title: "Phone (recommended)", text: $loginVM.phone, width: 310, height: 40, color: CustomColor.sxcgreen)
                     .keyboardType(.phonePad)
                 passwordTextField(title: "Password", text: $loginVM.password, width: 310, height: 40)
                 passwordTextField(title: "Confirm Password", text: $loginVM.confirmPassword, width: 310, height: 40)
@@ -233,7 +270,7 @@ struct LoginView: View {
                         .font(.largeTitle)
                         .padding([.top, .bottom], 75)
                 }
-                loginTextField(title: "Email", text: $loginVM.email, width: 310, height: 40)
+                underlinedTextField(title: "Email", text: $loginVM.email, width: 310, height: 40, color: CustomColor.sxcgreen)
                     .keyboardType(.emailAddress)
                 passwordTextField(title: "Password", text: $loginVM.password, width: 310, height: 40)
                     .padding(.bottom, 40)

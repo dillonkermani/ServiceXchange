@@ -8,11 +8,11 @@
 import Foundation
 
 struct Listing: Encodable, Decodable {
-    var listingId: String
+    var listingId: String = ""
     var posterId: String
-    var coverImage: URL
+    var cardImageUrl: String = ""
     var title: String
     var description: String
-
-    var rate: Int?
+    var datePosted: Double
+    var rate: Double?
 }

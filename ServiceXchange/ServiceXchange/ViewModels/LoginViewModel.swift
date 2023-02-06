@@ -24,9 +24,8 @@ class LoginViewModel: ObservableObject {
     
     
     func signin(onSuccess: @escaping(_ user: User) -> Void, onError: @escaping(_ errorMessage: String) -> Void) {
-        Auth.auth().signIn(withEmail: self.email, password: self.password) { (authData, error) in
+        Auth.auth().signIn(withEmail: email, password: password) { (authData, error) in
                 if error != nil {
-                    print(error!.localizedDescription)
                     onError(error!.localizedDescription)
                     return
                 }
@@ -46,7 +45,7 @@ class LoginViewModel: ObservableObject {
     
     func signup(onSuccess: @escaping(_ user: User) -> Void, onError: @escaping(_ errorMessage: String) -> Void) {
         
-                Auth.auth().createUser(withEmail: email, password: password) { (authData, error) in
+        Auth.auth().createUser(withEmail: email, password: self.password) { (authData, error) in
                     if error != nil {
                         onError(error!.localizedDescription)
                         return
@@ -57,7 +56,12 @@ class LoginViewModel: ObservableObject {
                     let userRef = Ref.FIRESTORE_DOCUMENT_USERID(userId: userId)
                                   
                     // Add user to Firebase/users
-                    let user = User.init(userId: userId, firstName: self.firstName, lastName: self.lastName, email: self.email, isServiceProvider: false, listingIDs: [])
+                    let user = User.init(userId: userId,
+                                         firstName: self.firstName,
+                                         lastName: self.lastName,
+                                         email: self.email,
+                                         isServiceProvider: false,
+                                         listingIDs: [])
                                                             
                     guard let dict = try? user.toDictionary() else {return}
 

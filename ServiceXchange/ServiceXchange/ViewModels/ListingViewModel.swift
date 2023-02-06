@@ -6,12 +6,34 @@
 //
 
 import Foundation
+import SwiftUI
+import FirebaseCore
+import FirebaseStorage
 
 class ListingViewModel: ObservableObject {
     
-    func loadAllListings(onSuccess: @escaping(_ listings: [Listing]) -> Void, onError: @escaping(_ errorMessage: String) -> Void) {
+    @Published var allListings: [Listing] = []
+    @Published var isLoading = false
+    @Published var loadErrorMsg = ""
+    @Published var cardImageData = Data()
+    @Published var posterId: String = ""
+    @Published var title: String = ""
+    @Published var description: String = ""
+    
+    func loadListings() {
+        self.isLoading = true
+        getListingsFromDB(onSuccess: {listings in
+            self.allListings = listings
+            self.isLoading = false
+        }, onError: {errorMessage in
+            self.loadErrorMsg = errorMessage
+            self.isLoading = false
+        })
+    }
         
-        Ref.FIRESTORE_COLLECTION_LISTINGS.order(by: "name", descending: true).getDocuments { (snapshot, error) in
+    private func getListingsFromDB(onSuccess: @escaping(_ listings: [Listing]) -> Void, onError: @escaping(_ errorMessage: String) -> Void) {
+        
+        Ref.FIRESTORE_COLLECTION_LISTINGS.getDocuments { (snapshot, error) in
             guard let snap = snapshot else {
                 print("Error fetching data")
                 return
@@ -24,27 +46,49 @@ class ListingViewModel: ObservableObject {
                 guard let decodedListing = try? Listing.init(fromDictionary: dict) else { return }
                 listings.append(decodedListing)
             }
-            
             onSuccess(listings)
         }
     }
     
-    func addListing(posterId: String, coverImage: URL, title: String, description: String, onSuccess: @escaping(_ listing: Listing) -> Void, onError: @escaping(_ errorMessage: String) -> Void) {
+    func addListing(posterId: String, onSuccess: @escaping(_ listing: Listing) -> Void, onError: @escaping(_ errorMessage: String) -> Void) {
         
-        let listingId = Ref.FIRESTORE_COLLECTION_LISTINGS.document().documentID
 
+        let storage = Storage.storage()
         
-        let listing = Listing(listingId: listingId, posterId: posterId, coverImage: coverImage, title: title, description: description)
+        
+        let listing = Listing(posterId: posterId, title: self.title, description: self.description, datePosted: Date().timeIntervalSince1970)
         
         guard let dict = try? listing.toDictionary() else { return }
         
-        Ref.FIRESTORE_COLLECTION_LISTINGS.addDocument(data: dict) { (error) in
+        let listing_ref = Ref.FIRESTORE_COLLECTION_LISTINGS.addDocument(data: dict){ error in
             if let error = error {
                 onError(error.localizedDescription)
                 return
             }
-            onSuccess(listing)
         }
+        if self.cardImageData.isEmpty {
+            onSuccess(listing)
+            return
+        }
+        let image_name = "\(listing_ref.documentID).jpg"
+        let img_ref = storage.reference().child(image_name)
+        img_ref.putData(self.cardImageData) {(metadata, error) in
+            guard let _ = metadata else {
+                print("no image metadata...")
+                return
+            }
+            img_ref.downloadURL { (url, error) in
+                guard let downloadURL = url else {
+                    print("image upload failed: no download url")
+                    return
+                }
+                listing_ref.updateData( [
+                    "cardImageUrl": downloadURL.absoluteString,
+                    "listingId": listing_ref.documentID,
+                ] )
+            }
+                
+        }
+        onSuccess(listing)
     }
-    
 }

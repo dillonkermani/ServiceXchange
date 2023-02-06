@@ -28,7 +28,7 @@ struct ServiceXchangeApp: App {
   var body: some Scene {
     WindowGroup {
       NavigationView {
-        ContentView()
+        ContentView() // Right Click -> "Jump to Definition" to go through viewcontroller flow.
             .environmentObject(session)
       }
     }

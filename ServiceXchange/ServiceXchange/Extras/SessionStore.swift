@@ -21,7 +21,6 @@ class SessionStore: ObservableObject {
     var handle: AuthStateDidChangeListenerHandle?
     
     func listenAuthenticationState() {
-        print("ListenAuthenticationState called")
         self.isLoadingLogin = true
         handle = Auth.auth().addStateDidChangeListener({ (auth, user) in
             if let user = user {
