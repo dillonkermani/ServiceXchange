@@ -9,9 +9,24 @@ import Foundation
 
 class ListingViewModel: ObservableObject {
     
-    func loadAllListings(onSuccess: @escaping(_ listings: [Listing]) -> Void, onError: @escaping(_ errorMessage: String) -> Void) {
+    @Published var allListings: [Listing] = []
+    @Published var isLoading = false
+    @Published var loadErrorMsg = ""
+    
+    func loadListings() {
+        self.isLoading = true
+        getListingsFromDB(onSuccess: {listings in
+            self.allListings = listings
+            self.isLoading = false
+        }, onError: {errorMessage in
+            self.loadErrorMsg = errorMessage
+            self.isLoading = false
+        })
+    }
+    
+    private func getListingsFromDB(onSuccess: @escaping(_ listings: [Listing]) -> Void, onError: @escaping(_ errorMessage: String) -> Void) {
         
-        Ref.FIRESTORE_COLLECTION_LISTINGS.order(by: "name", descending: true).getDocuments { (snapshot, error) in
+        Ref.FIRESTORE_COLLECTION_LISTINGS.getDocuments { (snapshot, error) in
             guard let snap = snapshot else {
                 print("Error fetching data")
                 return
@@ -24,7 +39,6 @@ class ListingViewModel: ObservableObject {
                 guard let decodedListing = try? Listing.init(fromDictionary: dict) else { return }
                 listings.append(decodedListing)
             }
-            
             onSuccess(listings)
         }
     }
@@ -34,7 +48,7 @@ class ListingViewModel: ObservableObject {
         let listingId = Ref.FIRESTORE_COLLECTION_LISTINGS.document().documentID
 
         
-        let listing = Listing(listingId: listingId, posterId: posterId, coverImage: coverImage, title: title, description: description)
+        let listing = Listing(listingId: listingId, posterId: posterId, cardImageUrl: coverImage, title: title, description: description)
         
         guard let dict = try? listing.toDictionary() else { return }
         

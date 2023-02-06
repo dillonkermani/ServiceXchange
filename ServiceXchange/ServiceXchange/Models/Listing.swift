@@ -10,7 +10,7 @@ import Foundation
 struct Listing: Encodable, Decodable {
     var listingId: String
     var posterId: String
-    var coverImage: URL
+    var cardImageUrl: URL
     var title: String
     var description: String
 

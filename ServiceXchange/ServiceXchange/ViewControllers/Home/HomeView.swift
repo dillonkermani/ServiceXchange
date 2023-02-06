@@ -6,6 +6,13 @@
 //
 
 import SwiftUI
+import Kingfisher
+
+struct HomeViewControls {
+    let gridItems = [GridItem(.flexible()), GridItem(.flexible())]
+    var width = (UIScreen.main.bounds.width * 0.43)
+    var height = (UIScreen.main.bounds.width * 0.43)
+}
 
 struct HomeView: View {
     
@@ -15,7 +22,11 @@ struct HomeView: View {
     private var listOfCountry = countryList
     private var listOfPosts = posts
     @State var searchText = ""
-
+    
+    @ObservedObject var listingVM = ListingViewModel()
+    
+    @State var controls = HomeViewControls()
+    
     
     
     var countries: [String] {
@@ -29,15 +40,22 @@ struct HomeView: View {
     // Custom Scroll Bar() components
     private var listOfTags = tags
     
-        
+     
+    init() {
+        listingVM.loadListings()
+    }
+    
     var body: some View {
         ZStack {
             
+            
+            
             NavigationStack {
                 VStack {
+                    
                     ScrollView (.horizontal, showsIndicators: false) {
                         HStack(spacing: 10) {
-                            ForEach(listOfPosts, id: \.self) { x in
+                            ForEach(listOfCountry, id: \.self) { x in
                                 Button(action: {print("You clicked")}){
                                     Text("\(x)")
                                         .foregroundColor(.white)
@@ -45,16 +63,24 @@ struct HomeView: View {
                                         .frame(width: 90, height: 40)
                                         .background(.green)
                                         .cornerRadius(25)
-//                                        .overlay(
-//                                            RoundedRectangle(cornerRadius: 25)
-//                                                .stroke(.black, lineWidth: 2)
-//                                        )
                                 }
                             }
                         }
                     }.padding([.leading, .trailing], 10)
                     
+                    ScrollView(.vertical) {
+                        if !listingVM.isLoading {
+                            
+                            AllListings()
+                            
+                        } else {
+                            Text(listingVM.loadErrorMsg)
+                        }
+                    }
                     
+                    
+                    
+                    /*
                     List {
                         ForEach(0..<4) {_ in
                             HStack() {
@@ -72,36 +98,77 @@ struct HomeView: View {
                                 .aspectRatio(contentMode: .fit)
                             }
                         }
-                    }.navigationTitle("ServiceXchange")
+                    }
+                     */
+                    
+                    
                 }
-            }
+            }.navigationTitle("ServiceXchange")
             .searchable(text: $searchText)
             
-            VStack {
-                
-                /*
-                 if session.userSession != nil {
-                 if session.isLoggedIn {
-                 Text("Welcome, \(session.userSession!.firstName)")
-                 }
-                 } else {
-                 Text("Not logged in")
-                 }
-                 */
-                
-                // Custom Search Bar()
-                
-                // Horizontally Scrollable Category Picker
-                
-
-                Spacer()
-
-            }
-            .padding()
         }
-        .onAppear {
-            print(listOfTags)
-            print(listOfPosts)
+    }
+    
+    fileprivate func AllListings() -> some View {
+        Group {
+            HStack {
+                Text("Listings")
+                Spacer()
+            }.padding(.vertical, 10)
+            .padding(.top, 5)
+            .padding(.leading, 20)
+            
+            LazyVGrid(columns: controls.gridItems, alignment: .center, spacing: 15) {
+                if listingVM.allListings.isEmpty {
+                    ForEach(0..<10) { _ in
+                        ShimmerPlaceholderView(width: controls.width, height: controls.height, cornerRadius: 5, animating: false)
+                    }
+                } else {
+                    ForEach(listingVM.allListings, id: \.listingId) { listing in
+                        NavigationLink(destination: ListingDetailView(listing: listing)) {
+                            ListingCardView(listing: listing)
+                        }
+                        .simultaneousGesture(TapGesture().onEnded{
+                            UIImpactFeedbackGenerator(style: .soft).impactOccurred()
+                        })
+                    }
+                            
+                }
+            }.padding(.horizontal, 10)
+        }
+    }
+    
+    func ListingCardView(listing: Listing) -> some View {
+        return ZStack(alignment: .bottom) {
+            KFImage(listing.cardImageUrl)
+                .placeholder({
+                    ShimmerPlaceholderView(width: controls.width, height: controls.height, cornerRadius: 0, animating: true)
+                })
+                .frame(width: controls.width, height: controls.height)
+                .clipped()
+            
+            /*
+            cardGradient()
+                .rotationEffect(.degrees(180))
+                .frame(width: controls.width, height: controls.height)
+             */
+            
+            HStack {
+                VStack(alignment: .leading, spacing: 5) {
+                    Text(listing.title )
+                        .foregroundColor(.white)
+                        .lineLimit(1)
+                }.padding(10)
+                Spacer()
+            }
+        }
+        .frame(width: controls.width, height: controls.height)
+        .cornerRadius(5)
+    }
+    
+    func ListingDetailView(listing: Listing) -> some View {
+        return ZStack {
+            Text("Not implemented")
         }
     }
 }
