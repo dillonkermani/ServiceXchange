@@ -30,6 +30,7 @@ struct ServiceXchangeApp: App {
       NavigationView {
         ContentView() // Right Click -> "Jump to Definition" to go through viewcontroller flow.
             .environmentObject(session)
+            .preferredColorScheme(.light)
       }
     }
   }
