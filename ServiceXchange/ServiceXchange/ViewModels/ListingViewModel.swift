@@ -12,14 +12,28 @@ import FirebaseStorage
 
 class ListingViewModel: ObservableObject {
     
+    @Published var allListings: [Listing] = []
+    @Published var isLoading = false
+    @Published var loadErrorMsg = ""
     @Published var cardImageData = Data()
     @Published var posterId: String = ""
     @Published var title: String = ""
     @Published var description: String = ""
     
-    func loadAllListings(onSuccess: @escaping(_ listings: [Listing]) -> Void, onError: @escaping(_ errorMessage: String) -> Void) {
+    func loadListings() {
+        self.isLoading = true
+        getListingsFromDB(onSuccess: {listings in
+            self.allListings = listings
+            self.isLoading = false
+        }, onError: {errorMessage in
+            self.loadErrorMsg = errorMessage
+            self.isLoading = false
+        })
+    }
         
-        Ref.FIRESTORE_COLLECTION_LISTINGS.order(by: "name", descending: true).getDocuments { (snapshot, error) in
+    private func getListingsFromDB(onSuccess: @escaping(_ listings: [Listing]) -> Void, onError: @escaping(_ errorMessage: String) -> Void) {
+        
+        Ref.FIRESTORE_COLLECTION_LISTINGS.getDocuments { (snapshot, error) in
             guard let snap = snapshot else {
                 print("Error fetching data")
                 return
@@ -32,7 +46,6 @@ class ListingViewModel: ObservableObject {
                 guard let decodedListing = try? Listing.init(fromDictionary: dict) else { return }
                 listings.append(decodedListing)
             }
-            
             onSuccess(listings)
         }
     }
