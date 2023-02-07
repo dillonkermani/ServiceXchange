@@ -39,12 +39,8 @@ struct HomeView: View {
     
     var body: some View {
         ZStack {
-            
-            
-            
             NavigationStack {
                 VStack {
-                    
                     ScrollView (.horizontal, showsIndicators: false) {
                         HStack(spacing: 10) {
                             ForEach(controls.categoryList, id: \.self) { x in
@@ -72,27 +68,6 @@ struct HomeView: View {
                     
                     
                     
-                    /*
-                    List {
-                        ForEach(0..<4) {_ in
-                            HStack() {
-                                AsyncImage(url: URL(string: "https://www.shutterstock.com/shutterstock/photos/764462584/display_1500/stock-vector-dice-icon-iage-764462584.jpg")) { image in
-                                    image.resizable()
-                                } placeholder: {
-                                    ProgressView()
-                                }
-                                .aspectRatio(contentMode: .fit)
-                                AsyncImage(url: URL(string: "https://www.shutterstock.com/shutterstock/photos/764462584/display_1500/stock-vector-dice-icon-iage-764462584.jpg")) { image in
-                                    image.resizable()
-                                } placeholder: {
-                                    ProgressView()
-                                }
-                                .aspectRatio(contentMode: .fit)
-                            }
-                        }
-                    }
-                     */
-                    
                     
                 }
             }.navigationTitle("ServiceXchange")
@@ -111,7 +86,7 @@ struct HomeView: View {
             .padding(.leading, 20)
             
             LazyVGrid(columns: controls.gridItems, alignment: .center, spacing: 15) {
-                if listingVM.allListings.isEmpty {
+                if listingVM.allListings.isEmpty || listingVM.isLoading {
                     ForEach(0..<10) { _ in
                         ShimmerPlaceholderView(width: controls.width, height: controls.height, cornerRadius: 5, animating: false)
                     }
@@ -136,14 +111,16 @@ struct HomeView: View {
                 .placeholder({
                     ShimmerPlaceholderView(width: controls.width, height: controls.height, cornerRadius: 0, animating: true)
                 })
+                .basicKFModifiers(cgSize: CGSize(width: controls.height, height: controls.width))
+                .aspectRatio(contentMode: .fill)
                 .frame(width: controls.width, height: controls.height)
                 .clipped()
             
-            /*
+            
             cardGradient()
                 .rotationEffect(.degrees(180))
                 .frame(width: controls.width, height: controls.height)
-             */
+             
             
             HStack {
                 VStack(alignment: .leading, spacing: 5) {
