@@ -13,26 +13,16 @@ struct HomeViewControls {
     var width = (UIScreen.main.bounds.width * 0.43)
     var height = (UIScreen.main.bounds.width * 0.43)
     var categoryList = ["Category1", "Category2", "Category3", "Category4", "Category5"]
+    var searchText = ""
 }
 
 struct HomeView: View {
-    
-    //@EnvironmentObject var session: SessionStore
-    
-// Custom Search Bar() components
-    @State var searchText = ""
     
     @ObservedObject var listingVM = ListingViewModel()
     
     @State var controls = HomeViewControls()
     
-    
-    
 
-    
-    // Custom Scroll Bar() components
-    
-     
     init() {
         listingVM.loadListings()
     }
@@ -40,68 +30,78 @@ struct HomeView: View {
     var body: some View {
         ZStack {
             NavigationStack {
-                VStack {
-                    ScrollView (.horizontal, showsIndicators: false) {
-                        HStack(spacing: 10) {
-                            ForEach(controls.categoryList, id: \.self) { x in
-                                Button(action: {print("You clicked")}){
-                                    Text("\(x)")
-                                        .foregroundColor(.white)
-                                        .font(.subheadline)
-                                        .frame(width: 90, height: 40)
-                                        .background(.green)
-                                        .cornerRadius(25)
-                                }
-                            }
+                ScrollView {
+                    VStack {
+                        HStack {
+                            Image("sxc_title_transparent")
+                                .resizable()
+                                .frame(width: 300, height: 95)
+                                .padding()
+                            Spacer()
                         }
-                    }.padding([.leading, .trailing], 10)
-                    
-                    ScrollView(.vertical) {
-                        if !listingVM.isLoading {
-                            
-                            AllListings()
-                            
-                        } else {
-                            Text(listingVM.loadErrorMsg)
-                        }
+                        CategoryPicker()
+                            .searchable(text: $controls.searchText)
+                        ListingsGrid()
                     }
-                    
-                    
-                    
-                    
                 }
-            }.navigationTitle("ServiceXchange")
-            .searchable(text: $searchText)
+            }.navigationBarHidden(true)
             
         }
     }
     
-    fileprivate func AllListings() -> some View {
-        Group {
-            HStack {
-                Text("Listings")
-                Spacer()
-            }.padding(.vertical, 10)
-            .padding(.top, 5)
-            .padding(.leading, 20)
-            
-            LazyVGrid(columns: controls.gridItems, alignment: .center, spacing: 15) {
-                if listingVM.allListings.isEmpty || listingVM.isLoading {
-                    ForEach(0..<10) { _ in
-                        ShimmerPlaceholderView(width: controls.width, height: controls.height, cornerRadius: 5, animating: false)
+    
+    
+    
+    fileprivate func CategoryPicker() -> some View {
+        return ScrollView (.horizontal, showsIndicators: false) {
+            HStack(spacing: 10) {
+                ForEach(controls.categoryList, id: \.self) { x in
+                    Button(action: {print("You clicked")}){
+                        Text("\(x)")
+                            .foregroundColor(.white)
+                            .font(.subheadline)
+                            .frame(width: 90, height: 40)
+                            .background(.green)
+                            .cornerRadius(25)
                     }
-                } else {
-                    ForEach(listingVM.allListings, id: \.listingId) { listing in
-                        NavigationLink(destination: ListingDetailView(listing: listing)) {
-                            ListingCardView(listing: listing)
-                        }
-                        .simultaneousGesture(TapGesture().onEnded{
-                            UIImpactFeedbackGenerator(style: .soft).impactOccurred()
-                        })
-                    }
-                            
                 }
-            }.padding(.horizontal, 10)
+            }
+        }.padding([.leading, .trailing], 10)
+    }
+    
+    fileprivate func ListingsGrid() -> some View {
+        return ScrollView(.vertical) {
+            if !listingVM.isLoading {
+                Group {
+                    HStack {
+                        Text("All Services")
+                            .font(.system(size: 25)).bold()
+                        Spacer()
+                    }.padding(.vertical, 10)
+                    .padding(.top, 5)
+                    .padding(.leading, 25)
+                    
+                    LazyVGrid(columns: controls.gridItems, alignment: .center, spacing: 15) {
+                        if listingVM.allListings.isEmpty || listingVM.isLoading {
+                            ForEach(0..<10) { _ in
+                                ShimmerPlaceholderView(width: controls.width, height: controls.height, cornerRadius: 5, animating: false)
+                            }
+                        } else {
+                            ForEach(listingVM.allListings, id: \.listingId) { listing in
+                                NavigationLink(destination: ListingDetailView(listing: listing)) {
+                                    ListingCardView(listing: listing)
+                                }
+                                .simultaneousGesture(TapGesture().onEnded{
+                                    UIImpactFeedbackGenerator(style: .soft).impactOccurred()
+                                })
+                            }
+                                    
+                        }
+                    }.padding(.horizontal, 10)
+                }
+            } else {
+                Text(listingVM.loadErrorMsg)
+            }
         }
     }
     

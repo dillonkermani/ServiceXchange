@@ -14,5 +14,5 @@ struct Listing: Encodable, Decodable {
     var title: String
     var description: String
     var datePosted: Double
-    var rate: Double?
+    var categories: [String]?
 }
