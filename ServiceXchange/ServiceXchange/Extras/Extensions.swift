@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import Kingfisher
+import SwiftUI
 
 extension Encodable {
     func toDictionary() throws -> [String: Any] {
@@ -23,4 +25,17 @@ extension Decodable {
         let decoder = JSONDecoder()
         self = try decoder.decode(Self.self, from: data)
     }
+}
+
+extension KFImage {
+    func basicKFModifiers(cgSize: CGSize) -> AnyView {
+        return AnyView(
+          self
+            .setProcessor(DownsamplingImageProcessor(size: cgSize))
+            .scaleFactor(UIScreen.main.scale)
+            .cacheOriginalImage()
+            .renderingMode(.original)
+            .resizable()
+        )
+      }
 }

@@ -13,6 +13,7 @@ struct HomeViewControls {
     var width = (UIScreen.main.bounds.width * 0.43)
     var height = (UIScreen.main.bounds.width * 0.43)
     var categoryList = ["Category1", "Category2", "Category3", "Category4", "Category5"]
+    var selectedCategory = ""
     var searchText = ""
 }
 
@@ -36,16 +37,17 @@ struct HomeView: View {
                             Image("sxc_title_transparent")
                                 .resizable()
                                 .frame(width: 300, height: 95)
-                                .padding()
+                                .padding([.top, .bottom], 35)
+                                .padding(.leading, 15)
                             Spacer()
                         }
+                        
                         CategoryPicker()
                             .searchable(text: $controls.searchText)
                         ListingsGrid()
                     }
                 }
             }.navigationBarHidden(true)
-            
         }
     }
     
@@ -54,19 +56,28 @@ struct HomeView: View {
     
     fileprivate func CategoryPicker() -> some View {
         return ScrollView (.horizontal, showsIndicators: false) {
-            HStack(spacing: 10) {
-                ForEach(controls.categoryList, id: \.self) { x in
-                    Button(action: {print("You clicked")}){
-                        Text("\(x)")
-                            .foregroundColor(.white)
-                            .font(.subheadline)
-                            .frame(width: 90, height: 40)
-                            .background(.green)
-                            .cornerRadius(25)
+            HStack(spacing: 12) {
+                ForEach(controls.categoryList, id: \.self) { category in
+                    Button(action: {
+                        controls.selectedCategory = category}) {
+                        
+                            ZStack {
+                                Rectangle()
+                                    .frame(width: 105, height: 40)
+                                    .foregroundColor(CustomColor.sxcgreen)
+                                    .cornerRadius(20)
+
+                                Text("\(category)")
+                                    .foregroundColor(.white)
+                                    .padding()
+                                    .font(.system(size: 15)).bold()
+
+                            }.cornerRadius(20)
+
                     }
                 }
             }
-        }.padding([.leading, .trailing], 10)
+        }.padding([.leading], 20)
     }
     
     fileprivate func ListingsGrid() -> some View {
@@ -136,8 +147,10 @@ struct HomeView: View {
     }
     
     func ListingDetailView(listing: Listing) -> some View {
-        return ZStack {
+        return VStack {
             Text("Not implemented")
+            ListingCardView(listing: listing)
+            Spacer()
         }
     }
 }

@@ -1,7 +1,6 @@
 // Reusable Custom UI Components
 
 import SwiftUI
-import Kingfisher
 
 func underlinedTextField(title: String, text: Binding <String>, width: CGFloat, height: CGFloat, color: Color) -> some View {
     return TextField(title, text: text)
@@ -47,17 +46,4 @@ func cardGradient() -> LinearGradient {
         startPoint: UnitPoint(x: 0.5, y: 0.5),
         endPoint: UnitPoint(x: 0.5, y: 0.0))
         //.rotationEffect(.degrees(180))
-}
-
-extension KFImage {
-    func basicKFModifiers(cgSize: CGSize) -> AnyView {
-        return AnyView(
-          self
-            .setProcessor(DownsamplingImageProcessor(size: cgSize))
-            .scaleFactor(UIScreen.main.scale)
-            .cacheOriginalImage()
-            .renderingMode(.original)
-            .resizable()
-        )
-      }
 }
