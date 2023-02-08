@@ -60,28 +60,41 @@ class ListingViewModel: ObservableObject {
         
         guard let dict = try? listing.toDictionary() else { return }
         
+        //adding listing without the image to the firebase
         let listing_ref = Ref.FIRESTORE_COLLECTION_LISTINGS.addDocument(data: dict){ error in
             if let error = error {
                 onError(error.localizedDescription)
                 return
             }
         }
+        
+        //check if there is an image to add
         if self.cardImageData.isEmpty {
             onSuccess(listing)
             return
         }
+        
+        //create semi unique to be changed later image name
         let image_name = "\(listing_ref.documentID).jpg"
+        
+        //this a thing that you put image into and it updates image to firebase
         let img_ref = Ref.FIREBASE_STORAGE.reference().child(image_name)
+        
+        //give error if there is no image data
         img_ref.putData(self.cardImageData) {(metadata, error) in
             guard let _ = metadata else {
                 print("no image metadata...")
                 return
             }
+            
+            //gives us image url on success
             img_ref.downloadURL { (url, error) in
                 guard let downloadURL = url else {
                     print("image upload failed: no download url")
                     return
                 }
+                
+                //store the url of the image to firebase
                 listing_ref.updateData( [
                     "cardImageUrl": downloadURL.absoluteString,
                     "listingId": listing_ref.documentID,
