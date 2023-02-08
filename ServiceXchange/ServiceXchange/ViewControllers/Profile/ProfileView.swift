@@ -63,7 +63,7 @@ struct ProfileView: View {
                     
                     //will go to an account settings page once I make that page and figure out what in the
                     //world would be included in it
-                    NavigationLink(destination: CreateView(), label: {
+                    NavigationLink(destination: SettingsView(), label: {
                         Image(systemName: "gear")
                         
                             .font(.system(size: 35,
@@ -109,7 +109,7 @@ struct ProfileView: View {
             })
             
             //saved listings --> goes to a page that has the saved listing posts
-            NavigationLink(destination: CreateView(), label: {
+            NavigationLink(destination: SavedListingsView(), label: {
                 CustomProfileButtonView(title: "Saved Listings", foregroundColor: .white, backgroundColor: .blue.opacity(0.3))
             })
             
@@ -181,6 +181,24 @@ struct ProfileView: View {
                 .background(Color.red)
                 .cornerRadius(20)
                 
+            }
+        }
+    }
+    
+    private func SettingsView() -> some View {
+        return ZStack{
+            VStack{
+                Text("Settings").font(.subheadline).bold()
+                
+                
+            }
+        }
+    }
+    private func SavedListingsView() -> some View {
+        return ZStack{
+            
+            VStack{
+                Text("Saved Listings").font(.subheadline).bold()
             }
         }
     }
