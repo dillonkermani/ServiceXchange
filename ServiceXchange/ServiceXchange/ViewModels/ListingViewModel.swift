@@ -8,13 +8,15 @@
 import Foundation
 import SwiftUI
 import FirebaseCore
-import FirebaseStorage
 
 class ListingViewModel: ObservableObject {
     
+    //for displaying all listings
     @Published var allListings: [Listing] = []
     @Published var isLoading = false
     @Published var loadErrorMsg = ""
+    
+    //for uploading listings
     @Published var cardImageData = Data()
     @Published var posterId: String = ""
     @Published var title: String = ""
@@ -52,8 +54,6 @@ class ListingViewModel: ObservableObject {
     
     func addListing(posterId: String, onSuccess: @escaping(_ listing: Listing) -> Void, onError: @escaping(_ errorMessage: String) -> Void) {
         
-
-        let storage = Storage.storage()
         
         
         let listing = Listing(posterId: posterId, title: self.title, description: self.description, datePosted: Date().timeIntervalSince1970)
@@ -71,7 +71,7 @@ class ListingViewModel: ObservableObject {
             return
         }
         let image_name = "\(listing_ref.documentID).jpg"
-        let img_ref = storage.reference().child(image_name)
+        let img_ref = Ref.FIREBASE_STORAGE.reference().child(image_name)
         img_ref.putData(self.cardImageData) {(metadata, error) in
             guard let _ = metadata else {
                 print("no image metadata...")

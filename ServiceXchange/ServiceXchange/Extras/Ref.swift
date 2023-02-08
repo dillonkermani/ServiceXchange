@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Firebase
+import FirebaseStorage
 
 class Ref {
     // Firestore
@@ -23,4 +24,5 @@ class Ref {
     static func FIRESTORE_DOCUMENT_LISTINGID(listingId: String) -> DocumentReference {
         return FIRESTORE_COLLECTION_LISTINGS.document(listingId)
     }
+    static var FIREBASE_STORAGE = Storage.storage()
 }
