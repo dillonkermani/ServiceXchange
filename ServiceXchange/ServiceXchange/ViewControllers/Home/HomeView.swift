@@ -42,12 +42,12 @@ struct HomeView: View {
                             Spacer()
                         }
                         
+                        
                         CategoryPicker()
-                            .searchable(text: $controls.searchText)
                         ListingsGrid()
                     }
                 }
-            }.navigationBarHidden(true)
+            }.toolbar(.hidden)
         }
     }
     
@@ -81,39 +81,33 @@ struct HomeView: View {
     }
     
     fileprivate func ListingsGrid() -> some View {
-        return ScrollView(.vertical) {
-            if !listingVM.isLoading {
-                Group {
-                    HStack {
-                        Text("All Services")
-                            .font(.system(size: 25)).bold()
-                        Spacer()
-                    }.padding(.vertical, 10)
-                    .padding(.top, 5)
-                    .padding(.leading, 25)
-                    
-                    LazyVGrid(columns: controls.gridItems, alignment: .center, spacing: 15) {
-                        if listingVM.allListings.isEmpty || listingVM.isLoading {
-                            ForEach(0..<10) { _ in
-                                ShimmerPlaceholderView(width: controls.width, height: controls.height, cornerRadius: 5, animating: false)
-                            }
-                        } else {
-                            ForEach(listingVM.allListings, id: \.listingId) { listing in
-                                NavigationLink(destination: ListingDetailView(listing: listing)) {
-                                    ListingCardView(listing: listing)
-                                }
-                                .simultaneousGesture(TapGesture().onEnded{
-                                    UIImpactFeedbackGenerator(style: .soft).impactOccurred()
-                                })
-                            }
-                                    
+        return VStack {
+                HStack {
+                    Text("All Services")
+                        .font(.system(size: 25)).bold()
+                    Spacer()
+                }.padding(.vertical, 10)
+                .padding(.top, 5)
+                .padding(.leading, 25)
+                
+                LazyVGrid(columns: controls.gridItems, alignment: .center, spacing: 15) {
+                    if listingVM.allListings.isEmpty || listingVM.isLoading {
+                        ForEach(0..<10) { _ in
+                            ShimmerPlaceholderView(width: controls.width, height: controls.height, cornerRadius: 5, animating: true)
                         }
-                    }.padding(.horizontal, 10)
-                }
-            } else {
-                Text(listingVM.loadErrorMsg)
+                    } else {
+                        ForEach(listingVM.allListings, id: \.listingId) { listing in
+                            NavigationLink(destination: ListingDetailView(listing: listing)) {
+                                ListingCardView(listing: listing)
+                            }
+                            .simultaneousGesture(TapGesture().onEnded{
+                                UIImpactFeedbackGenerator(style: .soft).impactOccurred()
+                            })
+                        }
+                                
+                    }
+                }.padding(.horizontal, 10)
             }
-        }
     }
     
     func ListingCardView(listing: Listing) -> some View {
