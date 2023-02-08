@@ -38,6 +38,7 @@
 		65FE2B4929874C140077F505 /* UIComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65FE2B4829874C140077F505 /* UIComponents.swift */; };
 		65FE2B4C29874C6C0077F505 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65FE2B4B29874C6C0077F505 /* LoginViewModel.swift */; };
 		DF96D063298C22C4009C80BB /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = DF96D062298C22C4009C80BB /* FirebaseStorage */; };
+		DFED901129942CC6004E7177 /* ListingDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFED901029942CC6004E7177 /* ListingDetailView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -65,6 +66,7 @@
 		65F932E22991B15C00A63F37 /* ShimmerPlaceholderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShimmerPlaceholderView.swift; sourceTree = "<group>"; };
 		65FE2B4829874C140077F505 /* UIComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIComponents.swift; sourceTree = "<group>"; };
 		65FE2B4B29874C6C0077F505 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
+		DFED901029942CC6004E7177 /* ListingDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListingDetailView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -192,6 +194,7 @@
 			isa = PBXGroup;
 			children = (
 				65C3EB982981DBA100766659 /* CreateListingView.swift */,
+				DFED901029942CC6004E7177 /* ListingDetailView.swift */,
 			);
 			path = Post;
 			sourceTree = "<group>";
@@ -334,6 +337,7 @@
 			files = (
 				65FE2B4929874C140077F505 /* UIComponents.swift in Sources */,
 				65C3EB952981DB7800766659 /* HomeView.swift in Sources */,
+				DFED901129942CC6004E7177 /* ListingDetailView.swift in Sources */,
 				65E992722989E67900C3C5BA /* Listing.swift in Sources */,
 				659462DD298A17AF0093A71D /* ImagePicker.swift in Sources */,
 				65C3EB9C2981DBDE00766659 /* LoginView.swift in Sources */,
