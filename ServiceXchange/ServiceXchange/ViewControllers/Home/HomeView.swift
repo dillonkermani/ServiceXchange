@@ -146,13 +146,13 @@ struct HomeView: View {
         .cornerRadius(5)
     }
     
-    func ListingDetailView(listing: Listing) -> some View {
-        return VStack {
-            Text("Not implemented")
-            ListingCardView(listing: listing)
-            Spacer()
-        }
-    }
+//    func ListingDetailView(listing: Listing) -> some View {
+//        return VStack {
+//            Text("Not implemented")
+//            ListingCardView(listing: listing)
+//            Spacer()
+//        }
+//    }
 }
 
 struct HomeView_Previews: PreviewProvider {

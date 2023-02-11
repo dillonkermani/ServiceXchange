@@ -11,53 +11,116 @@ import FirebaseStorage
 
 struct ListingDetailView : View {
     
-
+    @State private var report_clicked = false
+    
     @ObservedObject var viewModel: ListingDetailViewModel
     
     init(listing: Listing) {
         viewModel = ListingDetailViewModel(listing: listing)
         
     }
-    func listing_images(urls: [String]) -> some View {
-        return AsyncImage(url: URL(string: urls[0])) { phase in
-            switch phase {
-            case .empty:
-                ProgressView()
-                    .frame(width:  .infinity, height: 400)
-            case .success(let image):
-                image.resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(maxWidth: .infinity, maxHeight: 400 )
-                    .background(
-                        image.resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .brightness(0.3)
-                            .blur(radius: 15)
-                    )
-            case .failure:
-                Image(systemName: "photo")
-            @unknown default:
-                // Since the AsyncImagePhase enum isn't frozen,
-                // we need to add this currently unused fallback
-                // to handle any new cases that might be added
-                // in the future:
-                EmptyView()
+    func display_rating(rating: Double) -> some View {
+        let ones = Int(rating)
+        let tens = Int(rating * 10) % 10
+        return VStack(alignment: .leading){
+            HStack {
+                ForEach(1..<6) {i in
+                    if rating >= Double(i){
+                        Image(systemName: "star.fill")
+                            .frame(width: 10, height: 10)
+                            .foregroundColor(CustomColor.sxcgreen)
+                    }
+                    // if its x.2 and i + 1 < x ex: 3.3 i=3 yes 4.3 i=3 no
+                    else if tens > 2 && rating + 1 > Double(i) {
+                        Image(systemName: "star.leadinghalf.fill")
+                            .frame(width: 10, height: 10)
+                            .foregroundColor(CustomColor.sxcgreen)
+                    }
+                    else {
+                        Image(systemName: "star")
+                            .frame(width: 10, height: 10)
+                            .foregroundColor(CustomColor.sxcgreen)
+
+                    }
+                }
+                
+                Text("(\(ones).\(tens))")
             }
         }
     }
-    var body: some View {
-            VStack {
-                listing_images(urls: [viewModel.listing.cardImageUrl])
-                Text(viewModel.listing.title)
-                    .font(.system(size: 40)).bold()
-                    .frame(alignment: .leading)
+    
+    //TODO: fetch actual poster rating from firestore
+    func poster_data(poster: User, listing_rating: Double) -> some View {
+
+        return HStack {
+            //TODO: make Profile View take in a userid instead of nothing
+            NavigationLink(destination: ProfileView()){
+                HStack{
+                    KFImage(URL(string: poster.profileImageUrl ?? "https://firebasestorage.googleapis.com:443/v0/b/servicexchange-5c2cb.appspot.com/o/RuQF2I7AUVhKqprlGy3s.jpeg?alt=media&token=9a8cc66d-ce14-49ca-a7b1-45ed851987ed")) //TODO: create default image for users with no pfp
+                        .placeholder({
+                            ShimmerPlaceholderView(width: 64, height: 64, cornerRadius: 0, animating: true)
+                                .cornerRadius(100)
+                        })
+                    
+                        .resizable()
+                        .aspectRatio(1, contentMode: .fill)
+                        .scaledToFit()
+                        .cornerRadius(.infinity)
+                        .clipped(antialiased: true)
+                    VStack(alignment: .leading) {
+                        Text("\(poster.firstName) \(poster.lastName)")
+                            .padding(.horizontal, 0)
+                        display_rating(rating: listing_rating)
+                            .padding(.horizontal, 5)
+                        
+                    }
+                }
+            }
+            Spacer()
+            Menu {
+                NavigationLink(destination: MessagesView(), label: {
+                    Label("Send Message", systemImage: "envelope")
+                })
+                Button(role: .destructive, action: {report_clicked = true}, label: {
+                    Label("Report", systemImage: "flag.fill")
+                        .foregroundColor(Color.red)
+                })
                 
-                Text(viewModel.poster.firstName)
-                Text(viewModel.listing.description)
-                    .font(.system(size: 25))
+            }
+            label: {
+                VStack {
+                    ForEach(0..<3) { _ in
+                        Rectangle()
+                            .cornerRadius(.infinity)
+                            .frame(width: 5, height: 5)
+                            .foregroundColor(.black) //TODO: make a default text color, give this that color
+                    }
+                }
+                .padding()
+
+            }
+        }
+        .frame(height: 50)
+        .padding(.horizontal, 20)
+    }
+    
+    var body: some View {
+        VStack {
+            ScrollView {
+                URLCarouselView(urls: [viewModel.listing.cardImageUrl])
+                    .frame(maxHeight: 400)
+                Text(viewModel.listing.title)
+                    .font(.system(size: 36)).bold()
+                    .frame(maxWidth: .infinity, alignment: .leading)
                     .padding()
                 
-            }.frame(width: .infinity, alignment: .leading)
+                poster_data(poster: viewModel.poster, listing_rating: 3.5)
+                Text(viewModel.listing.description)
+                    .font(.system(size: 20))
+                    .padding()
+                
+            }
+        }
     }
 }
 
