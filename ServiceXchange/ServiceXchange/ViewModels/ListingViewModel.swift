@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 import FirebaseCore
+import FirebaseStorage
 
 class ListingViewModel: ObservableObject {
     
@@ -75,16 +76,18 @@ class ListingViewModel: ObservableObject {
             onSuccess(listing)
             return
         }
-        let image_name = "\(listing_ref.documentID).jpg"
+        let image_name = "\(listing_ref.documentID).jpeg"
         let img_ref = Ref.FIREBASE_STORAGE.reference().child(image_name)
-        img_ref.putData(self.cardImageData) {(metadata, error) in
+        img_ref.putData(self.cardImageData, metadata: StorageMetadata(dictionary: ["contentType": "image/jpeg"])) {(metadata, error) in
             guard let _ = metadata else {
                 print("no image metadata...")
+                onError("no image metadata")
                 return
             }
             img_ref.downloadURL { (url, error) in
                 guard let downloadURL = url else {
                     print("image upload failed: no download url")
+                    onError("image upload failed")
                     return
                 }
                 listing_ref.updateData( [
