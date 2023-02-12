@@ -17,7 +17,7 @@ struct ServiceProfileView: View {
     var body: some View {
         NavigationView{
             VStack{
-                HStack{
+                HStack(spacing: 12){
                     Text(CompanyName)
                         .font(.system(size: 30,
                                       weight: .regular,
