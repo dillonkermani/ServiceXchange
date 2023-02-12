@@ -37,6 +37,7 @@
 		65FE2B46298749220077F505 /* ImageMorphing in Frameworks */ = {isa = PBXBuildFile; productRef = 65FE2B45298749220077F505 /* ImageMorphing */; };
 		65FE2B4929874C140077F505 /* UIComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65FE2B4829874C140077F505 /* UIComponents.swift */; };
 		65FE2B4C29874C6C0077F505 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65FE2B4B29874C6C0077F505 /* LoginViewModel.swift */; };
+		6DE7466F299440960094805F /* ServiceProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DE7466E299440960094805F /* ServiceProfileView.swift */; };
 		DF96D063298C22C4009C80BB /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = DF96D062298C22C4009C80BB /* FirebaseStorage */; };
 /* End PBXBuildFile section */
 
@@ -65,6 +66,7 @@
 		65F932E22991B15C00A63F37 /* ShimmerPlaceholderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShimmerPlaceholderView.swift; sourceTree = "<group>"; };
 		65FE2B4829874C140077F505 /* UIComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIComponents.swift; sourceTree = "<group>"; };
 		65FE2B4B29874C6C0077F505 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
+		6DE7466E299440960094805F /* ServiceProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceProfileView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -171,6 +173,7 @@
 				6527E2C5298E31ED0085FA05 /* Main */,
 				65C3EB9A2981DBCE00766659 /* Login */,
 				65C3EB8C2981DAEB00766659 /* Home */,
+				6DE7466D299440210094805F /* ServiceProfile */,
 				65C3EB8E2981DAFE00766659 /* Map */,
 				65C3EB902981DB0D00766659 /* Message */,
 				65C3EB8F2981DB0400766659 /* Post */,
@@ -236,6 +239,14 @@
 				65E992752989F5AC00C3C5BA /* ListingViewModel.swift */,
 			);
 			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		6DE7466D299440210094805F /* ServiceProfile */ = {
+			isa = PBXGroup;
+			children = (
+				6DE7466E299440960094805F /* ServiceProfileView.swift */,
+			);
+			path = ServiceProfile;
 			sourceTree = "<group>";
 		};
 		DF96D061298C22C4009C80BB /* Frameworks */ = {
@@ -344,6 +355,7 @@
 				65C3EB972981DB9500766659 /* MapView.swift in Sources */,
 				65C3EB992981DBA100766659 /* CreateListingView.swift in Sources */,
 				65FE2B4C29874C6C0077F505 /* LoginViewModel.swift in Sources */,
+				6DE7466F299440960094805F /* ServiceProfileView.swift in Sources */,
 				658D1CC629885E2B0026DC5B /* SessionStore.swift in Sources */,
 				658D1CC4298857550026DC5B /* Extensions.swift in Sources */,
 				658D1CC1298855050026DC5B /* User.swift in Sources */,
