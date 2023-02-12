@@ -8,6 +8,7 @@ import SwiftUI
 
 public struct ShimmerPlaceholderView: View {
     
+    //TODO: Fix this code so it isnt dependent on exact sizes
     @State private var opacity: Double = 0.25
     var width: CGFloat
     var height: CGFloat
