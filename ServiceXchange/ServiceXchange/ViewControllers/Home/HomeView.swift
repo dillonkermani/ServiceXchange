@@ -112,7 +112,6 @@ struct HomeView: View {
     
     func ListingCardView(listing: Listing) -> some View {
         let image_url = listing.imageUrls.first ?? ""
-        print(image_url)
         return ZStack(alignment: .bottom) {
             KFImage(URL(string:  image_url))
                 .placeholder({

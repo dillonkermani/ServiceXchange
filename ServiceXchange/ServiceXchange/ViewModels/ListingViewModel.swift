@@ -116,14 +116,7 @@ class ListingViewModel: ObservableObject {
         }
         
         
-        let url_array: [String]
-        do {
-            url_array = try await uploadImages(listing_ref: listing_ref)
-        }
-        catch {
-            onError("trouble uploading images")
-            return
-        }
+        let url_array = await uploadImages(listing_ref: listing_ref)
         
         do{
             try await listing_ref.updateData( [
