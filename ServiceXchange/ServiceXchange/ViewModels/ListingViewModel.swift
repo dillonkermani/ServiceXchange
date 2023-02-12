@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 import FirebaseCore
+import Firebase
 import FirebaseStorage
 
 class ListingViewModel: ObservableObject {
@@ -38,27 +39,64 @@ class ListingViewModel: ObservableObject {
             self.isLoading = false
         })
     }
-        
-    private func getListingsFromDB(onSuccess: @escaping(_ listings: [Listing]) -> Void, onError: @escaping(_ errorMessage: String) -> Void) {
-        
-        Ref.FIRESTORE_COLLECTION_LISTINGS.getDocuments { (snapshot, error) in
-            guard let snap = snapshot else {
-                print("Error fetching data")
-                return
+    
+    /*
+     * this function takes in a document reference and uploads a bunch of
+     * images asyncronously, so we can await all of the image uploads at once
+     */
+    
+    //TODO: performace improvement?
+    private func uploadImages(listing_ref: DocumentReference) async -> [String] {
+        await withTaskGroup(of: (URL?).self) { group in
+            for (i, image) in self.images.enumerated(){
+                group.addTask {
+                    let image_name = "\(listing_ref.documentID)-\(i).jpeg"
+                    let img_ref = Ref.FIREBASE_STORAGE.reference().child(image_name)
+                    guard let metadata = try? await img_ref.putDataAsync(
+                        image,
+                        metadata: StorageMetadata(dictionary: ["contentType": "image/jpeg"])
+                    ) else {
+                        return nil
+                    }
+                    guard let img_path = metadata.path else { return nil }
+                    return try? await Ref.FIREBASE_STORAGE.reference(withPath: img_path).downloadURL()
+                    
+                        
+                }
             }
-            
-            var listings: [Listing] = []
-            
-            for document in snap.documents {
-                let dict = document.data()
-                guard let decodedListing = try? Listing.init(fromDictionary: dict) else { return }
-                listings.append(decodedListing)
+            var urls: [String] = []
+            for await image_url in group {
+                if image_url == nil {
+                    continue
+                }
+                urls.append(image_url!.absoluteString)
             }
-            onSuccess(listings)
+            return urls
         }
     }
     
-    func addListing(posterId: String, onSuccess: @escaping(_ listing: Listing) -> Void, onError: @escaping(_ errorMessage: String) -> Void) {
+    private func getListingsFromDB(onSuccess: @escaping(_ listings: [Listing]) -> Void, onError: @escaping(_ errorMessage: String) -> Void) {
+        
+        Ref.FIRESTORE_COLLECTION_LISTINGS
+            .order(by: "datePosted", descending: true)
+            .getDocuments { (snapshot, error) in
+                guard let snap = snapshot else {
+                    print("Error fetching data")
+                    return
+                }
+                
+                var listings: [Listing] = []
+                
+                for document in snap.documents {
+                    let dict = document.data()
+                    guard let decodedListing = try? Listing.init(fromDictionary: dict) else { return }
+                    listings.append(decodedListing)
+                }
+                onSuccess(listings)
+            }
+    }
+    
+    func addListing(posterId: String, onSuccess: @escaping(_ listing: Listing) -> Void, onError: @escaping(_ errorMessage: String) -> Void) async {
         
         
         
@@ -72,30 +110,30 @@ class ListingViewModel: ObservableObject {
                 return
             }
         }
-        if self.cardImageData.isEmpty {
+        if self.images.count == 0 {
             onSuccess(listing)
             return
         }
-        let image_name = "\(listing_ref.documentID).jpeg"
-        let img_ref = Ref.FIREBASE_STORAGE.reference().child(image_name)
-        img_ref.putData(self.cardImageData, metadata: StorageMetadata(dictionary: ["contentType": "image/jpeg"])) {(metadata, error) in
-            guard let _ = metadata else {
-                print("no image metadata...")
-                onError("no image metadata")
-                return
-            }
-            img_ref.downloadURL { (url, error) in
-                guard let downloadURL = url else {
-                    print("image upload failed: no download url")
-                    onError("image upload failed")
-                    return
-                }
-                listing_ref.updateData( [
-                    "cardImageUrl": downloadURL.absoluteString,
-                    "listingId": listing_ref.documentID,
-                ] )
-            }
-                
+        
+        
+        let url_array: [String]
+        do {
+            url_array = try await uploadImages(listing_ref: listing_ref)
+        }
+        catch {
+            onError("trouble uploading images")
+            return
+        }
+        
+        do{
+            try await listing_ref.updateData( [
+                "imageUrls": url_array,
+                "listingId": listing_ref.documentID,
+            ] )
+        }
+        catch { 
+            onError("listing update error, hanging images")
+            return
         }
         onSuccess(listing)
     }

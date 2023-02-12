@@ -25,6 +25,7 @@ struct CreateListingView: View {
     @ObservedObject var listingVM = ListingViewModel()
     
     @State var controls = CreateListingControls()
+    @State private var uploading = false
     
     var body: some View {
                 VStack {
@@ -91,20 +92,24 @@ struct CreateListingView: View {
                 ImagePicker(showImagePicker: $controls.showImagePicker, pickedImage: $listingVM.image, imageData: $listingVM.imageData, sourceType: .photoLibrary)
                     
             })
-            .onChange(of: listingVM.image) { _ in
+            .onChange(of: listingVM.image) { _ in //Should this be a function on listingVM?
                 listingVM.images.append(listingVM.imageData)
                 listingVM.imageArray.append(ListingImage(id: UUID(), image: listingVM.image))
             }
     }
     
     private func postListingButton() -> some View {
-        return Button {
-            listingVM.addListing(posterId: session.userSession!.userId, onSuccess: { listing in
-                print("Succesfully posted Listing: \(listingVM.title)")
-            }, onError: { errorMessage in
-                print("Error posting Listing: \(listingVM.title)\nError: \(errorMessage)")
-            })
-        } label: {
+        return Button (action: {
+            self.uploading = true
+            Task {
+                await listingVM.addListing(posterId: session.userSession!.userId, onSuccess: { listing in
+                    print("Succesfully posted Listing: \(listingVM.title)")
+                }, onError: { errorMessage in
+                    print("Error posting Listing: \(listingVM.title)\nError: \(errorMessage)")
+                })
+                self.uploading = false
+            }
+        }, label: {
             ZStack {
                 Rectangle()
                     .frame(width: UIScreen.main.bounds.width / 1.2, height: 50)
@@ -113,7 +118,7 @@ struct CreateListingView: View {
                 Text("Post Listing")
                     .foregroundColor(.white)
             }
-        }
+        }).disabled(self.uploading)
 
             
 
