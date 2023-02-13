@@ -29,7 +29,7 @@ struct URLCarouselView: View {
             ZStack{
                 HStack(spacing: 0){
                     ForEach(0..<self.urls.count, id: \.self) { idx in
-                        Button(action: {index = idx}, label: {
+                        Button(action: {index = idx}, label: { //for snapping scrollbar to location
                             Rectangle().opacity(0)
                         })
                     }
@@ -41,7 +41,7 @@ struct URLCarouselView: View {
                     .frame(width: geometry.size.width / CGFloat(self.urls.count))
                     .position(x: geometry.size.width / CGFloat(self.urls.count) * (CGFloat(index) + 0.5), y: 9)
                     .animation(Animation.linear(duration: 0.25), value: index)
-                    .gesture( //add scroll behavior
+                    .gesture( //add scroll behavior to green part
                         DragGesture()
                             .onChanged( {v in
                                 self.dragging = true
@@ -80,13 +80,26 @@ struct URLCarouselView: View {
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
             scrollbar()
         }.onChange(of: self.index, perform: { _ in
+            //this function require locks, but its a best effort task anyway
+            
             self.scroll_opacity = 1.0
             let scroll_hides_at = DispatchTime.now() + 1.5
+            
+            // cancel all previous tasks
             var prev_job = self.jobs.popLast()
             while prev_job != nil {
                 prev_job!.cancel()
                 prev_job = self.jobs.popLast()
             }
+            let work = DispatchWorkItem {
+                self.scroll_opacity = 0.5
+            }
+            //add new task
+            self.jobs.append(work)
+            DispatchQueue.main.asyncAfter(deadline: scroll_hides_at, execute: work)
+            
+        }).onAppear(perform: {
+            let scroll_hides_at = DispatchTime.now() + 5.0
             let work = DispatchWorkItem {
                 self.scroll_opacity = 0.5
             }
@@ -119,6 +132,5 @@ struct URLCarouselView_Previews: PreviewProvider {
             "https://firebasestorage.googleapis.com:443/v0/b/servicexchange-5c2cb.appspot.com/o/1TOXMnwd2sCdpkeI77QN.jpg?alt=media&token=330f2014-13c3-4193-9e40-cd308e5af08d"
         ])
         .frame(maxHeight: 300)
-//        URLCarouselView(urls: [], width: 300, height: 300)
     }
 }
