@@ -16,5 +16,11 @@ struct User: Encodable, Decodable {
     var listingIDs: [String]
 
     var phone: String?
+    
+    
     var profileImageUrl: String?
+    var companyName: String?
+    var bio: String?
+    var primaryLocationServed: String?
+    
 }
