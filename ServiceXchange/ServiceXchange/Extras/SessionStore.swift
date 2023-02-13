@@ -44,6 +44,22 @@ class SessionStore: ObservableObject {
         })
     }
     
+    func refreshUser() {
+        if isLoggedIn {
+            let firestoreUserId = Ref.FIRESTORE_DOCUMENT_USERID(userId: userSession!.userId)
+              firestoreUserId.getDocument { (document, error) in
+                  if let dict = document?.data() {
+                      guard let decoderUser = try? User.init(fromDictionary: dict) else {return}
+                    self.userSession = decoderUser
+                    print("Successfully refreshed user session.")
+                  }
+              }
+        } else {
+            print("User isn't logged in. Cannot refresh user session.")
+        }
+        
+    }
+    
     
     func logout() {
         do {
