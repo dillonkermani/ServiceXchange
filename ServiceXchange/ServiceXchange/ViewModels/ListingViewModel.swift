@@ -104,6 +104,7 @@ class ListingViewModel: ObservableObject {
         
         guard let dict = try? listing.toDictionary() else { return }
         
+        //adding listing without the image to the firebase
         let listing_ref = Ref.FIRESTORE_COLLECTION_LISTINGS.addDocument(data: dict){ error in
             if let error = error {
                 onError(error.localizedDescription)

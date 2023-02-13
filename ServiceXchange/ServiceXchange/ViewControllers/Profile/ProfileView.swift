@@ -27,10 +27,10 @@ struct ProfileView: View {
     @Environment(\.presentationMode) var presentationMode // Allows us to dismiss views.
     @EnvironmentObject var session: SessionStore // Stores user's login status.
     
-    @ObservedObject var listingVM = ListingViewModel() //this is a reference to the listing class metadata I think
+    //@ObservedObject var listingVM = ListingViewModel() //this is a reference to the listing class metadata I think
                                                        //create one for profile later
                                                        //gotta make a new view model for the user profile I think
-                                                       
+    @ObservedObject var UserVM = UserViewModel()
     
     
     @State var controls = CreateProfileControls() //some control variables for the image picker now given for
@@ -41,7 +41,7 @@ struct ProfileView: View {
     @State private var locationServe: String = ""
     @State private var shortBio: String = ""
     @State private var service: String = ""
-    
+    @State var ProfImageData = Data()
     
     
     
@@ -59,6 +59,8 @@ struct ProfileView: View {
                                           design: .default))
                             .padding(.trailing, 30)
                     }
+                    
+                    
                     
                     
                     //will go to an account settings page once I make that page and figure out what in the
@@ -94,7 +96,6 @@ struct ProfileView: View {
         }
     }
     
-  
     private func ButtonStack() -> some View {
         return VStack(spacing: 30) {
             addProfilePhoto()
@@ -160,18 +161,15 @@ struct ProfileView: View {
                 //does not yet include sending the profile image
                 Button(action: {
                     
-                    Firestore.firestore().collection("users").document("userTest2").setData([
-                        "name": username,
-                       "loaction": locationServe,
-                        "bio": shortBio,
-                        "jobs_done": 2,
-                    ]) { err in
-                        if let err = err {
-                            print("Error writing document: \(err)")
-                        } else {
-                            print("Document successfully written!")
-                        }
-                    }
+                    //get the users information in the form of a unique stucture
+                    let userId = session.userSession!.userId
+                    
+                    //update values of my_user
+                    UserVM.update_user_info(userId: userId, company_name: username, location_served: locationServe, bio: shortBio, profileImageData: ProfImageData, onError: { errorMessage in
+                        print("Update user error: \(errorMessage)")
+                    })
+                    
+
                     
                 }){
                     Text("Send a user to our database")
@@ -244,34 +242,17 @@ struct ProfileView: View {
             //}
         }.frame(maxWidth: .infinity, maxHeight: .infinity)
             .sheet(isPresented: $controls.showImagePicker, content: {
-                ImagePicker(showImagePicker: $controls.showImagePicker, pickedImage: $controls.pickedImage, imageData: $listingVM.cardImageData, sourceType: .photoLibrary)
+                ImagePicker(showImagePicker: $controls.showImagePicker, pickedImage: $controls.pickedImage, imageData: $ProfImageData, sourceType: .photoLibrary)
                     
             })
         
     }
     
+  
+    
+    
 }
 
-
-
-/*
-struct ProfileView: View {
-    
-    @StateObject var session = SessionStore()
-
-    
-    var body: some View {
-        Text("ProfileView")
-        
-        Button {
-            session.logout()
-        } label: {
-            Text("Logout")
-        }
-
-    }
-}
-*/
 
 struct ProfileView_Previews: PreviewProvider {
     static var previews: some View {
