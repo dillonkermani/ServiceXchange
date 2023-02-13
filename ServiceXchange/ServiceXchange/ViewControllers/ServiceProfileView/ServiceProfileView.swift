@@ -16,22 +16,33 @@ struct ServiceProfileView: View {
     
     var body: some View {
         NavigationView{
-            VStack{
-                HStack(spacing: 12){
+            VStack(spacing: 0.0){
+                //HStack(alignment: .top, spacing: 12.0){
                     Text(CompanyName)
                         .font(.system(size: 30,
                                       weight: .regular,
                                       design: .default))
+                        .multilineTextAlignment(.leading)
                         .padding(.trailing, 30)
-                        //.frame(width: 50, height: 50)
-                    //Spacer()
-                    /*Text(NumberProvided)
+                    Text(NumberProvided)
                         .font(.system(size:20,
                                       weight: .regular,
                                       design: .default))
+                        .multilineTextAlignment(.leading)
+                        .padding(.trailing, 30.0)
                     
-                */}
+                     //}
             }
+            
+            
+            
+            
         }
+    }
+}
+
+struct ServiceProfileView_Previews: PreviewProvider {
+    static var previews: some View {
+        ServiceProfileView()
     }
 }
