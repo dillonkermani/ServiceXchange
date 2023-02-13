@@ -61,12 +61,10 @@ struct ListingDetailView : View {
                             ShimmerPlaceholderView(width: 64, height: 64, cornerRadius: 0, animating: true)
                                 .cornerRadius(100)
                         })
-                    
                         .resizable()
-                        .aspectRatio(1, contentMode: .fill)
-                        .scaledToFit()
-                        .cornerRadius(.infinity)
-                        .clipped(antialiased: true)
+                        .clipShape(Circle())
+                        .scaledToFill()
+
                     VStack(alignment: .leading) {
                         Text("\(poster.firstName) \(poster.lastName)")
                             .padding(.horizontal, 0)

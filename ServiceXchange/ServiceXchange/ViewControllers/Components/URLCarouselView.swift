@@ -16,7 +16,6 @@ struct URLCarouselView: View {
     @State private var jobs = [DispatchWorkItem]()
     func kf_image(url: String) -> some View {
         ZStack{
-            
             KFImage(URL(string: url))
                 .resizable()
                 .scaledToFit()

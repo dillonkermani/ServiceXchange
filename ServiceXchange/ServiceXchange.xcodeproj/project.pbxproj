@@ -39,6 +39,8 @@
 		65FE2B4C29874C6C0077F505 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65FE2B4B29874C6C0077F505 /* LoginViewModel.swift */; };
 		6DCDAE392999F597006CECA0 /* ServiceProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DCDAE382999F597006CECA0 /* ServiceProfileView.swift */; };
 		9CF3A2742994318F006E3E5D /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CF3A2732994318F006E3E5D /* UserViewModel.swift */; };
+		DF0F902B299ABDAF000D9AD1 /* UrlImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF0F902A299ABDAF000D9AD1 /* UrlImage.swift */; };
+		DF0F902D299ABF1D000D9AD1 /* ShimmerPlaceHolder2.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF0F902C299ABF1D000D9AD1 /* ShimmerPlaceHolder2.swift */; };
 		DF96D063298C22C4009C80BB /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = DF96D062298C22C4009C80BB /* FirebaseStorage */; };
 		DFED901129942CC6004E7177 /* ListingDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFED901029942CC6004E7177 /* ListingDetailView.swift */; };
 		DFED90132996C9F0004E7177 /* ListingDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFED90122996C9F0004E7177 /* ListingDetailViewModel.swift */; };
@@ -71,10 +73,12 @@
 		65FE2B4829874C140077F505 /* UIComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIComponents.swift; sourceTree = "<group>"; };
 		65FE2B4B29874C6C0077F505 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		6DCDAE382999F597006CECA0 /* ServiceProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceProfileView.swift; sourceTree = "<group>"; };
+		9CF3A2732994318F006E3E5D /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
+		DF0F902A299ABDAF000D9AD1 /* UrlImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UrlImage.swift; sourceTree = "<group>"; };
+		DF0F902C299ABF1D000D9AD1 /* ShimmerPlaceHolder2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShimmerPlaceHolder2.swift; sourceTree = "<group>"; };
 		DFED901029942CC6004E7177 /* ListingDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListingDetailView.swift; sourceTree = "<group>"; };
 		DFED90122996C9F0004E7177 /* ListingDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListingDetailViewModel.swift; sourceTree = "<group>"; };
 		DFED901429982B1A004E7177 /* URLCarouselView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLCarouselView.swift; sourceTree = "<group>"; };
-		9CF3A2732994318F006E3E5D /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -237,7 +241,9 @@
 			children = (
 				65FE2B4829874C140077F505 /* UIComponents.swift */,
 				65F932E22991B15C00A63F37 /* ShimmerPlaceholderView.swift */,
+				DF0F902C299ABF1D000D9AD1 /* ShimmerPlaceHolder2.swift */,
 				DFED901429982B1A004E7177 /* URLCarouselView.swift */,
+				DF0F902A299ABDAF000D9AD1 /* UrlImage.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -362,6 +368,7 @@
 				659462DD298A17AF0093A71D /* ImagePicker.swift in Sources */,
 				65C3EB9C2981DBDE00766659 /* LoginView.swift in Sources */,
 				6DCDAE392999F597006CECA0 /* ServiceProfileView.swift in Sources */,
+				DF0F902B299ABDAF000D9AD1 /* UrlImage.swift in Sources */,
 				DFED901529982B1A004E7177 /* URLCarouselView.swift in Sources */,
 				65C3EBA62981F69400766659 /* TabView.swift in Sources */,
 				65F932E32991B15C00A63F37 /* ShimmerPlaceholderView.swift in Sources */,
@@ -378,6 +385,7 @@
 				658D1CC8298893B30026DC5B /* ContentView.swift in Sources */,
 				65C3EBA02981DC4F00766659 /* MessagesView.swift in Sources */,
 				65C3EB9E2981DC4500766659 /* ProfileView.swift in Sources */,
+				DF0F902D299ABF1D000D9AD1 /* ShimmerPlaceHolder2.swift in Sources */,
 				65522BF02980DB5600CC898F /* ServiceXchangeApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
