@@ -1,6 +1,40 @@
-// Reusable Custom UI Components
+// Reusable Public UI Components
 
 import SwiftUI
+import Kingfisher
+
+var controls = HomeViewControls()
+
+func ListingCardView(listing: Listing) -> some View {
+    let image_url = listing.imageUrls.first ?? ""
+    return ZStack(alignment: .bottom) {
+        KFImage(URL(string:  image_url))
+            .placeholder({
+                ShimmerPlaceholderView(width: controls.width, height: controls.height, cornerRadius: 0, animating: true)
+            })
+            .basicKFModifiers(cgSize: CGSize(width: controls.height, height: controls.width))
+            .aspectRatio(contentMode: .fill)
+            .frame(width: controls.width, height: controls.height)
+            .clipped()
+        
+        
+        cardGradient()
+            .rotationEffect(.degrees(180))
+            .frame(width: controls.width, height: controls.height)
+         
+        
+        HStack {
+            VStack(alignment: .leading, spacing: 5) {
+                Text(listing.title )
+                    .foregroundColor(.white)
+                    .lineLimit(1)
+            }.padding(10)
+            Spacer()
+        }
+    }
+    .frame(width: controls.width, height: controls.height)
+    .cornerRadius(5)
+}
 
 func underlinedTextField(title: String, text: Binding <String>, width: CGFloat, height: CGFloat, color: Color) -> some View {
     return TextField(title, text: text)
