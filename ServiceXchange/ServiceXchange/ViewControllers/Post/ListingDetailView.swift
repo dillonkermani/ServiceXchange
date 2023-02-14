@@ -53,18 +53,13 @@ struct ListingDetailView : View {
     func poster_data(poster: User, listing_rating: Double) -> some View {
 
         return HStack {
-            //TODO: make Profile View take in a userid instead of nothing
+            //TODO: make Profile View take in a userid instead of nothing (profile view my be the wrong view to link)
             NavigationLink(destination: ProfileView()){
                 HStack{
-                    KFImage(URL(string: poster.profileImageUrl ?? "https://firebasestorage.googleapis.com:443/v0/b/servicexchange-5c2cb.appspot.com/o/RuQF2I7AUVhKqprlGy3s.jpeg?alt=media&token=9a8cc66d-ce14-49ca-a7b1-45ed851987ed")) //TODO: create default image for users with no pfp
-                        .placeholder({
-                            ShimmerPlaceholderView(width: 64, height: 64, cornerRadius: 0, animating: true)
-                                .cornerRadius(100)
-                        })
-                        .resizable()
-                        .clipShape(Circle())
+                    UrlImage(url: poster.profileImageUrl ?? "")
                         .scaledToFill()
-
+                        .frame(width: 70, height: 70)
+                        .clipShape(Circle())
                     VStack(alignment: .leading) {
                         Text("\(poster.firstName) \(poster.lastName)")
                             .padding(.horizontal, 0)

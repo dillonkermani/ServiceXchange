@@ -13,8 +13,11 @@ struct UrlImage: View {
     var body: some View {
         KFImage(URL(string: url))
             .placeholder({
-                ShimmerPlaceHolder2()
+                LoadingView()
             })
+            .scaleFactor(UIScreen.main.scale)
+            .cacheOriginalImage(true)
+            .renderingMode(.original)
             .resizable()
             .scaledToFit()
     }
@@ -22,6 +25,13 @@ struct UrlImage: View {
 
 struct UrlImage_Previews: PreviewProvider {
     static var previews: some View {
-        UrlImage(url: "https://upload.wikimedia.org/wikipedia/commons/c/ce/Pavle_Durisic.jpg")
+        VStack{
+            UrlImage(url: "https://upload.wikimedia.org/wikipedia/commons/c/ce/Pavle_Durisic.jpg")
+                .cornerRadius(20)
+                .padding(40)
+            UrlImage(url: "")
+                .cornerRadius(.infinity)
+                .padding(20)
+        }
     }
 }
