@@ -11,9 +11,80 @@ import FirebaseCore
 
 class UserViewModel: ObservableObject{
     
+    
+    //local storage of variables here are updated live
+    @Published var localProfileImageUrl: String = ""
+    @Published var localCompanyName: String = ""
+    @Published var localBio: String = ""
+    @Published var localPrimaryLocationServed: String = ""
+    
+    
+    //populate the user vm variables at the begining of a run
+    
     //ask dillon how to pull the user structure in the Profile edit view
     //pass the user structure into the function and
     //what is user data type? to pass it in?
+    
+    
+    //pull the values of user data and store in local variables
+    func loadLocalUserVariables(userId : String){
+        
+        let userDocRef = Ref.FIRESTORE_DOCUMENT_USERID(userId: userId)
+        
+        //self.localCompanyName = user_ref.companyName
+        
+        
+        //lit this updates fill out rest of the vars later and find the right place for it
+        //also maybe definitly make a userId local variable so that we can only have to use sesesion once
+        userDocRef.getDocument { (document, error) in
+            if let document = document, document.exists {
+                let dataDescription = document.data()
+                //self.localProfileImageUrl = dataDescription["profileImageUrl"] ?? "unknowm"
+                self.localCompanyName = dataDescription?["companyName"]! as? String ?? "unknowm"
+                print(dataDescription?["companyName"]! as? String ?? "unknowm" )
+                print("should be compName: ", self.localCompanyName)
+                //print("Document data: \(dataDescription)")
+            } else {
+                print("Document does not exist")
+            }
+        }
+        
+        
+        
+        /*
+        user_ref.child("users/\(userId)/companyName").getData(completion:  { error, snapshot in
+          guard error == nil else {
+            print(error!.localizedDescription)
+            return;
+          }
+            self.localCompanyName = snapshot.value as? String ?? "Unknown";
+        });
+        
+        user_ref.child("users/\(userId)/profileImageUrl").getData(completion:  { error, snapshot in
+          guard error == nil else {
+            print(error!.localizedDescription)
+            return;
+          }
+            self.localProfileImageUrl = snapshot.value as? String ?? "Unknown";
+        });
+        
+        user_ref.child("users/\(userId)/bio").getData(completion:  { error, snapshot in
+          guard error == nil else {
+            print(error!.localizedDescription)
+            return;
+          }
+            self.localBio = snapshot.value as? String ?? "Unknown";
+        });
+        
+        user_ref.child("users/\(userId)/primaryLocationServed").getData(completion:  { error, snapshot in
+          guard error == nil else {
+            print(error!.localizedDescription)
+            return;
+          }
+            self.localProfileImageUrl = snapshot.value as? String ?? "Unknown";
+        });
+        */
+    }
     
     
     //store user data into

@@ -27,9 +27,7 @@ struct ProfileView: View {
     @Environment(\.presentationMode) var presentationMode // Allows us to dismiss views.
     @EnvironmentObject var session: SessionStore // Stores user's login status.
     
-    //@ObservedObject var listingVM = ListingViewModel() //this is a reference to the listing class metadata I think
-                                                       //create one for profile later
-                                                       //gotta make a new view model for the user profile I think
+    
     @ObservedObject var UserVM = UserViewModel()
     
     
@@ -46,14 +44,20 @@ struct ProfileView: View {
     
     
     var body: some View {
+        
+       
+        
         NavigationView{
             VStack{
                 HStack{
                     //account settings icon --> find the settings icon fo swift
                     //I want in top right corner
                     //text, Welcome back NAME --> find out how to get the nam of the person
+                    
                     if session.userSession != nil {
-                        Text("Welcome, \(session.userSession!.firstName)")
+                        
+                        
+                        Text("Welcome, \(session.userSession?.firstName ?? "")")
                             .font(.system(size: 30,
                                           weight: .regular,
                                           design: .default))
@@ -65,7 +69,7 @@ struct ProfileView: View {
                     
                     //will go to an account settings page once I make that page and figure out what in the
                     //world would be included in it
-                    NavigationLink(destination: SettingsView(), label: {
+                    NavigationLink(destination: ProfileSettingsView(), label: {
                         Image(systemName: "gear")
                         
                             .font(.system(size: 35,
@@ -76,6 +80,7 @@ struct ProfileView: View {
                             .background(CustomColor.sxcgreen)
                             .cornerRadius(40)
                     })
+                    
                 }
                 
                 ScrollView {
@@ -168,7 +173,7 @@ struct ProfileView: View {
                     UserVM.update_user_info(userId: userId, company_name: username, location_served: locationServe, bio: shortBio, profileImageData: ProfImageData, onError: { errorMessage in
                         print("Update user error: \(errorMessage)")
                     })
-                    
+                    session.refreshUser()
 
                     
                 }){
@@ -183,19 +188,29 @@ struct ProfileView: View {
         }
     }
     
-    private func SettingsView() -> some View {
-        return ZStack{
-            VStack{
-                Text("Settings").font(.subheadline).bold()
-                
-                
-            }
-        }
-    }
+
     private func SavedListingsView() -> some View {
         return ZStack{
             
             VStack{
+                
+                //test button to see if data load worked
+                Button(action: {
+                    
+                    //load this didnt fuckin work I guess those state vars just dont update?
+                    let userId = session.userSession!.userId
+                    UserVM.loadLocalUserVariables(userId: userId)
+
+                    
+                }){
+                    Text("test pulling data print comp name to terminal")
+                }
+                .padding()
+                .foregroundColor(.white)
+                .background(Color.red)
+                .cornerRadius(20)
+                
+                
                 Text("Saved Listings").font(.subheadline).bold()
             }
         }
