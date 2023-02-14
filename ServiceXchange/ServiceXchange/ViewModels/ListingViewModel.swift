@@ -19,7 +19,6 @@ class ListingViewModel: ObservableObject {
     @Published var loadErrorMsg = ""
     
     //for uploading listings
-    @Published var cardImageData = Data()
     var imageData = Data()
     var image: Image = Image("user-placeholder")
     @Published var posterId: String = ""

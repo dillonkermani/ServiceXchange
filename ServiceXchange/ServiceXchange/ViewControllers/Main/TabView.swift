@@ -59,7 +59,7 @@ struct TabView: View {
                         NavigationView {
                             VStack {
                                 CreateListingView()
-                            }.navigationTitle("Offer A Service")
+                            }
                         }
                     case 3:
                         NavigationView {
@@ -92,7 +92,7 @@ struct TabView: View {
             Spacer()
             
             Divider()
-                .offset(y: 10)
+                .offset(y: 8)
     
             HStack {
                 ForEach(0..<5, id: \.self) { i in
@@ -117,18 +117,19 @@ struct TabView: View {
                     } label: {
                         if i == 2 {
                             Image(systemName: icons[i])
-                                .font(.system(size: 25,
+                                .font(.system(size: 20,
                                               weight: .regular,
                                               design: .default))
                                 .foregroundColor(.black)
-                                .frame(width: 80, height: 80)
+                                .frame(width: 64, height: 64)
                                 .background(CustomColor.sxcgreen)
-                                .cornerRadius(40)
+                                .cornerRadius(32)
                                 .shadow(color: .gray, radius: 5, x: 0, y: 0)
                                 .overlay(
-                                        RoundedRectangle(cornerRadius: 40)
+                                        RoundedRectangle(cornerRadius: 32)
                                             .stroke(.black, lineWidth: 2)
                                     )
+                                .offset(y: -2)
                 
                         } else {
                             Image(systemName: selectedIndex == i ? icons[i]+".fill" : icons[i])
