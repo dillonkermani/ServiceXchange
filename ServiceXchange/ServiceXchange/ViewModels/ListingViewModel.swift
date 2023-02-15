@@ -13,12 +13,12 @@ import FirebaseStorage
 
 class ListingViewModel: ObservableObject {
     
-    //for displaying all listings
+    // For displaying all listings
     @Published var allListings: [Listing] = []
     @Published var isLoading = false
     @Published var loadErrorMsg = ""
     
-    //for uploading listings
+    // For uploading listings
     var imageData = Data()
     var image: Image = Image("user-placeholder")
     @Published var posterId: String = ""
@@ -27,6 +27,23 @@ class ListingViewModel: ObservableObject {
     @Published var images: [Data] = []
     @Published var imageArray: [ListingImage] = []
     @Published var uploadingImages = false
+    
+    // For current Listing
+    @Published var poster: User = User(userId: "", firstName: "", lastName: "", email: "", isServiceProvider: false, listingIDs: [])
+    @Published var currentListing: Listing = Listing(listingId: "", posterId: "", imageUrls: [], title: "", description: "", datePosted: 0)
+    
+    
+    func getListingPoster(listing: Listing) {
+        let user_ref = Ref.FIRESTORE_DOCUMENT_USERID(userId: listing.posterId)
+        user_ref.getDocument { (document, error) in
+            if let dict = document?.data() {
+                guard let user = try? User.init(fromDictionary: dict) else {
+                    return
+                }
+                self.poster = user
+            }
+        }
+    }
     
     func loadListings() {
         self.isLoading = true
@@ -136,6 +153,30 @@ class ListingViewModel: ObservableObject {
         images.append(imageData)
         imageArray.append(ListingImage(id: UUID(), image: image))
         return 
+    }
+    
+    func deleteListing() {
+        // TODO: Delete listing images from Storage
+        for imageUrl in currentListing.imageUrls {
+            // Create a reference to the file to delete
+            let imageRef = Ref.FIREBASE_STORAGE.reference().child(imageUrl)
+
+            // Delete the file
+            imageRef.delete { error in
+              if let error = error {
+                // Uh-oh, an error occurred!
+                print("Error deleting image from Storage: \(error)")
+              } else {
+                // File deleted successfully
+                print("Successfully deleted \(imageUrl) from Storage.")
+              }
+            }
+                
+        }
+
+        Ref.FIRESTORE_COLLECTION_LISTINGS.document(currentListing.listingId).delete()
+        
+        return
     }
     
 }
