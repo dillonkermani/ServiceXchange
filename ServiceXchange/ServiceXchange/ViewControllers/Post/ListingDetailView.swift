@@ -9,16 +9,99 @@ import SwiftUI
 import Kingfisher
 import FirebaseStorage
 
+enum ActiveAlert {
+    case reportListing, deleteListing
+}
+
+struct listingDetailViewControls {
+    var deleteClicked = false
+    var showAlert = false
+    var activeAlert: ActiveAlert = .reportListing
+
+}
+
 struct ListingDetailView : View {
     
-    @State private var report_clicked = false
+    @Environment(\.presentationMode) var presentationMode
+    @EnvironmentObject var session: SessionStore
+
     
-    @ObservedObject var viewModel: ListingDetailViewModel
+    @State var controls = listingDetailViewControls()
     
-    init(listing: Listing) {
-        viewModel = ListingDetailViewModel(listing: listing)
-        
+    @ObservedObject var listingVM = ListingViewModel()
+    
+    @State var listing: Listing
+    
+    var body: some View {
+        VStack {
+            ScrollView {
+                URLCarouselView(urls: listing.imageUrls)
+                    .frame(maxHeight: 400)
+                Text(listing.title)
+                    .font(.system(size: 36)).bold()
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding()
+                
+                PosterDataView(poster: listingVM.poster, listing_rating: 3.5)
+                Text(listing.description)
+                    .font(.system(size: 20))
+                    .padding()
+            }
+        }.gesture(DragGesture()
+            .onEnded { value in
+              let direction = self.detectDirection(value: value)
+              if direction == .left {
+                  presentationMode.wrappedValue.dismiss()
+              }
+            }
+        )
+        .alert(isPresented: $controls.showAlert) {
+            switch controls.activeAlert {
+            case .reportListing:
+                return Alert(title: Text("Report Listing?"),
+                             message: Text("Not Implemented"),
+                             dismissButton: Alert.Button.default(
+                                 Text("OK"), action: {
+                                     
+                                 }
+                             )
+                         )
+            case .deleteListing:
+                return Alert(title: Text("Delete Listing?"), message: Text("Warning: This action cannot be undone."), primaryButton: .destructive(Text("Delete")) {
+                    
+                    listingVM.deleteListing(listing: listing)
+                    presentationMode.wrappedValue.dismiss()
+
+                    
+                }, secondaryButton: .cancel())
+                
+            }
+            
+        }
+        .onAppear {
+            listingVM.getListingPoster(listing: listing)
+        }
     }
+    
+    enum SwipeHVDirection: String {
+        case left, right, up, down, none
+    }
+    private func detectDirection(value: DragGesture.Value) -> SwipeHVDirection {
+        if value.startLocation.x < value.location.x - 24 {
+                return .left
+              }
+              if value.startLocation.x > value.location.x + 24 {
+                return .right
+              }
+              if value.startLocation.y < value.location.y - 24 {
+                return .down
+              }
+              if value.startLocation.y > value.location.y + 24 {
+                return .up
+              }
+        return .none
+    }
+    
     func display_rating(rating: Double) -> some View {
         let ones = Int(rating)
         let tens = Int(rating * 10) % 10
@@ -50,18 +133,18 @@ struct ListingDetailView : View {
     }
     
     //TODO: fetch actual poster rating from firestore
-    func poster_data(poster: User, listing_rating: Double) -> some View {
+    func PosterDataView(poster: User, listing_rating: Double) -> some View {
 
         return HStack {
             //TODO: make Profile View take in a userid instead of nothing (profile view my be the wrong view to link)
             NavigationLink(destination: ProfileView()){
                 HStack{
-                    UrlImage(url: poster.profileImageUrl ?? "")
+                    UrlImage(url: listingVM.poster.profileImageUrl ?? "")
                         .scaledToFill()
                         .frame(width: 70, height: 70)
                         .clipShape(Circle())
                     VStack(alignment: .leading) {
-                        Text("\(poster.firstName) \(poster.lastName)")
+                        Text("\(listingVM.poster.firstName) \(listingVM.poster.lastName)")
                             .padding(.horizontal, 0)
                         display_rating(rating: listing_rating)
                             .padding(.horizontal, 5)
@@ -74,10 +157,24 @@ struct ListingDetailView : View {
                 NavigationLink(destination: MessagesView(), label: {
                     Label("Send Message", systemImage: "envelope")
                 })
-                Button(role: .destructive, action: {report_clicked = true}, label: {
+                Button(role: .destructive, action: {
+                    controls.activeAlert = .reportListing
+                    controls.showAlert.toggle()
+                    
+                }, label: {
                     Label("Report", systemImage: "flag.fill")
                         .foregroundColor(Color.red)
                 })
+                if session.userSession?.userId == listing.posterId { // If currently signed in user is the poster of the Listing
+                    Button(role: .destructive, action: {
+                        controls.activeAlert = .deleteListing
+                        controls.showAlert.toggle()
+                    }, label: {
+                        Label("Delete", systemImage: "trash")
+                            .foregroundColor(.black)
+                    })
+                    
+                }
                 
             }
             label: {
@@ -97,39 +194,18 @@ struct ListingDetailView : View {
         .padding(.horizontal, 20)
     }
     
-    var body: some View {
-        VStack {
-            ScrollView {
-                URLCarouselView(urls: viewModel.listing.imageUrls)
-                    .frame(maxHeight: 400)
-                Text(viewModel.listing.title)
-                    .font(.system(size: 36)).bold()
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding()
-                
-                poster_data(poster: viewModel.poster, listing_rating: 3.5)
-                Text(viewModel.listing.description)
-                    .font(.system(size: 20))
-                    .padding()
-            }
-        }
-    }
+    
 }
 
 
 
-let sample_listing = Listing(
-    listingId: "poopylolpoop",
-    posterId: "7syxwXFCwYh6HevOXCD9oTJJV7n1",
-    imageUrls: ["https://firebasestorage.googleapis.com:443/v0/b/servicexchange-5c2cb.appspot.com/o/RuQF2I7AUVhKqprlGy3s.jpeg?alt=media&token=9a8cc66d-ce14-49ca-a7b1-45ed851987ed","https://firebasestorage.googleapis.com:443/v0/b/servicexchange-5c2cb.appspot.com/o/RuQF2I7AUVhKqprlGy3s.jpeg?alt=media&token=9a8cc66d-ce14-49ca-a7b1-45ed851987ed","https://firebasestorage.googleapis.com:443/v0/b/servicexchange-5c2cb.appspot.com/o/RuQF2I7AUVhKqprlGy3s.jpeg?alt=media&token=9a8cc66d-ce14-49ca-a7b1-45ed851987ed"],
-    title: "Sample Post",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    datePosted: 0.0,
-    categories: ["piss", "shid"]
-)
+
+
+
 
 struct ListingDetailView_Previews: PreviewProvider {
+    
     static var previews: some View {
-        ListingDetailView(listing: sample_listing)
+        ListingDetailView(listing: Listing(listingId: "", posterId: "", imageUrls: [], title: "", description: "", datePosted: 0, categories: []))
     }
 }
