@@ -11,6 +11,7 @@ import FirebaseStorage
 
 struct ListingDetailView : View {
     
+    @Environment(\.presentationMode) var presentationMode
     @State private var report_clicked = false
     
     @ObservedObject var viewModel: ListingDetailViewModel
@@ -19,6 +20,51 @@ struct ListingDetailView : View {
         viewModel = ListingDetailViewModel(listing: listing)
         
     }
+    
+    var body: some View {
+        VStack {
+            ScrollView {
+                URLCarouselView(urls: viewModel.listing.imageUrls)
+                    .frame(maxHeight: 400)
+                Text(viewModel.listing.title)
+                    .font(.system(size: 36)).bold()
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding()
+                
+                poster_data(poster: viewModel.poster, listing_rating: 3.5)
+                Text(viewModel.listing.description)
+                    .font(.system(size: 20))
+                    .padding()
+            }
+        }.gesture(DragGesture()
+            .onEnded { value in
+              let direction = self.detectDirection(value: value)
+              if direction == .left {
+                  presentationMode.wrappedValue.dismiss()
+              }
+            }
+        )
+    }
+    
+    enum SwipeHVDirection: String {
+        case left, right, up, down, none
+    }
+    private func detectDirection(value: DragGesture.Value) -> SwipeHVDirection {
+        if value.startLocation.x < value.location.x - 24 {
+                return .left
+              }
+              if value.startLocation.x > value.location.x + 24 {
+                return .right
+              }
+              if value.startLocation.y < value.location.y - 24 {
+                return .down
+              }
+              if value.startLocation.y > value.location.y + 24 {
+                return .up
+              }
+        return .none
+    }
+    
     func display_rating(rating: Double) -> some View {
         let ones = Int(rating)
         let tens = Int(rating * 10) % 10
@@ -97,24 +143,10 @@ struct ListingDetailView : View {
         .padding(.horizontal, 20)
     }
     
-    var body: some View {
-        VStack {
-            ScrollView {
-                URLCarouselView(urls: viewModel.listing.imageUrls)
-                    .frame(maxHeight: 400)
-                Text(viewModel.listing.title)
-                    .font(.system(size: 36)).bold()
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding()
-                
-                poster_data(poster: viewModel.poster, listing_rating: 3.5)
-                Text(viewModel.listing.description)
-                    .font(.system(size: 20))
-                    .padding()
-            }
-        }
-    }
+    
 }
+
+
 
 
 
