@@ -26,7 +26,7 @@ struct ServiceProfileView: View {
                     //Image
                     //stackView.addBackground(color: .gray)
                     Circle().fill(CustomColor.sxcgreen)
-                        .frame(width: 100, height: 100)
+                        .frame(width: 150, height: 150)
                                Image("user-placeholder")
                     VStack {
                         Text(CompanyName)
@@ -41,14 +41,32 @@ struct ServiceProfileView: View {
                          design: .default))
                     }
                 }.background(Color.gray)
-                
+
                 ScrollView{
                     Text(AboutText)
                      .font(.system(size:20,
                      weight: .regular,
                      design: .default))
+                    
                 }
+                Spacer()
+                /*NavigationLink(destination:
+                                MessagesView(), label: {
+                    CustomButtonView(title: "Message", foregroundColor:.black, backgroundColor: CustomColor.sxcgreen)
+                })*/
             }
         }
     }
 }
+
+/*private func CustomButtonView(title: String, foregroundColor: Color, backgroundColor: Color) -> some View {
+    return ZStack {
+        Rectangle()
+            .frame(width: UIScreen.main.bounds.width / 1.3, height: 50)
+            .shadow(radius: 5)
+            .foregroundColor(backgroundColor)
+        Text(title)
+            .font(.system(size: 17)).bold()
+            .foregroundColor(foregroundColor)
+    }.cornerRadius(40)
+}*/
