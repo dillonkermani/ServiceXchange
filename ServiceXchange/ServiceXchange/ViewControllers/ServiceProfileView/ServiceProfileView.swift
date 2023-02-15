@@ -13,23 +13,40 @@ import FirebaseFirestore
 struct ServiceProfileView: View {
     var CompanyName = "Company Name"
     var NumberProvided = "100 Services Provided"
+    var ProfileImage = ""
+    var AboutText = "Placeholder Text"
     
     var body: some View {
+        //@Environment(\.presentationMode) var presentationMode
+        //@ObservedObject var UserVM = UserViewModel()
         NavigationView{
-            return ZStack{
-                VStack{
-                    HStack(spacing: 12){
+            return VStack{
+                
+                HStack(spacing: 12){
+                    //Image
+                    //stackView.addBackground(color: .gray)
+                    Circle().fill(CustomColor.sxcgreen)
+                        .frame(width: 100, height: 100)
+                               Image("user-placeholder")
+                    VStack {
                         Text(CompanyName)
                             .font(.system(size: 30,
                                           weight: .regular,
                                           design: .default))
                             .padding(.trailing, 30)
-                        /*Text(NumberProvided)
+                        
+                        Text(NumberProvided)
                          .font(.system(size:20,
                          weight: .regular,
                          design: .default))
-                         
-                         */}
+                    }
+                }.background(Color.gray)
+                
+                ScrollView{
+                    Text(AboutText)
+                     .font(.system(size:20,
+                     weight: .regular,
+                     design: .default))
                 }
             }
         }
