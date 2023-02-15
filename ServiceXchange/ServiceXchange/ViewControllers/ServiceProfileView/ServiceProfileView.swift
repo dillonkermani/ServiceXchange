@@ -16,21 +16,21 @@ struct ServiceProfileView: View {
     
     var body: some View {
         NavigationView{
-            VStack{
-                HStack(spacing: 12){
-                    Text(CompanyName)
-                        .font(.system(size: 30,
-                                      weight: .regular,
-                                      design: .default))
-                        .padding(.trailing, 30)
-                        //.frame(width: 50, height: 50)
-                    //Spacer()
-                    /*Text(NumberProvided)
-                        .font(.system(size:20,
-                                      weight: .regular,
-                                      design: .default))
-                    
-                */}
+            return ZStack{
+                VStack{
+                    HStack(spacing: 12){
+                        Text(CompanyName)
+                            .font(.system(size: 30,
+                                          weight: .regular,
+                                          design: .default))
+                            .padding(.trailing, 30)
+                        /*Text(NumberProvided)
+                         .font(.system(size:20,
+                         weight: .regular,
+                         design: .default))
+                         
+                         */}
+                }
             }
         }
     }
