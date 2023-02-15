@@ -46,7 +46,7 @@ class ListingViewModel: ObservableObject {
     
     //TODO: performace improvement?
     private func uploadImages(listing_ref: DocumentReference) async -> [String] {
-        await withTaskGroup(of: (URL?).self) { group in
+        await withTaskGroup(of: (Int, URL?).self) { group in
             for (i, image) in self.images.enumerated(){
                 group.addTask {
                     let image_name = "\(listing_ref.documentID)-\(i).jpeg"
@@ -55,24 +55,25 @@ class ListingViewModel: ObservableObject {
                         image,
                         metadata: StorageMetadata(dictionary: ["contentType": "image/jpeg"])
                     ) else {
-                        return nil
+                        return (i, nil)
                     }
-                    guard let img_path = metadata.path else { return nil }
-                    return try? await Ref.FIREBASE_STORAGE.reference(withPath: img_path).downloadURL()
+                    guard let img_path = metadata.path else { return (i, nil) }
+                    return (i, try? await Ref.FIREBASE_STORAGE.reference(withPath: img_path).downloadURL())
                     
                         
                 }
             }
-            var urls: [String] = []
-            for await image_url in group {
-                if image_url == nil {
+            var urls = [Int:String]()
+            for await (i, img_url) in group {
+                if img_url == nil {
                     continue
                 }
-                urls.append(image_url!.absoluteString)
+                urls[i]  = img_url!.absoluteString
             }
-            return urls
+            return urls.sorted(by: {a,b in a.0 < b.0}).map({ (_, url) in url})
         }
     }
+    
     
     private func getListingsFromDB(onSuccess: @escaping(_ listings: [Listing]) -> Void, onError: @escaping(_ errorMessage: String) -> Void) {
         

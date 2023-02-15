@@ -14,16 +14,16 @@ struct URLCarouselView: View {
     @State private var dragging = false
     @State private var scroll_opacity = 1.0
     @State private var jobs = [DispatchWorkItem]()
-    func kf_image(url: String) -> some View {
-        ZStack{
-            
-            KFImage(URL(string: url))
-                .resizable()
-                .scaledToFit()
-        }
-    }
+    
+    let activeOpacity = 1.0
+    let minOpacity = 0.51
+    let hideTimeSeconds = 1.5
+    let defaultHideTimeSeconds = 5.0
+    let scrollbarHeight = 18.0
     
     //create a scrollbar, for the caruosel
+    // if you want a horizontal scrollbar you need
+    // index dragging scoll_opacity jobs as state vars
     private func scrollbar() -> some View {
         GeometryReader { geometry in
             ZStack{
@@ -34,12 +34,12 @@ struct URLCarouselView: View {
                         })
                     }
                 }
-
+                let scrollbar_width = geometry.size.width / CGFloat(self.urls.count)
                 Rectangle()
                     .foregroundColor(CustomColor.sxcgreen)
                     .cornerRadius(.infinity)
-                    .frame(width: geometry.size.width / CGFloat(self.urls.count))
-                    .position(x: geometry.size.width / CGFloat(self.urls.count) * (CGFloat(index) + 0.5), y: 9)
+                    .frame(width: scrollbar_width)
+                    .position(x: scrollbar_width * (CGFloat(index) + 0.5), y: 9)
                     .animation(Animation.linear(duration: 0.25), value: index)
                     .gesture( //add scroll behavior to green part
                         DragGesture()
@@ -53,7 +53,7 @@ struct URLCarouselView: View {
                             })
                     
                     )
-                    .opacity(1.1 * self.scroll_opacity)
+                    .opacity(1 * self.scroll_opacity)
                     .animation(Animation.linear(duration: 0.2), value: self.scroll_opacity)
             }.background(
                 Rectangle()
@@ -64,7 +64,7 @@ struct URLCarouselView: View {
             )
             
         }
-        .frame(height: 18)
+        .frame(height: self.scrollbarHeight)
         .padding(.horizontal)
     }
     
@@ -72,7 +72,7 @@ struct URLCarouselView: View {
         ZStack(alignment: .bottom) {
             SwiftUI.TabView(selection: $index, content: {
                 ForEach(0..<urls.count, id: \.self) { idx in
-                    kf_image(url: self.urls[idx])
+                    UrlImage(url: self.urls[idx])
                 }.disabled(dragging)
                 
             })
@@ -82,7 +82,7 @@ struct URLCarouselView: View {
         }.onChange(of: self.index, perform: { _ in
             //this function require locks, but its a best effort task anyway
             
-            self.scroll_opacity = 1.0
+            self.scroll_opacity = self.activeOpacity
             let scroll_hides_at = DispatchTime.now() + 1.5
             
             // cancel all previous tasks
@@ -92,16 +92,16 @@ struct URLCarouselView: View {
                 prev_job = self.jobs.popLast()
             }
             let work = DispatchWorkItem {
-                self.scroll_opacity = 0.5
+                self.scroll_opacity = self.minOpacity
             }
             //add new task
             self.jobs.append(work)
             DispatchQueue.main.asyncAfter(deadline: scroll_hides_at, execute: work)
             
         }).onAppear(perform: {
-            let scroll_hides_at = DispatchTime.now() + 5.0
+            let scroll_hides_at = DispatchTime.now() + self.defaultHideTimeSeconds
             let work = DispatchWorkItem {
-                self.scroll_opacity = 0.5
+                self.scroll_opacity = minOpacity
             }
             self.jobs.append(work)
             DispatchQueue.main.asyncAfter(deadline: scroll_hides_at, execute: work)
@@ -115,7 +115,7 @@ struct URLCarouselView: View {
             }
         }
         else if urls.count == 1 {
-            kf_image(url: urls[0])
+            UrlImage(url: urls[0])
         }
         else {
             

@@ -12,7 +12,7 @@ import SwiftUI
 struct LoginView: View {
     
     
-    @EnvironmentObject var session: SessionStore
+    //@EnvironmentObject var session: SessionStore
     @Environment(\.presentationMode) var presentationMode
      
     
