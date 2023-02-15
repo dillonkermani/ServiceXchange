@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct CreateListingControls {
+    var uploading = false
     var pickedImageType = ""
     var showImagePicker = false
     var pickedImage = Image("user-placeholder")
@@ -15,7 +16,9 @@ struct CreateListingControls {
     var height = (UIScreen.main.bounds.width * 0.43)
     var imageArray = UserDefaults.standard.data(forKey: "ImageArray")
     let gridItems = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
-    var showPreview = false
+    var showAlert = false
+    var alertMessage = ""
+    var postListingSuccess = false
 }
 
 struct CreateListingView: View {
@@ -26,7 +29,6 @@ struct CreateListingView: View {
     @ObservedObject var listingVM = ListingViewModel()
     
     @State var controls = CreateListingControls()
-    @State private var uploading = false
     
     var body: some View {
         VStack {
@@ -52,7 +54,6 @@ struct CreateListingView: View {
                 if (listingVM.imageArray.isEmpty || listingVM.title.isEmpty || listingVM.description.isEmpty) {
                     fillFieldsButton()
                 } else {
-                    previewListingButton()
                     postListingButton()
                 }
             }.offset(y: 8)
@@ -61,9 +62,29 @@ struct CreateListingView: View {
             ImagePicker(showImagePicker: $controls.showImagePicker, pickedImage: $listingVM.image, imageData: $listingVM.imageData, sourceType: .photoLibrary)
                 
         })
-        .onChange(of: listingVM.image) { _ in //Should this be a function on listingVM?
-            listingVM.images.append(listingVM.imageData)
-            listingVM.imageArray.append(ListingImage(id: UUID(), image: listingVM.image))
+        .onChange(of: listingVM.image) { _ in 
+            listingVM.addListingImage()
+        }
+        .overlay {
+            
+            ActivityIndicator(isShowing: $controls.uploading)
+                .frame(width: 50, height: 50)
+                .foregroundColor(CustomColor.sxcgreen)
+            
+        }
+        .alert(isPresented: $controls.showAlert) {
+
+            Alert(title: Text(controls.alertMessage),
+                message: Text(""),
+                dismissButton: Alert.Button.default(
+                    Text("OK"), action: {
+                        if controls.postListingSuccess {
+                            UserDefaults.standard.set(0, forKey: "selectedTabIndex")
+                        }
+                        
+                    }
+                )
+            )
         }
     }
     
@@ -120,31 +141,11 @@ struct CreateListingView: View {
         }
     }
     
-    private func previewListingButton() -> some View {
-        return Button {
-            UIImpactFeedbackGenerator(style: .rigid).impactOccurred()
-            controls.showPreview.toggle()
-        } label: {
-            HStack {
-                Spacer()
-                Text("Preview")
-                    .bold()
-                    .padding(10)
-                Spacer()
-            }
-            .background(.blue)
-            .foregroundColor(.white)
-            .cornerRadius(5)
-            .padding(.bottom, 10)
-            .padding(.horizontal, 15)
-        }
-
-    }
-    
     // Button label for Post Listing Button if all required fields have not been filled yet.
     private func fillFieldsButton() -> some View {
         return Button {
             UIImpactFeedbackGenerator(style: .rigid).impactOccurred()
+            controls.uploading.toggle()
         } label: {
             HStack {
                 Spacer()
@@ -164,14 +165,20 @@ struct CreateListingView: View {
     private func postListingButton() -> some View {
         return Button (action: {
             UIImpactFeedbackGenerator(style: .rigid).impactOccurred()
-            self.uploading = true
+            controls.uploading = true
             Task {
                 await listingVM.addListing(posterId: session.userSession!.userId, onSuccess: { listing in
-                    print("Succesfully posted Listing: \(listingVM.title)")
+                    controls.alertMessage = "Success !"
+                    controls.postListingSuccess.toggle()
+                    controls.uploading = false
+
                 }, onError: { errorMessage in
-                    print("Error posting Listing: \(listingVM.title)\nError: \(errorMessage)")
+                    controls.alertMessage = "Error posting Listing: \(errorMessage)"
+                    controls.uploading = false
+
                 })
-                self.uploading = false
+                controls.showAlert.toggle()
+
             }
         }, label: {
             HStack {
@@ -186,7 +193,7 @@ struct CreateListingView: View {
             .cornerRadius(5)
             .padding(.bottom, 10)
             .padding(.horizontal, 15)
-        }).disabled(self.uploading)
+        }).disabled(controls.uploading)
 
             
 

@@ -131,4 +131,11 @@ class ListingViewModel: ObservableObject {
         }
         onSuccess(listing)
     }
+    
+    func addListingImage() {
+        images.append(imageData)
+        imageArray.append(ListingImage(id: UUID(), image: image))
+        return 
+    }
+    
 }

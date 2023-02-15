@@ -10,7 +10,7 @@ import SwiftUI
 struct TabView: View {
     @Environment(\.colorScheme) var colorScheme
     
-    @State var selectedIndex = 0
+    @AppStorage("selectedTabIndex") var selectedTabIndex: Int = 0
     @State var postPressed = false
     @State var promptLogin = false
     @EnvironmentObject var session: SessionStore
@@ -38,11 +38,11 @@ struct TabView: View {
                         VStack {
                             HomeView()
                         }.onAppear {
-                            self.selectedIndex = 0
+                            self.selectedTabIndex = 0
                         }
                     }
                 } else {
-                    switch selectedIndex {
+                    switch selectedTabIndex {
                     case 0:
                         NavigationView {
                             VStack {
@@ -103,11 +103,11 @@ struct TabView: View {
                                 promptLogin.toggle()
                                 
                             } else {
-                                self.selectedIndex = i
+                                self.selectedTabIndex = i
                             }
                             
                         } else if session.isLoggedIn == true { // if logged in
-                            self.selectedIndex = i
+                            self.selectedTabIndex = i
                         }
                         
                         
@@ -132,11 +132,11 @@ struct TabView: View {
                                 .offset(y: -2)
                 
                         } else {
-                            Image(systemName: selectedIndex == i ? icons[i]+".fill" : icons[i])
+                            Image(systemName: selectedTabIndex == i ? icons[i]+".fill" : icons[i])
                                 .font(.system(size: 25,
                                               weight: .regular,
                                               design: .default))
-                                .foregroundColor(selectedIndex == i ? CustomColor.sxcgreen : colorScheme == .dark ? .white : .black)
+                                .foregroundColor(selectedTabIndex == i ? CustomColor.sxcgreen : colorScheme == .dark ? .white : .black)
                         }
                         
                     }.fullScreenCover(isPresented: $promptLogin) {
