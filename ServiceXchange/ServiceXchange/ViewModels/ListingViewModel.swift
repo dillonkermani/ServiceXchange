@@ -30,8 +30,6 @@ class ListingViewModel: ObservableObject {
     
     // For current Listing
     @Published var poster: User = User(userId: "", firstName: "", lastName: "", email: "", isServiceProvider: false, listingIDs: [])
-    @Published var currentListing: Listing = Listing(listingId: "", posterId: "", imageUrls: [], title: "", description: "", datePosted: 0)
-    
     
     func getListingPoster(listing: Listing) {
         let user_ref = Ref.FIRESTORE_DOCUMENT_USERID(userId: listing.posterId)
@@ -155,12 +153,15 @@ class ListingViewModel: ObservableObject {
         return 
     }
     
-    func deleteListing() {
+    func deleteListing(listing: Listing) {
         // TODO: Delete listing images from Storage
-        for imageUrl in currentListing.imageUrls {
+        for imageUrl in listing.imageUrls {
+            let httpsReference = Ref.FIREBASE_STORAGE.reference(forURL: imageUrl)
+            
+            let imageName = httpsReference.name
             // Create a reference to the file to delete
-            let imageRef = Ref.FIREBASE_STORAGE.reference().child(imageUrl)
-
+            let imageRef = Ref.FIREBASE_STORAGE.reference().child(imageName)
+            
             // Delete the file
             imageRef.delete { error in
               if let error = error {
@@ -174,7 +175,7 @@ class ListingViewModel: ObservableObject {
                 
         }
 
-        Ref.FIRESTORE_COLLECTION_LISTINGS.document(currentListing.listingId).delete()
+        Ref.FIRESTORE_COLLECTION_LISTINGS.document(listing.listingId).delete()
         
         return
     }

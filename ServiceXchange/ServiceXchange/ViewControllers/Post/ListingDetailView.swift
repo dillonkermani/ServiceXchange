@@ -9,12 +9,15 @@ import SwiftUI
 import Kingfisher
 import FirebaseStorage
 
+enum ActiveAlert {
+    case reportListing, deleteListing
+}
+
 struct listingDetailViewControls {
-    var reportClicked = false
     var deleteClicked = false
     var showAlert = false
-    var alertMessage = ""
-    var alertButtonText = ""
+    var activeAlert: ActiveAlert = .reportListing
+
 }
 
 struct ListingDetailView : View {
@@ -53,26 +56,27 @@ struct ListingDetailView : View {
             }
         )
         .alert(isPresented: $controls.showAlert) {
-
-            if controls.deleteClicked {
-                return Alert(title: Text("Delete Listing?"), message: Text("This action is permanent and cannot be undone."), primaryButton: .destructive(Text("Delete")) {
-                       
-                    listingVM.deleteListing()
+            switch controls.activeAlert {
+            case .reportListing:
+                return Alert(title: Text("Report Listing?"),
+                             message: Text("Not Implemented"),
+                             dismissButton: Alert.Button.default(
+                                 Text("OK"), action: {
+                                     
+                                 }
+                             )
+                         )
+            case .deleteListing:
+                return Alert(title: Text("Delete Listing?"), message: Text("Warning: This action cannot be undone."), primaryButton: .destructive(Text("Delete")) {
+                    
+                    listingVM.deleteListing(listing: listing)
                     presentationMode.wrappedValue.dismiss()
+
                     
                 }, secondaryButton: .cancel())
-            } else {
                 
-                return Alert(title: Text(controls.alertMessage),
-                      message: Text(""),
-                      dismissButton: Alert.Button.default(
-                        Text(controls.alertButtonText), action: {
-                            
-                            
-                        }
-                      )
-                )
             }
+            
         }
         .onAppear {
             listingVM.getListingPoster(listing: listing)
@@ -153,13 +157,17 @@ struct ListingDetailView : View {
                 NavigationLink(destination: MessagesView(), label: {
                     Label("Send Message", systemImage: "envelope")
                 })
-                Button(role: .destructive, action: {controls.reportClicked = true}, label: {
+                Button(role: .destructive, action: {
+                    controls.activeAlert = .reportListing
+                    controls.showAlert.toggle()
+                    
+                }, label: {
                     Label("Report", systemImage: "flag.fill")
                         .foregroundColor(Color.red)
                 })
                 if session.userSession?.userId == listing.posterId { // If currently signed in user is the poster of the Listing
                     Button(role: .destructive, action: {
-                        controls.alertMessage = "Delete Listing?"
+                        controls.activeAlert = .deleteListing
                         controls.showAlert.toggle()
                     }, label: {
                         Label("Delete", systemImage: "trash")
