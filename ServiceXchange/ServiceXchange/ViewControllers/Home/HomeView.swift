@@ -19,7 +19,7 @@ struct HomeViewControls {
 
 struct HomeView: View {
     
-    @ObservedObject var listingVM = ListingViewModel()
+    @ObservedObject var listingVM = HomeViewModel()
     
     @State var controls = HomeViewControls()
     

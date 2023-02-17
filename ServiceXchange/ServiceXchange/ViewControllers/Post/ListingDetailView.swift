@@ -23,14 +23,13 @@ struct listingDetailViewControls {
 struct ListingDetailView : View {
 
     @Environment(\.presentationMode) var presentationMode
-    @EnvironmentObject var session: SessionStore
 
     @State private var report_clicked = false
     @State var rating = 0.0
 
     @State var controls = listingDetailViewControls()
 
-    @ObservedObject var listingVM = ListingViewModel()
+    @ObservedObject var listingVM = ListingDetailViewModel()
 
     @State var listing: Listing
 
@@ -44,7 +43,7 @@ struct ListingDetailView : View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding()
 
-                PosterDataView(poster: listingVM.poster, listing_rating: 3.5)
+                PosterDataView()
                 Text(listing.description)
                     .font(.system(size: 20))
                     .padding()
@@ -81,7 +80,9 @@ struct ListingDetailView : View {
 
         }
         .onAppear {
-            listingVM.getListingPoster(listing: listing)
+            Task{
+                await listingVM.getListingPoster(posterId: listing.posterId)
+            }
         }
     }
 
@@ -104,38 +105,7 @@ struct ListingDetailView : View {
         return .none
     }
 
-    func display_rating(rating: Double) -> some View {
-        let ones = Int(rating)
-        let tens = Int(rating * 10) % 10
-        return VStack(alignment: .leading){
-            HStack {
-                ForEach(1..<6) {i in
-                    if rating >= Double(i){
-                        Image(systemName: "star.fill")
-                            .frame(width: 10, height: 10)
-                            .foregroundColor(CustomColor.sxcgreen)
-                    }
-                    // if its x.2 and i + 1 < x ex: 3.3 i=3 yes 4.3 i=3 no
-                    else if tens > 2 && rating + 1 > Double(i) {
-                        Image(systemName: "star.leadinghalf.fill")
-                            .frame(width: 10, height: 10)
-                            .foregroundColor(CustomColor.sxcgreen)
-                    }
-                    else {
-                        Image(systemName: "star")
-                            .frame(width: 10, height: 10)
-                            .foregroundColor(CustomColor.sxcgreen)
-
-                    }
-                }
-
-                Text("(\(ones).\(tens))")
-            }
-        }
-    }
-
-    //TODO: fetch actual poster rating from firestore
-    func PosterDataView(poster: User, listing_rating: Double) -> some View {
+    func PosterDataView() -> some View {
 
         return HStack {
             //TODO: make Profile View take in a userid instead of nothing (profile view my be the wrong view to link)
@@ -151,7 +121,8 @@ struct ListingDetailView : View {
                         RatingView(rating: rating)
                             .padding(.horizontal, 5)
                             .task {
-                                self.rating = await getRating(userId: poster.userId)
+                                await listingVM.getListingPoster(posterId: self.listing.posterId)
+                                self.rating = await getRating(userId: listingVM.poster.userId)
                             }
 
                     }
@@ -170,7 +141,7 @@ struct ListingDetailView : View {
                     Label("Report", systemImage: "flag.fill")
                         .foregroundColor(Color.red)
                 })
-                if session.userSession?.userId == listing.posterId { // If currently signed in user is the poster of the Listing
+                if false {//session.userSession?.userId == listing.posterId { // If currently signed in user is the poster of the Listing
                     Button(role: .destructive, action: {
                         controls.activeAlert = .deleteListing
                         controls.showAlert.toggle()
@@ -201,12 +172,6 @@ struct ListingDetailView : View {
 
 
 }
-
-
-
-
-
-
 
 struct ListingDetailView_Previews: PreviewProvider {
 

@@ -26,7 +26,7 @@ struct CreateListingView: View {
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var session: SessionStore
     
-    @ObservedObject var listingVM = ListingViewModel()
+    @ObservedObject var listingVM = CreateListingViewModel()
     
     @State var controls = CreateListingControls()
     
@@ -51,7 +51,7 @@ struct CreateListingView: View {
             }
             
             VStack {
-                if (listingVM.imageArray.isEmpty || listingVM.title.isEmpty || listingVM.description.isEmpty) {
+                if listingVM.isPostable() {
                     fillFieldsButton()
                 } else {
                     postListingButton()
@@ -59,10 +59,10 @@ struct CreateListingView: View {
             }.offset(y: 8)
         }
         .sheet(isPresented: $controls.showImagePicker, content: {
-            ImagePicker(showImagePicker: $controls.showImagePicker, pickedImage: $listingVM.image, imageData: $listingVM.imageData, sourceType: .photoLibrary)
+            ImagePicker(showImagePicker: $controls.showImagePicker, pickedImage: $listingVM.pickedImage, imageData: $listingVM.pickedImageData, sourceType: .photoLibrary)
                 
         })
-        .onChange(of: listingVM.image) { _ in 
+        .onChange(of: listingVM.pickedImage) { _ in 
             listingVM.addListingImage()
         }
         .overlay {
@@ -91,7 +91,7 @@ struct CreateListingView: View {
     private func MultiImageSelector() -> some View {
         return ScrollView(.horizontal) {
             HStack {
-                if listingVM.imageArray.count < 8 {
+                if !listingVM.maxImageCountReached() {
                     
                     Button {
                         controls.showImagePicker.toggle()
@@ -108,7 +108,7 @@ struct CreateListingView: View {
                     
                 }
                 
-                ForEach(listingVM.imageArray, id: \.id) { im in
+                ForEach(listingVM.images, id: \.id) { im in
                     ZStack {
                         im.image
                             .resizable()
@@ -118,8 +118,8 @@ struct CreateListingView: View {
                             .padding()
                         Button(action: {
                             UIImpactFeedbackGenerator(style: .rigid).impactOccurred()
-                            let index = listingVM.imageArray.firstIndex(of: im)! as Int
-                            listingVM.imageArray.remove(at: index)
+                            let index = listingVM.images.firstIndex(of: im) ?? -1 as Int
+                            listingVM.images.remove(at: index)
                         }, label: {
                             Image(systemName: "minus.circle.fill")
                                 .resizable()
@@ -204,9 +204,4 @@ struct CreateListingView_Previews: PreviewProvider {
     static var previews: some View {
         CreateListingView()
     }
-}
-
-struct ListingImage: Identifiable, Equatable {
-    var id: UUID
-    var image: Image
 }
