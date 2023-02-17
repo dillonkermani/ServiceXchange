@@ -121,11 +121,12 @@ struct ListingDetailView : View {
                         RatingView(rating: rating)
                             .padding(.horizontal, 5)
                             .task {
-                                await listingVM.getListingPoster(posterId: self.listing.posterId)
-                                self.rating = await getRating(userId: listingVM.poster.userId)
+                                self.rating = await getRating(userId: listing.posterId)
                             }
 
                     }
+                }.task {
+                    await self.listingVM.getListingPoster(posterId: listing.posterId)
                 }
             }
             Spacer()
@@ -177,6 +178,6 @@ struct ListingDetailView : View {
 struct ListingDetailView_Previews: PreviewProvider {
 
     static var previews: some View {
-        ListingDetailView(listing: Listing(listingId: "", posterId: "7syxwXFCwYh6HevOXCD9oTJJV7n1 ", imageUrls: [], title: "", description: "", datePosted: 0, categories: []))
+        ListingDetailView(listing: Listing(listingId: "", posterId: "7syxwXFCwYh6HevOXCD9oTJJV7n1", imageUrls: [""], title: "title", description: "description", datePosted: 0, categories: []))
     }
 }
