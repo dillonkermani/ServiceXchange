@@ -21,17 +21,19 @@ struct listingDetailViewControls {
 }
 
 struct ListingDetailView : View {
-    
+
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var session: SessionStore
 
-    
+    @State private var report_clicked = false
+    @State var rating = 0.0
+
     @State var controls = listingDetailViewControls()
-    
+
     @ObservedObject var listingVM = ListingViewModel()
-    
+
     @State var listing: Listing
-    
+
     var body: some View {
         VStack {
             ScrollView {
@@ -41,7 +43,7 @@ struct ListingDetailView : View {
                     .font(.system(size: 36)).bold()
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding()
-                
+
                 PosterDataView(poster: listingVM.poster, listing_rating: 3.5)
                 Text(listing.description)
                     .font(.system(size: 20))
@@ -62,27 +64,27 @@ struct ListingDetailView : View {
                              message: Text("Not Implemented"),
                              dismissButton: Alert.Button.default(
                                  Text("OK"), action: {
-                                     
+
                                  }
                              )
                          )
             case .deleteListing:
                 return Alert(title: Text("Delete Listing?"), message: Text("Warning: This action cannot be undone."), primaryButton: .destructive(Text("Delete")) {
-                    
+
                     listingVM.deleteListing(listing: listing)
                     presentationMode.wrappedValue.dismiss()
 
-                    
+
                 }, secondaryButton: .cancel())
-                
+
             }
-            
+
         }
         .onAppear {
             listingVM.getListingPoster(listing: listing)
         }
     }
-    
+
     enum SwipeHVDirection: String {
         case left, right, up, down, none
     }
@@ -101,7 +103,7 @@ struct ListingDetailView : View {
               }
         return .none
     }
-    
+
     func display_rating(rating: Double) -> some View {
         let ones = Int(rating)
         let tens = Int(rating * 10) % 10
@@ -126,12 +128,12 @@ struct ListingDetailView : View {
 
                     }
                 }
-                
+
                 Text("(\(ones).\(tens))")
             }
         }
     }
-    
+
     //TODO: fetch actual poster rating from firestore
     func PosterDataView(poster: User, listing_rating: Double) -> some View {
 
@@ -146,9 +148,12 @@ struct ListingDetailView : View {
                     VStack(alignment: .leading) {
                         Text("\(listingVM.poster.firstName) \(listingVM.poster.lastName)")
                             .padding(.horizontal, 0)
-                        display_rating(rating: listing_rating)
+                        RatingView(rating: rating)
                             .padding(.horizontal, 5)
-                        
+                            .task {
+                                self.rating = await getRating(userId: poster.userId)
+                            }
+
                     }
                 }
             }
@@ -160,7 +165,7 @@ struct ListingDetailView : View {
                 Button(role: .destructive, action: {
                     controls.activeAlert = .reportListing
                     controls.showAlert.toggle()
-                    
+
                 }, label: {
                     Label("Report", systemImage: "flag.fill")
                         .foregroundColor(Color.red)
@@ -173,9 +178,9 @@ struct ListingDetailView : View {
                         Label("Delete", systemImage: "trash")
                             .foregroundColor(.black)
                     })
-                    
+
                 }
-                
+
             }
             label: {
                 VStack {
@@ -193,8 +198,8 @@ struct ListingDetailView : View {
         .frame(height: 50)
         .padding(.horizontal, 20)
     }
-    
-    
+
+
 }
 
 
@@ -204,7 +209,7 @@ struct ListingDetailView : View {
 
 
 struct ListingDetailView_Previews: PreviewProvider {
-    
+
     static var previews: some View {
         ListingDetailView(listing: Listing(listingId: "", posterId: "", imageUrls: [], title: "", description: "", datePosted: 0, categories: []))
     }
