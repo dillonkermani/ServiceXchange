@@ -12,6 +12,7 @@ import FirebaseStorage
 struct ListingDetailView : View {
     
     @State private var report_clicked = false
+    @State var rating = 0.0
     
     @ObservedObject var viewModel: ListingDetailViewModel
     
@@ -19,38 +20,9 @@ struct ListingDetailView : View {
         viewModel = ListingDetailViewModel(listing: listing)
         
     }
-    func display_rating(rating: Double) -> some View {
-        let ones = Int(rating)
-        let tens = Int(rating * 10) % 10
-        return VStack(alignment: .leading){
-            HStack {
-                ForEach(1..<6) {i in
-                    if rating >= Double(i){
-                        Image(systemName: "star.fill")
-                            .frame(width: 10, height: 10)
-                            .foregroundColor(CustomColor.sxcgreen)
-                    }
-                    // if its x.2 and i + 1 < x ex: 3.3 i=3 yes 4.3 i=3 no
-                    else if tens > 2 && rating + 1 > Double(i) {
-                        Image(systemName: "star.leadinghalf.fill")
-                            .frame(width: 10, height: 10)
-                            .foregroundColor(CustomColor.sxcgreen)
-                    }
-                    else {
-                        Image(systemName: "star")
-                            .frame(width: 10, height: 10)
-                            .foregroundColor(CustomColor.sxcgreen)
-
-                    }
-                }
-                
-                Text("(\(ones).\(tens))")
-            }
-        }
-    }
     
     //TODO: fetch actual poster rating from firestore
-    func poster_data(poster: User, listing_rating: Double) -> some View {
+    func poster_data(poster: User) -> some View {
 
         return HStack {
             //TODO: make Profile View take in a userid instead of nothing (profile view my be the wrong view to link)
@@ -63,8 +35,11 @@ struct ListingDetailView : View {
                     VStack(alignment: .leading) {
                         Text("\(poster.firstName) \(poster.lastName)")
                             .padding(.horizontal, 0)
-                        display_rating(rating: listing_rating)
+                        RatingView(rating: rating)
                             .padding(.horizontal, 5)
+                            .task {
+                                self.rating = await getRating(userId: poster.userId)
+                            }
                         
                     }
                 }
@@ -107,7 +82,7 @@ struct ListingDetailView : View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding()
                 
-                poster_data(poster: viewModel.poster, listing_rating: 3.5)
+                poster_data(poster: viewModel.poster)
                 Text(viewModel.listing.description)
                     .font(.system(size: 20))
                     .padding()
