@@ -31,7 +31,7 @@ struct ListingDetailView : View {
 
     @ObservedObject var listingVM = ListingDetailViewModel()
 
-    @State var listing: Listing
+    var listing: Listing
 
     var body: some View {
         VStack {
@@ -173,9 +173,10 @@ struct ListingDetailView : View {
 
 }
 
+
 struct ListingDetailView_Previews: PreviewProvider {
 
     static var previews: some View {
-        ListingDetailView(listing: Listing(listingId: "", posterId: "", imageUrls: [], title: "", description: "", datePosted: 0, categories: []))
+        ListingDetailView(listing: Listing(listingId: "", posterId: "7syxwXFCwYh6HevOXCD9oTJJV7n1 ", imageUrls: [], title: "", description: "", datePosted: 0, categories: []))
     }
 }

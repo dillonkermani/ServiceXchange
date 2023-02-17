@@ -23,6 +23,7 @@ class ListingDetailViewModel: ObservableObject {
     @Published var loadingPoster = true
     @Published var poster = skeletonUser
     
+    @MainActor
     func getListingPoster(posterId: String) async {
         let user_ref = Ref.FIRESTORE_DOCUMENT_USERID(userId: posterId)
         do{
