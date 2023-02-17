@@ -47,16 +47,15 @@ struct CreateListingView: View {
                     underlinedTextField(title: "Service Name", text: $listingVM.title, width: 310, height: 40, color: CustomColor.sxcgreen)
                     underlinedTextField(title: "Details about service provided", text: $listingVM.description, width: 310, height: 40, color: CustomColor.sxcgreen)
                     
+                    if listingVM.isPostable() {
+                        fillFieldsButton()
+                    } else {
+                        postListingButton()
+                    }
+                    
                 }.frame(maxWidth: .infinity, maxHeight: .infinity)
             }
             
-            VStack {
-                if listingVM.isPostable() {
-                    fillFieldsButton()
-                } else {
-                    postListingButton()
-                }
-            }.offset(y: 8)
         }
         .sheet(isPresented: $controls.showImagePicker, content: {
             ImagePicker(showImagePicker: $controls.showImagePicker, pickedImage: $listingVM.pickedImage, imageData: $listingVM.pickedImageData, sourceType: .photoLibrary)

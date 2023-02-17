@@ -146,7 +146,7 @@ struct TabView: View {
 
                 }
             }
-        }
+        }.ignoresSafeArea(.keyboard, edges: .bottom)
     }
 }
 
