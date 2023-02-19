@@ -9,10 +9,48 @@ import Foundation
 
 class HomeViewModel: ObservableObject {
     
-    @Published var allListings: [Listing] = []
+    @Published var allListings: [Listing] = [] // All Listings Cached in ViewModel
+    @Published var listings: [Listing] = [] // Only the listings to Display to user
     @Published var isLoading = false
     @Published var loadErrorMsg = ""
+    var searchText: String = ""
     
+    func searchTextDidChange() {
+        if searchText.isEmpty {
+            self.listings = allListings
+            return
+        }
+        isLoading = true
+        self.searchListings(text: searchText) { (listings) in
+            self.isLoading = false
+            self.listings = listings
+        }
+    }
+    
+    // private func for searchTextDidChange()
+    private func searchListings(text: String, onSuccess: @escaping(_ listings: [Listing]) -> Void) {
+        var listings = [Listing]()
+        for listing in self.allListings {
+            if listing.title.lowercased().contains(text.lowercased()) {
+                listings.append(listing)
+            }
+        }
+        onSuccess(listings)
+    }
+    
+    func loadListings() -> Void {
+        self.isLoading = true
+        getListingsFromDB(onSuccess: {listings in
+            self.allListings = listings
+            self.listings = listings
+            self.isLoading = false
+        }, onError: {errorMessage in
+            self.loadErrorMsg = errorMessage
+            self.isLoading = false
+        })
+    }
+    
+    // private func for loadListings()
     private func getListingsFromDB(
         onSuccess: @escaping(_ listings: [Listing]) -> Void,
         onError: @escaping(_ errorMessage: String) -> Void
@@ -37,15 +75,6 @@ class HomeViewModel: ObservableObject {
             }
     }
     
-    func loadListings() -> Void {
-        self.isLoading = true
-        getListingsFromDB(onSuccess: {listings in
-            self.allListings = listings
-            self.isLoading = false
-        }, onError: {errorMessage in
-            self.loadErrorMsg = errorMessage
-            self.isLoading = false
-        })
-    }
+    
     
 }

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		65022E3929A2D852003A3DAA /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65022E3829A2D852003A3DAA /* SearchBar.swift */; };
 		6546DBB8299C74F100CD12DE /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6546DBB7299C74F100CD12DE /* ActivityIndicator.swift */; };
 		65522BF02980DB5600CC898F /* ServiceXchangeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65522BEF2980DB5600CC898F /* ServiceXchangeApp.swift */; };
 		65522BF42980DB5800CC898F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 65522BF32980DB5800CC898F /* Assets.xcassets */; };
@@ -52,6 +53,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		65022E3829A2D852003A3DAA /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		651E5494298B6D93009AEEFD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		6546DBB7299C74F100CD12DE /* ActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		65522BEC2980DB5600CC898F /* ServiceXchange.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ServiceXchange.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -255,6 +257,7 @@
 				DF0F902A299ABDAF000D9AD1 /* UrlImage.swift */,
 				6546DBB7299C74F100CD12DE /* ActivityIndicator.swift */,
 				DF995650299EB29500977D21 /* RatingView.swift */,
+				65022E3829A2D852003A3DAA /* SearchBar.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -379,6 +382,7 @@
 				65E992722989E67900C3C5BA /* Listing.swift in Sources */,
 				659462DD298A17AF0093A71D /* ImagePicker.swift in Sources */,
 				65C3EB9C2981DBDE00766659 /* LoginView.swift in Sources */,
+				65022E3929A2D852003A3DAA /* SearchBar.swift in Sources */,
 				6DCDAE392999F597006CECA0 /* ServiceProfileView.swift in Sources */,
 				DF0F902B299ABDAF000D9AD1 /* UrlImage.swift in Sources */,
 				DFED901529982B1A004E7177 /* URLCarouselView.swift in Sources */,

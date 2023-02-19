@@ -43,7 +43,6 @@ class ListingDetailViewModel: ObservableObject {
 
     
     func deleteListing(listing: Listing) {
-        // TODO: Delete listing images from Storage
         for imageUrl in listing.imageUrls {
             let httpsReference = Ref.FIREBASE_STORAGE.reference(forURL: imageUrl)
             

@@ -142,7 +142,7 @@ struct ListingDetailView : View {
                     Label("Report", systemImage: "flag.fill")
                         .foregroundColor(Color.red)
                 })
-                if false {//session.userSession?.userId == listing.posterId { // If currently signed in user is the poster of the Listing
+                if true {//session.userSession?.userId == listing.posterId { // If currently signed in user is the poster of the Listing
                     Button(role: .destructive, action: {
                         controls.activeAlert = .deleteListing
                         controls.showAlert.toggle()

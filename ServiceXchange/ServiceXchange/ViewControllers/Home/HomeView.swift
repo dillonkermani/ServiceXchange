@@ -15,46 +15,69 @@ struct HomeViewControls {
     var categoryList = ["Category1", "Category2", "Category3", "Category4", "Category5"]
     var selectedCategory = ""
     var searchText = ""
+    var showSearchBar = false
 }
 
 struct HomeView: View {
     
-    @ObservedObject var listingVM = HomeViewModel()
+    @ObservedObject var homeVM = HomeViewModel()
     
     @State var controls = HomeViewControls()
     
 
     init() {
-        listingVM.loadListings()
+        homeVM.loadListings()
     }
     
     var body: some View {
-        ZStack {
+        VStack {
             NavigationStack {
                 ScrollView {
                     VStack {
                         HStack {
-                            Image("sxc_title_transparent")
-                                .resizable()
-                                .frame(width: 300, height: 95)
-                                .padding([.top, .bottom], 35)
-                                .padding(.leading, 15)
+                            HeaderLabel()
                             Spacer()
+                            searchButton()
+                        }.padding(.bottom, 25)
+                        if controls.showSearchBar {
+                            SearchBar(initialText: "Search services", text: $homeVM.searchText, onSearchButtonChanged: homeVM.searchTextDidChange)
+                                .padding(.horizontal, 5)
                         }
-                        
-                        
                         CategoryPicker()
                         ListingsGrid()
-                    }
+                    }.padding([.top, .bottom], 65)
                 }
             }.toolbar(.hidden)
         }
     }
     
+    private func HeaderLabel() -> some View {
+        return HStack {
+            Image("sxc_title_transparent")
+                .resizable()
+                .frame(width: 275, height: 90)
+                .padding(.leading, 15)
+            Spacer()
+        }
+    }
     
+    private func searchButton() -> some View {
+        return  HStack(spacing: 20) {
+            Button(action: {
+                UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                withAnimation {
+                    controls.showSearchBar.toggle()
+                }
+            }) {
+                Image(systemName: controls.showSearchBar ? "chevron.up" : "magnifyingglass")
+                    .imageScale(.large)
+                    .foregroundColor(.black)
+                    .padding(25)
+            }
+        }
+    }
     
-    
-    fileprivate func CategoryPicker() -> some View {
+    private func CategoryPicker() -> some View {
         return ScrollView (.horizontal, showsIndicators: false) {
             HStack(spacing: 12) {
                 ForEach(controls.categoryList, id: \.self) { category in
@@ -78,9 +101,10 @@ struct HomeView: View {
                 }
             }
         }.padding([.leading], 20)
+            .padding(.top, 25)
     }
     
-    fileprivate func ListingsGrid() -> some View {
+    private func ListingsGrid() -> some View {
         return VStack {
                 HStack {
                     Text("All Services")
@@ -91,12 +115,12 @@ struct HomeView: View {
                 .padding(.leading, 25)
                 
                 LazyVGrid(columns: controls.gridItems, alignment: .center, spacing: 15) {
-                    if listingVM.allListings.isEmpty || listingVM.isLoading {
+                    if homeVM.allListings.isEmpty || homeVM.isLoading {
                         ForEach(0..<10) { _ in
                             ShimmerPlaceholderView(width: controls.width, height: controls.height, cornerRadius: 5, animating: true)
                         }
                     } else {
-                        ForEach(listingVM.allListings, id: \.listingId) { listing in
+                        ForEach(homeVM.listings, id: \.listingId) { listing in
                             NavigationLink(destination: ListingDetailView(listing: listing)) {
                                 ListingCardView(listing: listing)
                             }
