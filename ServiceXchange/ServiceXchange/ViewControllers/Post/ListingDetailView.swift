@@ -15,6 +15,8 @@ struct ListingDetailView : View {
     
     @ObservedObject var viewModel: ListingDetailViewModel
     
+   
+    
     init(listing: Listing) {
         viewModel = ListingDetailViewModel(listing: listing)
         
