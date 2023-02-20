@@ -17,6 +17,8 @@ class UserViewModel: ObservableObject{
     @Published var localUserId: String = "" //maybe we want this so that we dont have to use
                                             //   session store exect for at sign in
     
+    
+    @Published var initialized: Bool = false
     @Published var localProfileImageUrl: String = ""
     @Published var localCompanyName: String = ""
     @Published var localBio: String = ""
@@ -26,6 +28,8 @@ class UserViewModel: ObservableObject{
     
     
     func updateLocalUserVariables(user : User) {
+        
+        self.initialized = true
         
         self.localUserId = user.userId
         self.localBio = user.bio ?? "none"
@@ -125,6 +129,15 @@ class UserViewModel: ObservableObject{
                 //why does this go back to orignal empty string state?
                 self.localProfileImageUrl = downloadURL.absoluteString
                 print("localProfileImageUrl in try to update: \(self.localProfileImageUrl)")
+                
+                
+                //either this is not a good update or else the page peloads all variables
+                //doesnt make sence because it shows rigth away when you update
+                
+                // IIIIII fookin know so evey time you go into the profile view you update from firebase which does not have the the most current version
+                
+                //solution ->> create and updated variable if updated do not call the load var function
+                
             }
              return
         }//update function

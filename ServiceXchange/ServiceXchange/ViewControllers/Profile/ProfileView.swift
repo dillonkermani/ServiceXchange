@@ -6,7 +6,10 @@
 //
 
 
-
+// ok problemo --> every time that you leave the profile view and come back a new userVM object is
+//being created
+// solution --> find somwhere else to initialize and most likely has to be passed along to almost all views
+//or where is there a view where it can stay???
 
 
 import SwiftUI
@@ -45,7 +48,12 @@ struct ProfileView: View {
             })
         }.onAppear{
             
-            userVM.updateLocalUserVariables(user: session.userSession!)
+            //initailize the local variables if you have not already
+            if (userVM.initialized == false){
+                print( "initailized var >>> : ", userVM.initialized )
+                userVM.updateLocalUserVariables(user: session.userSession!)
+                print( "after updated initailized var >>> : ", userVM.initialized )
+            }
         }
         
         

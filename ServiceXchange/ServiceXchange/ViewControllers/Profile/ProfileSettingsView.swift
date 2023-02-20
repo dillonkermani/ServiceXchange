@@ -24,8 +24,13 @@ struct ProfileSettingsView: View {
     var body: some View {
         //NavigationView{
             VStack{
+                
+                
+                //this is working now and it updates but then when you toggle away and come back it
+                //reverts to the origninal image
+                
                 let _ = print ("this is profileim url in user settings: ", userVM.localProfileImageUrl)
-                let image_url = session.userSession?.profileImageUrl ?? "none"
+                let image_url =  userVM.localProfileImageUrl
                 KFImage(URL(string:  image_url))
                     .placeholder({
                         ShimmerPlaceholderView(width: controls.width, height: controls.height, cornerRadius: 0, animating: true)
@@ -34,12 +39,12 @@ struct ProfileSettingsView: View {
                     .aspectRatio(contentMode: .fill)
                     .frame(width: controls.width, height: controls.height)
                     .clipped()
-//                HStack{
-//
-//                    ScrollView {
-//                        ButtonStack()
-//                    }//scrollView
-//                }
+                HStack{
+
+                    ScrollView {
+                        ButtonStack()
+                    }//scrollView
+                }
             }
         //}//navView
     }//body

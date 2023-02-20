@@ -14,6 +14,16 @@ class SessionStore: ObservableObject {
     
     let db = Firestore.firestore()
     
+    
+    // adding local variables that have the current user info (so dont have to push and pull changes from fb)
+    @Published var initialized: Bool = false
+    @Published var localProfileImageUrl: String = ""
+    @Published var localCompanyName: String = ""
+    @Published var localBio: String = ""
+    @Published var localPrimaryLocationServed: String = ""
+    // -----
+    
+    
     @Published var isLoggedIn = false
     @Published var isLoadingLogin = false
     var userSession: User?
@@ -92,3 +102,9 @@ class SessionStore: ObservableObject {
         unbind()
     }
 }
+
+
+func loadLocalUserVariables() {
+    self.localProfileImageUrl = session.userSession.profileImageUrl ?? "none"
+}
+
