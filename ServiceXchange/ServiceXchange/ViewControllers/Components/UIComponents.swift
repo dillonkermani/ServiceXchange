@@ -33,7 +33,12 @@ func ListingCardView(listing: Listing) -> some View {
         }
     }
     .frame(width: controls.width, height: controls.height)
-    .cornerRadius(5)
+    .overlay(
+        RoundedRectangle(cornerRadius: 17)
+            .stroke(.black, lineWidth: 1)
+    )
+    .padding(1)
+    .cornerRadius(17)
 }
 
 func underlinedTextField(title: String, text: Binding <String>, width: CGFloat, height: CGFloat, color: Color) -> some View {
@@ -44,11 +49,11 @@ func underlinedTextField(title: String, text: Binding <String>, width: CGFloat, 
                     .padding(10)
 }
 
-func passwordTextField(title: String, text: Binding <String>, width: CGFloat, height: CGFloat) -> some View {
+func passwordTextField(title: String, text: Binding <String>, width: CGFloat, height: CGFloat, color: Color) -> some View {
     return SecureField(title, text: text)
         .frame(width: width, height: height)
         .padding(.vertical, 10)
-                    .overlay(Rectangle().frame(height: 2).padding(.top, 35).foregroundColor(CustomColor.sxcgreen))
+                    .overlay(Rectangle().frame(height: 2).padding(.top, 35).foregroundColor(color))
                     .padding(10)
 }
 

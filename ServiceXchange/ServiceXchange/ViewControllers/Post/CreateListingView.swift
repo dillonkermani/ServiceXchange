@@ -36,17 +36,18 @@ struct CreateListingView: View {
             ScrollView(.vertical) {
                 VStack {
                     HStack {
-                        Text("List a Service")
+                        Text("List Your Service")
                             .font(.system(size: 35)).bold()
                             .padding(25)
                         Spacer()
                     }
                     
                     MultiImageSelector()
-                        .padding([.leading, .top, .bottom], 25)
+                        .padding(.leading , 30)
+                        .padding(.vertical, 25)
                     
-                    underlinedTextField(title: "Service Name", text: $listingVM.title, width: 310, height: 40, color: CustomColor.sxcgreen)
-                    underlinedTextField(title: "Details about service provided", text: $listingVM.description, width: 310, height: 40, color: CustomColor.sxcgreen)
+                    underlinedTextField(title: "Service Name", text: $listingVM.title, width: 330, height: 40, color: listingVM.title.isEmpty ? .black : CustomColor.sxcgreen)
+                    underlinedTextField(title: "Details about service provided", text: $listingVM.description, width: 330, height: 40, color: listingVM.description.isEmpty ? .black : CustomColor.sxcgreen)
                     
                     
                     pickCategoriesButton()
@@ -101,26 +102,43 @@ struct CreateListingView: View {
             }) {
                 HStack {
                     Spacer()
+                    Text(listingVM.categories.count == 0 ? "No Categories Added" : "Edit Categories")
+                        .font(.system(size: 17))
+                        .padding(15)
                     
-                    
-                    if listingVM.categories.count == 0 {
-                        Text("No Categories Added")
-                            .font(.system(size: 17))
-                            .padding(10)
-                    } else {
-                        Text("Edit Categories")
-                            .font(.system(size: 17))
-                            .padding(10)
+                    if listingVM.categories.count != 0 {
+                        
+                        ScrollView(.horizontal) {
+                            HStack {
+                                ForEach(listingVM.categories, id: \.self) { category in
+                                    
+                                    FilterTag(filterData: category)
+                                }
+                            }
+                        }
+                        
+                        /*
+                        LazyVGrid(columns: controls.gridItems, alignment: .center, spacing: 40) {
+                         ForEach(listingVM.categories, id: \.self) { category in
+                             
+                             FilterTag(filterData: category)
+                         }
+                        }
+                         */
                     }
-                    
                     Spacer()
+                    
                 }
-                .frame(height: 40)
-                .background(Color.blue)
-                .foregroundColor(.white)
-                .cornerRadius(5)
+                .background(.white)
+                .foregroundColor(.black)
+                .cornerRadius(17)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 17)
+                        .stroke(.black, lineWidth: 2)
+                )
+                .padding(15)
             }
-        }.padding(40)
+        }.padding(30)
     }
     
     private func MultiImageSelector() -> some View {
@@ -133,12 +151,18 @@ struct CreateListingView: View {
                     } label: {
                         ZStack {
                             Rectangle()
-                                .fill(Color.gray.opacity(0.5))
+                                .fill(.white)
                                 .frame(width: controls.width/1.5, height: controls.height/1.5)
-                                .cornerRadius(5)
+                                .cornerRadius(17)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 17)
+                                        .stroke(.black, lineWidth: 2)
+                                )
                             Image(systemName: "plus")
-                                .foregroundColor(.white)
-                        }
+                                .foregroundColor(.black)
+                                .font(.system(size: 30))
+                            
+                        }.padding(1)
                     }
                     
                 }
@@ -149,7 +173,11 @@ struct CreateListingView: View {
                             .resizable()
                             .scaledToFill()
                             .frame(width: controls.width, height: controls.height)
-                            .cornerRadius(5)
+                            .cornerRadius(17)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 17)
+                                    .stroke(.black, lineWidth: 1)
+                            )
                             .padding()
                         Button(action: {
                             UIImpactFeedbackGenerator(style: .rigid).impactOccurred()
@@ -158,10 +186,14 @@ struct CreateListingView: View {
                         }, label: {
                             Image(systemName: "minus.circle.fill")
                                 .resizable()
-                                .frame(width: 25, height: 25)
+                                .frame(width: 35, height: 35)
                                 .foregroundColor(.red)
                                 .background(Color.white)
                                 .clipShape(Circle())
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 17.5)
+                                        .stroke(.black, lineWidth: 1)
+                                )
                         }).offset(x: controls.width / 2.1, y: -controls.height / 2.1)
                     }
                     
@@ -183,16 +215,20 @@ struct CreateListingView: View {
         } label: {
             HStack {
                 Spacer()
-                Text("Fill in fields above")
-                    .bold()
-                    .padding(10)
+                Text("Fill All Required Fields")
+                    .font(.system(size: 17))
+                    .padding(15)
                 Spacer()
+                
             }
-            .background(Color.gray.opacity(0.5))
-            .foregroundColor(.white)
-            .cornerRadius(5)
-            .padding(.bottom, 10)
-            .padding(.horizontal, 15)
+            .background(.white)
+            .foregroundColor(.black)
+            .cornerRadius(17)
+            .overlay(
+                RoundedRectangle(cornerRadius: 17)
+                    .stroke(.black, lineWidth: 2)
+            )
+            .padding(15)
         }
     }
     
@@ -218,15 +254,20 @@ struct CreateListingView: View {
             HStack {
                 Spacer()
                 Text("Post Listing")
+                    .font(.system(size: 17))
                     .bold()
-                    .padding(10)
+                    .padding(15)
                 Spacer()
+                
             }
             .background(CustomColor.sxcgreen)
             .foregroundColor(.black)
-            .cornerRadius(5)
-            .padding(.bottom, 10)
-            .padding(.horizontal, 15)
+            .cornerRadius(17)
+            .overlay(
+                RoundedRectangle(cornerRadius: 17)
+                    .stroke(.black, lineWidth: 1)
+            )
+            .padding(15)
         }).disabled(controls.uploading)
 
             

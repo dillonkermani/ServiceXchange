@@ -27,7 +27,7 @@ class CreateListingViewModel : ObservableObject {
     @Published var pickedImage = Image("")
     @Published var uploadingImages = false
     let maxImageCount = 8
-    @Published var categories: [String] = []
+    @Published var categories: [CategoryCell] = []
     
     /*
      * this function takes in a document reference and uploads a bunch of
@@ -37,8 +37,13 @@ class CreateListingViewModel : ObservableObject {
     // Posts Listing to Firestore
     func postListing(posterId: String, onSuccess: @escaping(_ listing: Listing) -> Void, onError: @escaping(_ errorMessage: String) -> Void) async {
         
+        var categoryNames: [String] = []
+        for category in categories {
+            categoryNames.append(category.title)
+        }
+        
         // Init Listing Model to be pushed to Firestore.
-        let listing = Listing(posterId: posterId, title: self.title, description: self.description, datePosted: Date().timeIntervalSince1970, categories: self.categories)
+        let listing = Listing(posterId: posterId, title: self.title, description: self.description, datePosted: Date().timeIntervalSince1970, categories: categoryNames)
         
         guard let dict = try? listing.toDictionary() else { return }
         
@@ -102,7 +107,7 @@ class CreateListingViewModel : ObservableObject {
     }
     
     func isPostable() -> Bool {
-        return !(self.posterId.isEmpty || self.title.isEmpty || self.description.isEmpty || self.categories.isEmpty)
+        return !(self.title.isEmpty || self.description.isEmpty || self.categories.isEmpty || self.images.isEmpty)
     }
     func maxImageCountReached() -> Bool {
         return self.images.count > self.maxImageCount

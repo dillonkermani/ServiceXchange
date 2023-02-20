@@ -245,15 +245,15 @@ struct LoginView: View {
                         .padding([.top, .bottom], 75)
                 }
                 HStack {
-                    underlinedTextField(title: "First Name", text: $loginVM.firstName, width: 140, height: 40, color: CustomColor.sxcgreen)
-                    underlinedTextField(title: "First Name", text: $loginVM.lastName, width: 140, height: 40, color: CustomColor.sxcgreen)
+                    underlinedTextField(title: "First Name", text: $loginVM.firstName, width: 140, height: 40, color: loginVM.firstName.isEmpty ? .black : CustomColor.sxcgreen)
+                    underlinedTextField(title: "First Name", text: $loginVM.lastName, width: 140, height: 40, color: loginVM.lastName.isEmpty ? .black : CustomColor.sxcgreen)
                 }
-                underlinedTextField(title: "Email", text: $loginVM.email, width: 310, height: 40, color: CustomColor.sxcgreen)
+                underlinedTextField(title: "Email", text: $loginVM.email, width: 310, height: 40, color: loginVM.email.isEmpty ? .black : CustomColor.sxcgreen)
                     .keyboardType(.emailAddress)
-                underlinedTextField(title: "Phone (recommended)", text: $loginVM.phone, width: 310, height: 40, color: CustomColor.sxcgreen)
+                underlinedTextField(title: "Phone (recommended)", text: $loginVM.phone, width: 310, height: 40, color: loginVM.phone.isEmpty ? .black : CustomColor.sxcgreen)
                     .keyboardType(.phonePad)
-                passwordTextField(title: "Password", text: $loginVM.password, width: 310, height: 40)
-                passwordTextField(title: "Confirm Password", text: $loginVM.confirmPassword, width: 310, height: 40)
+                passwordTextField(title: "Password", text: $loginVM.password, width: 310, height: 40, color: loginVM.password.isEmpty ? .black : CustomColor.sxcgreen)
+                passwordTextField(title: "Confirm Password", text: $loginVM.confirmPassword, width: 310, height: 40, color: loginVM.confirmPassword.isEmpty ? .black : CustomColor.sxcgreen)
                 
                 Spacer()
                 
@@ -270,9 +270,9 @@ struct LoginView: View {
                         .font(.largeTitle)
                         .padding([.top, .bottom], 75)
                 }
-                underlinedTextField(title: "Email", text: $loginVM.email, width: 310, height: 40, color: CustomColor.sxcgreen)
+                underlinedTextField(title: "Email", text: $loginVM.email, width: 310, height: 40, color: loginVM.email.isEmpty ? .black : CustomColor.sxcgreen)
                     .keyboardType(.emailAddress)
-                passwordTextField(title: "Password", text: $loginVM.password, width: 310, height: 40)
+                passwordTextField(title: "Password", text: $loginVM.password, width: 310, height: 40, color: loginVM.password.isEmpty ? .black : CustomColor.sxcgreen)
                     .padding(.bottom, 40)
                 
                 Button {

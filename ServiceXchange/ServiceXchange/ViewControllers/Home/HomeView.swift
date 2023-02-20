@@ -14,16 +14,15 @@ struct HomeViewControls {
     var height = (UIScreen.main.bounds.width * 0.43)
     var categoryList = [CategoryCell(index: 0, title: "All", imageName: "suitcase.fill"),
                         CategoryCell(index: 1,title: "Food", imageName: "fork.knife"),
-                        CategoryCell(index: 2,title: "Food", imageName: "fork.knife"),
-                        CategoryCell(index: 3,title: "Clothing", imageName: "tshirt"),
-                        CategoryCell(index: 4,title: "Electronics", imageName: "laptopcomputer.and.iphone"),
-                        CategoryCell(index: 5,title: "Education", imageName: "brain.head.profile"),
-                        CategoryCell(index: 6,title: "Entertainment", imageName: "ticket"),
-                        CategoryCell(index: 7,title: "Health", imageName: "heart"),
-                        CategoryCell(index: 8,title: "Automotive", imageName: "car"),
-                        CategoryCell(index: 9,title: "Home Decor", imageName: "house"),
-                        CategoryCell(index: 10,title: "Pet Services", imageName: "comb"),
-                        CategoryCell(index: 11,title: "Travel", imageName: "airplane.departure")]
+                        CategoryCell(index: 2,title: "Clothing", imageName: "tshirt"),
+                        CategoryCell(index: 3,title: "Electronics", imageName: "laptopcomputer.and.iphone"),
+                        CategoryCell(index: 4,title: "Education", imageName: "brain.head.profile"),
+                        CategoryCell(index: 5,title: "Entertainment", imageName: "ticket"),
+                        CategoryCell(index: 6,title: "Health", imageName: "heart"),
+                        CategoryCell(index: 7,title: "Automotive", imageName: "car"),
+                        CategoryCell(index: 8,title: "Home Decor", imageName: "house"),
+                        CategoryCell(index: 9,title: "Pet Services", imageName: "comb"),
+                        CategoryCell(index: 10,title: "Travel", imageName: "airplane.departure")]
     var selectedCategory = ""
     var searchText = ""
     var showSearchBar = false
@@ -90,27 +89,15 @@ struct HomeView: View {
     
     private func CategoryPicker() -> some View {
         return ScrollView (.horizontal, showsIndicators: false) {
-            HStack(spacing: 12) {
+            HStack() {
                 ForEach(controls.categoryList, id: \.self) { category in
-                    Button(action: {
-                        controls.selectedCategory = category.title
-                        controls.categoryList[category.index!].isSelected.toggle()
-                    }) {
-                        
-                            ZStack {
-                                Rectangle()
-                                    .frame(width: 105, height: 40)
-                                    .foregroundColor(category.isSelected ? CustomColor.sxcgreen : .gray.opacity(0.6))
-                                    .cornerRadius(20)
 
-                                Text("\(category.title)")
-                                    .foregroundColor(.white)
-                                    .padding()
-                                    .font(.system(size: 15)).bold()
-
-                            }.cornerRadius(5)
-
-                    }
+                    FilterTag(filterData: category)
+                        .onTapGesture {
+                            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                            controls.selectedCategory = category.title
+                            controls.categoryList[category.index!].isSelected.toggle()
+                     }
                 }
             }
         }.padding([.leading], 20)

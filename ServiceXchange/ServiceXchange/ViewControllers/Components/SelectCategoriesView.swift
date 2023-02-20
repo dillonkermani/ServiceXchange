@@ -11,7 +11,7 @@ struct SelectCategoriesView: View {
     @Environment(\.presentationMode) var presentationMode
     @StateObject var filterModel = FilterModel()
     @State var listingId: String = ""
-    @Binding var categories: [String]
+    @Binding var categories: [CategoryCell]
     
     var body: some View {
         VStack {
@@ -29,7 +29,7 @@ struct SelectCategoriesView: View {
                     var i = 0
                     for filterCategory in filterModel.categories {
                         for category in categories {
-                            if category == filterCategory.title {
+                            if category.title == filterCategory.title {
                                 filterModel.toggleFilter(at: i)
                             }
                         }
@@ -49,24 +49,29 @@ struct SelectCategoriesView: View {
                     Spacer()
                     Text("Save")
                         .font(.system(size: 17))
-                        .padding(10)
+                        .padding(15)
                     Spacer()
                 }
-                .background(Color.blue)
-                .foregroundColor(.white)
-                .cornerRadius(5)
+                .background(CustomColor.sxcgreen)
+                .foregroundColor(.black)
+                .cornerRadius(17)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 17)
+                        .stroke(.black, lineWidth: 2)
+                )
                 .padding(40)
+                
             }
         }
         .padding()
     }
     
     func saveButtonPressed() {
-        var updatedCategories: [String] = []
+        var updatedCategories: [CategoryCell] = []
         
         for category in filterModel.categories {
             if category.isSelected {
-                updatedCategories.append(category.title)
+                updatedCategories.append(category)
             }
         }
         
@@ -157,22 +162,32 @@ struct FilterTag: View {
     
     // 2
     var body: some View {
-        Label(filterData.title, systemImage: filterData.imageName)
-            .font(.caption)
-            .padding(4)
-            .foregroundColor(filterData.isSelected ? .black : .white)
-            .background(
-                RoundedRectangle(cornerRadius: 8)  // 3
-                    .foregroundColor(filterData.isSelected ?  CustomColor.sxcgreen : Color.gray.opacity(0.8))
-            )
-            // 4
+        ZStack {
+            Rectangle()
+                .frame(width: 80, height: 60)
+                .foregroundColor(filterData.isSelected ? CustomColor.sxcgreen : .white)
+                .cornerRadius(17)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 17)
+                        .stroke(.black, lineWidth: 1)
+                )
+                        
+            VStack {
+                Image(systemName: filterData.imageName)
+                    .font(.system(size: 17)).bold()
+                    .padding(.bottom, 3)
+                Text(filterData.title)
+                    .font(.system(size: 10)).bold()
+            }
+            .foregroundColor(.black)
+        }
+        .padding(1)
             .transition(.asymmetric(insertion: .move(edge: .leading), removal: .move(edge: .leading)))
     }
 }
 
 struct SearchFilterView_Previews: PreviewProvider {
     static var previews: some View {
-        //SelectCategoriesView(listingId: "")
         EmptyView()
     }
 }
