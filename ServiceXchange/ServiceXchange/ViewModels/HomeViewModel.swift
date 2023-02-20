@@ -7,6 +7,7 @@
 
 import Foundation
 
+// Main Functions: 1) Loads all Listings from Firestore. 2) Performs search by title or category.
 class HomeViewModel: ObservableObject {
     
     @Published var allListings: [Listing] = [] // All Listings Cached in ViewModel

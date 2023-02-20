@@ -12,7 +12,18 @@ struct HomeViewControls {
     let gridItems = [GridItem(.flexible()), GridItem(.flexible())]
     var width = (UIScreen.main.bounds.width * 0.43)
     var height = (UIScreen.main.bounds.width * 0.43)
-    var categoryList = ["Category1", "Category2", "Category3", "Category4", "Category5"]
+    var categoryList = [CategoryCell(index: 0, title: "All", imageName: "suitcase.fill"),
+                        CategoryCell(index: 1,title: "Food", imageName: "fork.knife"),
+                        CategoryCell(index: 2,title: "Food", imageName: "fork.knife"),
+                        CategoryCell(index: 3,title: "Clothing", imageName: "tshirt"),
+                        CategoryCell(index: 4,title: "Electronics", imageName: "laptopcomputer.and.iphone"),
+                        CategoryCell(index: 5,title: "Education", imageName: "brain.head.profile"),
+                        CategoryCell(index: 6,title: "Entertainment", imageName: "ticket"),
+                        CategoryCell(index: 7,title: "Health", imageName: "heart"),
+                        CategoryCell(index: 8,title: "Automotive", imageName: "car"),
+                        CategoryCell(index: 9,title: "Home Decor", imageName: "house"),
+                        CategoryCell(index: 10,title: "Pet Services", imageName: "comb"),
+                        CategoryCell(index: 11,title: "Travel", imageName: "airplane.departure")]
     var selectedCategory = ""
     var searchText = ""
     var showSearchBar = false
@@ -38,7 +49,7 @@ struct HomeView: View {
                             HeaderLabel()
                             Spacer()
                             searchButton()
-                        }.padding(.bottom, 25)
+                        }.padding(.bottom, 15)
                         if controls.showSearchBar {
                             SearchBar(initialText: "Search services", text: $homeVM.searchText, onSearchButtonChanged: homeVM.searchTextDidChange)
                                 .padding(.horizontal, 5)
@@ -55,7 +66,7 @@ struct HomeView: View {
         return HStack {
             Image("sxc_title_transparent")
                 .resizable()
-                .frame(width: 275, height: 90)
+                .frame(width: 275, height: 87)
                 .padding(.leading, 15)
             Spacer()
         }
@@ -72,7 +83,7 @@ struct HomeView: View {
                 Image(systemName: controls.showSearchBar ? "chevron.up" : "magnifyingglass")
                     .imageScale(.large)
                     .foregroundColor(.black)
-                    .padding(25)
+                    .padding()
             }
         }
     }
@@ -82,20 +93,22 @@ struct HomeView: View {
             HStack(spacing: 12) {
                 ForEach(controls.categoryList, id: \.self) { category in
                     Button(action: {
-                        controls.selectedCategory = category}) {
+                        controls.selectedCategory = category.title
+                        controls.categoryList[category.index!].isSelected.toggle()
+                    }) {
                         
                             ZStack {
                                 Rectangle()
                                     .frame(width: 105, height: 40)
-                                    .foregroundColor(CustomColor.sxcgreen)
+                                    .foregroundColor(category.isSelected ? CustomColor.sxcgreen : .gray.opacity(0.6))
                                     .cornerRadius(20)
 
-                                Text("\(category)")
+                                Text("\(category.title)")
                                     .foregroundColor(.white)
                                     .padding()
                                     .font(.system(size: 15)).bold()
 
-                            }.cornerRadius(20)
+                            }.cornerRadius(5)
 
                     }
                 }

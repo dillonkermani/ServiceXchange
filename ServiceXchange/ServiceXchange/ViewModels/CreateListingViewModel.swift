@@ -18,6 +18,7 @@ struct ListingImage: Identifiable, Equatable {
 }
 
 class CreateListingViewModel : ObservableObject {
+    @Published var listingId: String = ""
     @Published var posterId: String = ""
     @Published var title: String = ""
     @Published var description: String = ""
@@ -26,11 +27,49 @@ class CreateListingViewModel : ObservableObject {
     @Published var pickedImage = Image("")
     @Published var uploadingImages = false
     let maxImageCount = 8
+    @Published var categories: [String] = []
     
     /*
      * this function takes in a document reference and uploads a bunch of
      * images asyncronously, so we can await all of the image uploads at once
      */
+    
+    // Posts Listing to Firestore
+    func postListing(posterId: String, onSuccess: @escaping(_ listing: Listing) -> Void, onError: @escaping(_ errorMessage: String) -> Void) async {
+        
+        // Init Listing Model to be pushed to Firestore.
+        let listing = Listing(posterId: posterId, title: self.title, description: self.description, datePosted: Date().timeIntervalSince1970, categories: self.categories)
+        
+        guard let dict = try? listing.toDictionary() else { return }
+        
+        //adding listing without the image to the firebase
+        let listing_ref = Ref.FIRESTORE_COLLECTION_LISTINGS.addDocument(data: dict){ error in
+            if let error = error {
+                onError(error.localizedDescription)
+                return
+            }
+        }
+        if self.images.count == 0 {
+            onSuccess(listing)
+            return
+        }
+        
+        
+        let url_array = await uploadImages(listing_ref: listing_ref)
+        
+        do{
+            try await listing_ref.updateData( [
+                "imageUrls": url_array,
+                "listingId": listing_ref.documentID,
+            ] )
+            self.listingId = listing_ref.documentID
+        }
+        catch {
+            onError("listing update error, hanging images")
+            return
+        }
+        onSuccess(listing)
+    }
     
     //TODO: performace improvement?
     private func uploadImages(listing_ref: DocumentReference) async -> [String] {
@@ -63,51 +102,17 @@ class CreateListingViewModel : ObservableObject {
     }
     
     func isPostable() -> Bool {
-        return !(self.posterId.isEmpty || self.title.isEmpty || self.description.isEmpty)
+        return !(self.posterId.isEmpty || self.title.isEmpty || self.description.isEmpty || self.categories.isEmpty)
     }
     func maxImageCountReached() -> Bool {
         return self.images.count > self.maxImageCount
-    }
-    
-    func addListing(posterId: String, onSuccess: @escaping(_ listing: Listing) -> Void, onError: @escaping(_ errorMessage: String) -> Void) async {
-        
-        
-        
-        let listing = Listing(posterId: posterId, title: self.title, description: self.description, datePosted: Date().timeIntervalSince1970)
-        
-        guard let dict = try? listing.toDictionary() else { return }
-        
-        //adding listing without the image to the firebase
-        let listing_ref = Ref.FIRESTORE_COLLECTION_LISTINGS.addDocument(data: dict){ error in
-            if let error = error {
-                onError(error.localizedDescription)
-                return
-            }
-        }
-        if self.images.count == 0 {
-            onSuccess(listing)
-            return
-        }
-        
-        
-        let url_array = await uploadImages(listing_ref: listing_ref)
-        
-        do{
-            try await listing_ref.updateData( [
-                "imageUrls": url_array,
-                "listingId": listing_ref.documentID,
-            ] )
-        }
-        catch {
-            onError("listing update error, hanging images")
-            return
-        }
-        onSuccess(listing)
     }
     
     func addListingImage() {
         images.append(ListingImage(id: UUID(), image: self.pickedImage, data: self.pickedImageData))
         return
     }
+    
+    
     
 }
