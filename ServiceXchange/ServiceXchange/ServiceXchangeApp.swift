@@ -25,11 +25,15 @@ struct ServiceXchangeApp: App {
     @StateObject var session = SessionStore()
 
 
+  //hopefully this creates this an I can pass this anywhere I fuckin like
+  @StateObject var userVM = UserViewModel()
+    
   var body: some Scene {
     WindowGroup {
       NavigationView {
         ContentView() // Right Click -> "Jump to Definition" to go through viewcontroller flow.
             .environmentObject(session)
+            .environmentObject(userVM)
             .preferredColorScheme(.light)
       }
     }

@@ -15,7 +15,10 @@ struct ProfileSettingsView: View {
     //@ObservedObject var userVM : UserViewModel()
     
     @EnvironmentObject var session: SessionStore
-    @ObservedObject var userVM : UserViewModel
+    //@ObservedObject var userVM : UserViewModel
+    
+    @EnvironmentObject var userVM: UserViewModel
+    
     @State var controls = CreateProfileControls()
     
     
@@ -30,7 +33,8 @@ struct ProfileSettingsView: View {
                 //reverts to the origninal image
                 
                 let _ = print ("this is profileim url in user settings: ", userVM.localProfileImageUrl)
-                let image_url =  userVM.localProfileImageUrl
+                //let image_url =  userVM.localProfileImageUrl
+                let image_url = userVM.localProfileImageUrl
                 KFImage(URL(string:  image_url))
                     .placeholder({
                         ShimmerPlaceholderView(width: controls.width, height: controls.height, cornerRadius: 0, animating: true)
@@ -73,7 +77,7 @@ struct ProfileSettingsView: View {
             Spacer()
             
             //edit service provider profile button --> does this become a create listing once you have done it?
-            NavigationLink(destination: EditProfileView(userVM: userVM), label: {
+            NavigationLink(destination: EditProfileView(), label: {
                 CustomProfileButtonView(title: "View Provider Account", foregroundColor: .white, backgroundColor: CustomColor.sxcgreen)
             })
             

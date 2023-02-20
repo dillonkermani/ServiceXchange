@@ -24,8 +24,8 @@ struct ProfileView: View {
     @EnvironmentObject var session: SessionStore // Stores user's login status.
     
     
-    @ObservedObject var userVM = UserViewModel()
-    
+    //@ObservedObject var userVM = UserViewModel()
+    @EnvironmentObject var userVM: UserViewModel
     
     // @State var controls = CreateProfileControls() //some control variables for the image picker now given for
     
@@ -35,7 +35,7 @@ struct ProfileView: View {
 //            KFImage(URL(string : userVM.localProfileImageUrl))
 //                .frame(width: 250.0, height: 250.0, alignment: .center)
             
-            NavigationLink(destination: ProfileSettingsView(userVM : userVM), label: {
+            NavigationLink(destination: ProfileSettingsView(), label: {
                 Image(systemName: "gear")
                 
                     .font(.system(size: 35,
@@ -50,6 +50,7 @@ struct ProfileView: View {
             
             //initailize the local variables if you have not already
             if (userVM.initialized == false){
+                print("profile view, Initial image url: ", userVM.localProfileImageUrl)
                 print( "initailized var >>> : ", userVM.initialized )
                 userVM.updateLocalUserVariables(user: session.userSession!)
                 print( "after updated initailized var >>> : ", userVM.initialized )

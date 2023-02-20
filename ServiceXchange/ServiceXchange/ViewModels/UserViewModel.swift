@@ -11,6 +11,7 @@ import FirebaseCore
 
 class UserViewModel: ObservableObject{
     
+    @EnvironmentObject var session: SessionStore
     
     //local storage of variables here are updated live
     
@@ -128,27 +129,23 @@ class UserViewModel: ObservableObject{
                 //self.localProfileImageUrl = downloadURL as? String ?? "unknown"
                 //why does this go back to orignal empty string state?
                 self.localProfileImageUrl = downloadURL.absoluteString
-                print("localProfileImageUrl in try to update: \(self.localProfileImageUrl)")
                 
+                // self.session.localProfileImageUrl = downloadURL.absoluteString
                 
-                //either this is not a good update or else the page peloads all variables
-                //doesnt make sence because it shows rigth away when you update
-                
-                // IIIIII fookin know so evey time you go into the profile view you update from firebase which does not have the the most current version
-                
-                //solution ->> create and updated variable if updated do not call the load var function
+                //print("localProfileImageUrl in try to update: \(self.localProfileImageUrl)")
+
                 
             }
              return
-        }//update function
+        }
         
         
         
  
-    }
+    }//update function
     
     
-    
+
     
 }
 

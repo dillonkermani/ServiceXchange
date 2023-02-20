@@ -38,8 +38,10 @@ class SessionStore: ObservableObject {
                 let firestoreUserId = Ref.FIRESTORE_DOCUMENT_USERID(userId: user.uid)
                   firestoreUserId.getDocument { (document, error) in
                       if let dict = document?.data() {
-                          guard let decoderUser = try? User.init(fromDictionary: dict) else {return}
+                        guard let decoderUser = try? User.init(fromDictionary: dict) else {return}
                         self.userSession = decoderUser
+    
+                          self.loadLocalUserVariables()
                       }
                   }
                 self.isLoadingLogin = false
@@ -101,10 +103,20 @@ class SessionStore: ObservableObject {
     deinit {
         unbind()
     }
+    
+    ///
+    func updateLocal(profString : String){
+        print("profString: ", profString)
+        self.localProfileImageUrl = profString
+        print("in update local after should be updated: ", localProfileImageUrl)
+    }
+    
+    func loadLocalUserVariables() {
+        self.localProfileImageUrl = userSession?.profileImageUrl ?? "none"
+    }
+
+    /// we can delete all this crap and try to make an environment object
+    
 }
 
-
-func loadLocalUserVariables() {
-    self.localProfileImageUrl = session.userSession.profileImageUrl ?? "none"
-}
 

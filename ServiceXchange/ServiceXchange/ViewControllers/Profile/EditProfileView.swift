@@ -24,7 +24,11 @@ struct CreateProfileControls {
 
 struct EditProfileView: View {
     
-    @ObservedObject var userVM : UserViewModel
+    @EnvironmentObject var session: SessionStore
+    //@ObservedObject var userVM : UserViewModel
+    
+    @EnvironmentObject var userVM: UserViewModel
+    
     @State var controls = CreateProfileControls()
     
     //state varibles
@@ -63,8 +67,15 @@ struct EditProfileView: View {
                         print("Update user error: \(errorMessage)")
                     })
                     
-                    print("in profile view after button pressed localImUrl: \(userVM.localProfileImageUrl)")
-                    print("in createView localCompanyName is: ", userVM.localCompanyName)
+                   // print("in profile view before button pressed localImUrl: \(session.localProfileImageUrl)")
+                    
+                    //now can update the sessionStore variables here
+                    //self.session.localProfileImageUrl = userVM.localProfileImageUrl
+                    // !!! this is happening before the the userVM is updating in the above function
+                    //session.updateLocal(profString: userVM.localProfileImageUrl)
+                    
+                    //print("in profile view after button pressed localImUrl: \(session.localProfileImageUrl)")
+                    //print("in createView localCompanyName is: ", userVM.localCompanyName)
                     
                     //okay so I think the we have to only create one userviewModel struct --> duh and pass it between views
                     
