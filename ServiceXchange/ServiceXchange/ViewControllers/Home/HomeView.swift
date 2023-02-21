@@ -12,75 +12,99 @@ struct HomeViewControls {
     let gridItems = [GridItem(.flexible()), GridItem(.flexible())]
     var width = (UIScreen.main.bounds.width * 0.43)
     var height = (UIScreen.main.bounds.width * 0.43)
-    var categoryList = ["Category1", "Category2", "Category3", "Category4", "Category5"]
+    var categoryList = [CategoryCell(index: 0, title: "All", imageName: "suitcase.fill"),
+                        CategoryCell(index: 1,title: "Food", imageName: "fork.knife"),
+                        CategoryCell(index: 2,title: "Clothing", imageName: "tshirt"),
+                        CategoryCell(index: 3,title: "Electronics", imageName: "laptopcomputer.and.iphone"),
+                        CategoryCell(index: 4,title: "Education", imageName: "brain.head.profile"),
+                        CategoryCell(index: 5,title: "Entertainment", imageName: "ticket"),
+                        CategoryCell(index: 6,title: "Health", imageName: "heart"),
+                        CategoryCell(index: 7,title: "Automotive", imageName: "car"),
+                        CategoryCell(index: 8,title: "Home Decor", imageName: "house"),
+                        CategoryCell(index: 9,title: "Pet Services", imageName: "comb"),
+                        CategoryCell(index: 10,title: "Travel", imageName: "airplane.departure")]
     var selectedCategory = ""
     var searchText = ""
+    var showSearchBar = false
 }
 
 struct HomeView: View {
     
-    @ObservedObject var listingVM = ListingViewModel()
+    @ObservedObject var homeVM = HomeViewModel()
     
     @State var controls = HomeViewControls()
     
 
     init() {
-        listingVM.loadListings()
+        homeVM.loadListings()
     }
     
     var body: some View {
-        ZStack {
+        VStack {
             NavigationStack {
                 ScrollView {
                     VStack {
                         HStack {
-                            Image("sxc_title_transparent")
-                                .resizable()
-                                .frame(width: 300, height: 95)
-                                .padding([.top, .bottom], 35)
-                                .padding(.leading, 15)
+                            HeaderLabel()
                             Spacer()
+                            searchButton()
+                        }.padding(.bottom, 15)
+                        if controls.showSearchBar {
+                            SearchBar(initialText: "Search services", text: $homeVM.searchText, onSearchButtonChanged: homeVM.searchTextDidChange)
+                                .padding(.horizontal, 5)
                         }
-                        
-                        
                         CategoryPicker()
                         ListingsGrid()
-                    }
+                    }.padding([.top, .bottom], 65)
                 }
             }.toolbar(.hidden)
         }
     }
     
+    private func HeaderLabel() -> some View {
+        return HStack {
+            Image("sxc_title_transparent")
+                .resizable()
+                .frame(width: 275, height: 87)
+                .padding(.leading, 15)
+            Spacer()
+        }
+    }
     
+    private func searchButton() -> some View {
+        return  HStack(spacing: 20) {
+            Button(action: {
+                UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                withAnimation {
+                    controls.showSearchBar.toggle()
+                }
+            }) {
+                Image(systemName: controls.showSearchBar ? "chevron.up" : "magnifyingglass")
+                    .imageScale(.large)
+                    .foregroundColor(.black)
+                    .padding()
+            }
+        }
+    }
     
-    
-    fileprivate func CategoryPicker() -> some View {
+    private func CategoryPicker() -> some View {
         return ScrollView (.horizontal, showsIndicators: false) {
-            HStack(spacing: 12) {
+            HStack() {
                 ForEach(controls.categoryList, id: \.self) { category in
-                    Button(action: {
-                        controls.selectedCategory = category}) {
-                        
-                            ZStack {
-                                Rectangle()
-                                    .frame(width: 105, height: 40)
-                                    .foregroundColor(CustomColor.sxcgreen)
-                                    .cornerRadius(20)
 
-                                Text("\(category)")
-                                    .foregroundColor(.white)
-                                    .padding()
-                                    .font(.system(size: 15)).bold()
-
-                            }.cornerRadius(20)
-
-                    }
+                    FilterTag(filterData: category)
+                        .onTapGesture {
+                            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                            controls.selectedCategory = category.title
+                            controls.categoryList[category.index!].isSelected.toggle()
+                     }
                 }
             }
         }.padding([.leading], 20)
+            .padding(.top, 25)
     }
     
-    fileprivate func ListingsGrid() -> some View {
+    private func ListingsGrid() -> some View {
         return VStack {
                 HStack {
                     Text("All Services")
@@ -91,12 +115,12 @@ struct HomeView: View {
                 .padding(.leading, 25)
                 
                 LazyVGrid(columns: controls.gridItems, alignment: .center, spacing: 15) {
-                    if listingVM.allListings.isEmpty || listingVM.isLoading {
+                    if homeVM.allListings.isEmpty || homeVM.isLoading {
                         ForEach(0..<10) { _ in
                             ShimmerPlaceholderView(width: controls.width, height: controls.height, cornerRadius: 5, animating: true)
                         }
                     } else {
-                        ForEach(listingVM.allListings, id: \.listingId) { listing in
+                        ForEach(homeVM.listings, id: \.listingId) { listing in
                             NavigationLink(destination: ListingDetailView(listing: listing)) {
                                 ListingCardView(listing: listing)
                             }
@@ -109,45 +133,6 @@ struct HomeView: View {
                 }.padding(.horizontal, 10)
             }
     }
-    
-    func ListingCardView(listing: Listing) -> some View {
-        let image_url = listing.imageUrls.first ?? ""
-        return ZStack(alignment: .bottom) {
-            KFImage(URL(string:  image_url))
-                .placeholder({
-                    ShimmerPlaceholderView(width: controls.width, height: controls.height, cornerRadius: 0, animating: true)
-                })
-                .basicKFModifiers(cgSize: CGSize(width: controls.height, height: controls.width))
-                .aspectRatio(contentMode: .fill)
-                .frame(width: controls.width, height: controls.height)
-                .clipped()
-            
-            
-            cardGradient()
-                .rotationEffect(.degrees(180))
-                .frame(width: controls.width, height: controls.height)
-             
-            
-            HStack {
-                VStack(alignment: .leading, spacing: 5) {
-                    Text(listing.title )
-                        .foregroundColor(.white)
-                        .lineLimit(1)
-                }.padding(10)
-                Spacer()
-            }
-        }
-        .frame(width: controls.width, height: controls.height)
-        .cornerRadius(5)
-    }
-    
-//    func ListingDetailView(listing: Listing) -> some View {
-//        return VStack {
-//            Text("Not implemented")
-//            ListingCardView(listing: listing)
-//            Spacer()
-//        }
-//    }
 }
 
 struct HomeView_Previews: PreviewProvider {

@@ -10,7 +10,7 @@ import SwiftUI
 struct TabView: View {
     @Environment(\.colorScheme) var colorScheme
     
-    @State var selectedIndex = 0
+    @AppStorage("selectedTabIndex") var selectedTabIndex: Int = 0
     @State var postPressed = false
     @State var promptLogin = false
     @EnvironmentObject var session: SessionStore
@@ -41,11 +41,11 @@ struct TabView: View {
                         VStack {
                             HomeView()
                         }.onAppear {
-                            self.selectedIndex = 0
+                            self.selectedTabIndex = 0
                         }
                     }
                 } else {
-                    switch selectedIndex {
+                    switch selectedTabIndex {
                     case 0:
                         NavigationView {
                             VStack {
@@ -62,7 +62,7 @@ struct TabView: View {
                         NavigationView {
                             VStack {
                                 CreateListingView()
-                            }.navigationTitle("Offer A Service")
+                            }
                         }
                     case 3:
                         NavigationView {
@@ -98,7 +98,7 @@ struct TabView: View {
             Spacer()
             
             Divider()
-                .offset(y: 10)
+                .offset(y: 8)
     
             HStack {
                 ForEach(0..<5, id: \.self) { i in
@@ -109,11 +109,11 @@ struct TabView: View {
                                 promptLogin.toggle()
                                 
                             } else {
-                                self.selectedIndex = i
+                                self.selectedTabIndex = i
                             }
                             
                         } else if session.isLoggedIn == true { // if logged in
-                            self.selectedIndex = i
+                            self.selectedTabIndex = i
                         }
                         
                         
@@ -123,25 +123,26 @@ struct TabView: View {
                     } label: {
                         if i == 2 {
                             Image(systemName: icons[i])
-                                .font(.system(size: 25,
+                                .font(.system(size: 20,
                                               weight: .regular,
                                               design: .default))
                                 .foregroundColor(.black)
-                                .frame(width: 80, height: 80)
+                                .frame(width: 64, height: 64)
                                 .background(CustomColor.sxcgreen)
-                                .cornerRadius(40)
+                                .cornerRadius(32)
                                 .shadow(color: .gray, radius: 5, x: 0, y: 0)
                                 .overlay(
-                                        RoundedRectangle(cornerRadius: 40)
+                                        RoundedRectangle(cornerRadius: 32)
                                             .stroke(.black, lineWidth: 2)
                                     )
+                                .offset(y: -2)
                 
                         } else {
-                            Image(systemName: selectedIndex == i ? icons[i]+".fill" : icons[i])
+                            Image(systemName: selectedTabIndex == i ? icons[i]+".fill" : icons[i])
                                 .font(.system(size: 25,
                                               weight: .regular,
                                               design: .default))
-                                .foregroundColor(selectedIndex == i ? CustomColor.sxcgreen : colorScheme == .dark ? .white : .black)
+                                .foregroundColor(selectedTabIndex == i ? CustomColor.sxcgreen : colorScheme == .dark ? .white : .black)
                         }
                         
                     }.fullScreenCover(isPresented: $promptLogin) {
@@ -151,7 +152,7 @@ struct TabView: View {
 
                 }
             }
-        }
+        }.ignoresSafeArea(.keyboard, edges: .bottom)
     }
 }
 
