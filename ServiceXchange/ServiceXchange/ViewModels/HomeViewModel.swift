@@ -34,6 +34,13 @@ class HomeViewModel: ObservableObject {
         for listing in self.allListings {
             if listing.title.lowercased().contains(text.lowercased()) {
                 listings.append(listing)
+                continue
+            }
+            for category in listing.categories ?? [""] {
+                if category.lowercased().contains(text.lowercased()) {
+                    listings.append(listing)
+                    continue
+                }
             }
         }
         onSuccess(listings)
