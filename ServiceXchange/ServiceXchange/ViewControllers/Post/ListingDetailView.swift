@@ -47,6 +47,12 @@ struct ListingDetailView : View {
                 Text(listing.description)
                     .font(.system(size: 20))
                     .padding()
+                
+                Spacer()
+                
+                ListingCategoriesView()
+                
+                
             }
         }.gesture(DragGesture()
             .onEnded { value in
@@ -84,6 +90,26 @@ struct ListingDetailView : View {
                 await listingVM.getListingPoster(posterId: listing.posterId)
             }
         }
+    }
+    
+    private func ListingCategoriesView() -> some View {
+        return
+            VStack {
+                if listing.categories != nil {
+                    HStack {
+                        Text("Categories")
+                            .font(.system(size: 17)).bold()
+                        Spacer()
+                    }
+                    HStack {
+                        ForEach(listing.categories ?? [], id: \.self) { category in
+                            FilterTag(filterData: CategoryCell(title: category, imageName: ""))
+                        }
+                        Spacer()
+                    }
+                }
+            }.padding(25)
+        
     }
 
     enum SwipeHVDirection: String {

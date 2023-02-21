@@ -13,7 +13,6 @@ struct HomeViewControls {
     var width = (UIScreen.main.bounds.width * 0.43)
     var height = (UIScreen.main.bounds.width * 0.43)
     var categoryList: [CategoryCell] = Constants.categoryList
-    var selectedCategories: [CategoryCell] = []
     var searchText = ""
     var showSearchBar = false
 }
@@ -85,8 +84,25 @@ struct HomeView: View {
                     FilterTag(filterData: category)
                         .onTapGesture {
                             UIImpactFeedbackGenerator(style: .light).impactOccurred()
-                            controls.selectedCategories.append(category)
                             controls.categoryList[category.index!].isSelected.toggle()
+                            
+                            var selectedCategories: [CategoryCell] = []
+                            for category in controls.categoryList {
+                                if category.isSelected {
+                                    selectedCategories.append(category)
+                                }
+                            }
+                            if selectedCategories.count == 1 && selectedCategories[0].title == "All" {
+                                selectedCategories = controls.categoryList
+                            } else if selectedCategories.count == 0 {
+                                controls.categoryList[0].isSelected = true
+                                selectedCategories = controls.categoryList
+                            } else {
+                                controls.categoryList[0].isSelected = false
+                            }
+                            homeVM.selectedCategories = selectedCategories
+                            homeVM.categoriesDidChange()
+                            
                      }
                 }
             }
