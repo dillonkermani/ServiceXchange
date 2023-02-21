@@ -40,35 +40,7 @@ class UserViewModel: ObservableObject{
         
     }//update local user variables fucntion
     
-    
-    //pull the values of user data and store in local variables
-    //this shit is actually mega unessissary
-    func loadLocalUserVariables(userId : String){
-        
-        //create reference to firebase user -> userid document
-        let userDocRef = Ref.FIRESTORE_DOCUMENT_USERID(userId: userId)
-        
-        
-        //get the user document data and store it as a map in dataDescription variable
-        userDocRef.getDocument { (document, error) in
-            if let document = document, document.exists {
-                let dataDescription = document.data()
-                self.localUserId = dataDescription?["userId"]! as? String ?? "unknown"
-                self.localProfileImageUrl = dataDescription?["profileImageUrl"]! as? String ?? "unknown"
-                self.localCompanyName = dataDescription?["companyName"]! as? String ?? "unknown"
-                self.localBio = dataDescription?["bio"]! as? String ?? "unknown"
-                self.localPrimaryLocationServed = dataDescription?["primaryLocationServed"]! as? String ?? "unknown"
-//                print("should be compName: ", self.localCompanyName)
-//                print("localBio should be: ", self.localBio)
-//                print("localPrimaryLocationServed: ", self.localPrimaryLocationServed)
-//                print("localProfileImageUrl: ", self.localProfileImageUrl)
-                
-            } else {
-                print("Document does not exist")
-            }
-        }
-    }//load local variables function
-    
+
     
     //store user data into
     func update_user_info(userId : String, company_name: String, location_served: String, bio: String, profileImageData: Data, onError: @escaping(_ errorMessage: String) -> Void){
@@ -125,23 +97,10 @@ class UserViewModel: ObservableObject{
                 ] )
                 
                 //now comvert downloadURL back to string and store into the local variable
-                //or maybe in future we can make local var of typ url?
-                //self.localProfileImageUrl = downloadURL as? String ?? "unknown"
-                //why does this go back to orignal empty string state?
                 self.localProfileImageUrl = downloadURL.absoluteString
-                
-                // self.session.localProfileImageUrl = downloadURL.absoluteString
-                
-                //print("localProfileImageUrl in try to update: \(self.localProfileImageUrl)")
-
-                
             }
              return
         }
-        
-        
-        
- 
     }//update function
     
     
