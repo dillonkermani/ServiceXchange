@@ -35,7 +35,10 @@ struct EditProfileView: View {
     @State private var service: String = ""
     @State var ProfImageData = Data()
     
-    
+    //varibles that autofill the edit prompts if you already have somthing in that variable
+    @State var companyNameTitle: String = "company name"
+    @State var shortBioTitle: String = "short bio"
+    @State var locationServeTitle: String = "location served"
     
     var body: some View {
         ZStack {
@@ -46,9 +49,11 @@ struct EditProfileView: View {
                 //add the profile image button thing
                 addProfilePhoto()
 
-                underlinedTextField(title: "company name", text: $username, width: 310, height: 20, color: CustomColor.sxcgreen)
-                underlinedTextField(title: "location served", text: $locationServe, width: 310, height: 40, color: CustomColor.sxcgreen)
-                underlinedTextField(title: "short bio", text: $shortBio, width: 310, height: 40, color: CustomColor.sxcgreen)
+                
+                
+                underlinedTextField(title: companyNameTitle, text: $username, width: 310, height: 20, color: CustomColor.sxcgreen)
+                underlinedTextField(title: locationServeTitle, text: $locationServe, width: 310, height: 40, color: CustomColor.sxcgreen)
+                underlinedTextField(title: shortBioTitle, text: $shortBio, width: 310, height: 40, color: CustomColor.sxcgreen)
                 
                 //this button sends user info to databse
                 //To Do -- make this button a navigation link that sends user back to the main profile
@@ -75,8 +80,21 @@ struct EditProfileView: View {
                 .cornerRadius(20)
                 
             }
+        }.onAppear{
+            
+            if userVM.localCompanyName != "none" {
+                companyNameTitle = userVM.localCompanyName
+            }
+            if userVM.localBio != "none"{
+                shortBioTitle = userVM.localBio
+            }
+            if userVM.localPrimaryLocationServed != "none" {
+                locationServeTitle = userVM.localPrimaryLocationServed
+            }
+            
+            
         }
-    } //ZStack
+    }
     
     //create circular button that once tapped on prompts you to change user proflile image
     private func addProfilePhoto() -> some View {

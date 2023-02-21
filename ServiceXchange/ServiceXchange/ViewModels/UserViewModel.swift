@@ -56,10 +56,11 @@ class UserViewModel: ObservableObject{
             "bio": bio,
         ] )
         
-        //update the local variables --> everytime you declair a new viewmodel are they not the same?
-        self.localBio  = bio
-        self.localPrimaryLocationServed = location_served
-        self.localCompanyName = company_name
+        //update the local variables as long as they are not an empty string
+        if bio != "" { self.localBio  = bio }
+        
+        if location_served != "" { self.localPrimaryLocationServed = location_served }
+        if company_name != "" { self.localCompanyName = company_name }
         
         
         //now lets work on the image

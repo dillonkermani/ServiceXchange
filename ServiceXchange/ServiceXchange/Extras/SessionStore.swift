@@ -33,7 +33,7 @@ class SessionStore: ObservableObject {
                         guard let decoderUser = try? User.init(fromDictionary: dict) else {return}
                         self.userSession = decoderUser
     
-                          self.loadLocalUserVariables()
+                          //self.loadLocalUserVariables()
                       }
                   }
                 self.isLoadingLogin = false
