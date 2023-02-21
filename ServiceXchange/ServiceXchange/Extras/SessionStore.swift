@@ -15,14 +15,6 @@ class SessionStore: ObservableObject {
     let db = Firestore.firestore()
     
     
-    // adding local variables that have the current user info (so dont have to push and pull changes from fb)
-    @Published var initialized: Bool = false
-    @Published var localProfileImageUrl: String = ""
-    @Published var localCompanyName: String = ""
-    @Published var localBio: String = ""
-    @Published var localPrimaryLocationServed: String = ""
-    // -----
-    
     
     @Published var isLoggedIn = false
     @Published var isLoadingLogin = false
@@ -104,18 +96,6 @@ class SessionStore: ObservableObject {
         unbind()
     }
     
-    ///
-    func updateLocal(profString : String){
-        print("profString: ", profString)
-        self.localProfileImageUrl = profString
-        print("in update local after should be updated: ", localProfileImageUrl)
-    }
-    
-    func loadLocalUserVariables() {
-        self.localProfileImageUrl = userSession?.profileImageUrl ?? "none"
-    }
-
-    /// we can delete all this crap and try to make an environment object
     
 }
 

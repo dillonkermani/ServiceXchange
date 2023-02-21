@@ -25,7 +25,7 @@ struct ServiceXchangeApp: App {
     @StateObject var session = SessionStore()
 
 
-  //hopefully this creates this an I can pass this anywhere I fuckin like
+  //user information is stored locally in userViewModel and can be accessed throughout the apps pages
   @StateObject var userVM = UserViewModel()
     
   var body: some Scene {

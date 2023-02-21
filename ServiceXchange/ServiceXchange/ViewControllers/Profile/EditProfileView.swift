@@ -19,9 +19,6 @@ struct CreateProfileControls {
 }
 
 
-
-
-
 struct EditProfileView: View {
     
     @EnvironmentObject var session: SessionStore
@@ -54,7 +51,7 @@ struct EditProfileView: View {
                 underlinedTextField(title: "short bio", text: $shortBio, width: 310, height: 40, color: CustomColor.sxcgreen)
                 
                 //this button sends user info to databse
-                //does not yet include sending the profile image
+                //To Do -- make this button a navigation link that sends user back to the main profile
                 Button(action: {
                     
                     //get the users information in the form of a unique stucture
@@ -67,21 +64,6 @@ struct EditProfileView: View {
                         print("Update user error: \(errorMessage)")
                     })
                     
-                   // print("in profile view before button pressed localImUrl: \(session.localProfileImageUrl)")
-                    
-                    //now can update the sessionStore variables here
-                    //self.session.localProfileImageUrl = userVM.localProfileImageUrl
-                    // !!! this is happening before the the userVM is updating in the above function
-                    //session.updateLocal(profString: userVM.localProfileImageUrl)
-                    
-                    //print("in profile view after button pressed localImUrl: \(session.localProfileImageUrl)")
-                    //print("in createView localCompanyName is: ", userVM.localCompanyName)
-                    
-                    //okay so I think the we have to only create one userviewModel struct --> duh and pass it between views
-                    
-                    //update our local user profile image data
-                    //UserVM.localProfileImageUrl = ProfImageData
-                    //session.refreshUser()
 
                     
                 }){
@@ -96,14 +78,11 @@ struct EditProfileView: View {
         }
     } //ZStack
     
-    
+    //create circular button that once tapped on prompts you to change user proflile image
     private func addProfilePhoto() -> some View {
        return ZStack {
-            //ScrollView {
+         
                 VStack {
-                    
-                        // create circlar button that once tapped on propts you to change user profile image
-                    
                         Button(action: {
                             UIImpactFeedbackGenerator(style: .light).impactOccurred()
                             controls.pickedImageType = "card"
@@ -128,14 +107,13 @@ struct EditProfileView: View {
                                 
                             }
                         }
-                        //.padding(35)
-                        //Spacer()
+        
                     
 
                     
                     
                 }
-            //}
+      
         }.frame(maxWidth: .infinity, maxHeight: .infinity)
             .sheet(isPresented: $controls.showImagePicker, content: {
                 ImagePicker(showImagePicker: $controls.showImagePicker, pickedImage: $controls.pickedImage, imageData: $ProfImageData, sourceType: .photoLibrary)

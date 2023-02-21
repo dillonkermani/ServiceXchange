@@ -11,38 +11,19 @@ import FirebaseFirestore
 import Kingfisher
 
 struct ProfileSettingsView: View {
-    
-    //@ObservedObject var userVM : UserViewModel()
-    
+        
     @EnvironmentObject var session: SessionStore
-    //@ObservedObject var userVM : UserViewModel
+
     
     @EnvironmentObject var userVM: UserViewModel
     
     @State var controls = CreateProfileControls()
     
-    
-    // @State var controls = CreateProfileControls() //some control variables for the image picker now given for
-    
     var body: some View {
-        //NavigationView{
             VStack{
                 
+                ShowProfileImage()
                 
-                //this is working now and it updates but then when you toggle away and come back it
-                //reverts to the origninal image
-                
-                let _ = print ("this is profileim url in user settings: ", userVM.localProfileImageUrl)
-                //let image_url =  userVM.localProfileImageUrl
-                let image_url = userVM.localProfileImageUrl
-                KFImage(URL(string:  image_url))
-                    .placeholder({
-                        ShimmerPlaceholderView(width: controls.width, height: controls.height, cornerRadius: 0, animating: true)
-                    })
-                    .basicKFModifiers(cgSize: CGSize(width: controls.height, height: controls.width))
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: controls.width, height: controls.height)
-                    .clipped()
                 HStack{
 
                     ScrollView {
@@ -50,14 +31,14 @@ struct ProfileSettingsView: View {
                     }//scrollView
                 }
             }
-        //}//navView
+
     }//body
     
     
+    //returns a circular profile image
     private func ShowProfileImage() -> some View{
         
         return VStack {
-            let _ = print ("this is profileim url in user settings: ", userVM.localProfileImageUrl)
             let image_url = userVM.localProfileImageUrl
             KFImage(URL(string:  image_url))
                 .resizable()
