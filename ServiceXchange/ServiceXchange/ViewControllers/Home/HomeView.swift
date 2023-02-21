@@ -12,18 +12,8 @@ struct HomeViewControls {
     let gridItems = [GridItem(.flexible()), GridItem(.flexible())]
     var width = (UIScreen.main.bounds.width * 0.43)
     var height = (UIScreen.main.bounds.width * 0.43)
-    var categoryList = [CategoryCell(index: 0, title: "All", imageName: "suitcase.fill"),
-                        CategoryCell(index: 1,title: "Food", imageName: "fork.knife"),
-                        CategoryCell(index: 2,title: "Clothing", imageName: "tshirt"),
-                        CategoryCell(index: 3,title: "Electronics", imageName: "laptopcomputer.and.iphone"),
-                        CategoryCell(index: 4,title: "Education", imageName: "brain.head.profile"),
-                        CategoryCell(index: 5,title: "Entertainment", imageName: "ticket"),
-                        CategoryCell(index: 6,title: "Health", imageName: "heart"),
-                        CategoryCell(index: 7,title: "Automotive", imageName: "car"),
-                        CategoryCell(index: 8,title: "Home Decor", imageName: "house"),
-                        CategoryCell(index: 9,title: "Pet Services", imageName: "comb"),
-                        CategoryCell(index: 10,title: "Travel", imageName: "airplane.departure")]
-    var selectedCategory = ""
+    var categoryList: [CategoryCell] = Constants.categoryList
+    var selectedCategories: [CategoryCell] = []
     var searchText = ""
     var showSearchBar = false
 }
@@ -95,7 +85,7 @@ struct HomeView: View {
                     FilterTag(filterData: category)
                         .onTapGesture {
                             UIImpactFeedbackGenerator(style: .light).impactOccurred()
-                            controls.selectedCategory = category.title
+                            controls.selectedCategories.append(category)
                             controls.categoryList[category.index!].isSelected.toggle()
                      }
                 }
