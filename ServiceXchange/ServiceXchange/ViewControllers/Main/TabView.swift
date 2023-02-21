@@ -13,6 +13,7 @@ struct TabView: View {
     @AppStorage("selectedTabIndex") var selectedTabIndex: Int = 0
     @State var postPressed = false
     @State var promptLogin = false
+    @State var plusTabPressed = false
     @EnvironmentObject var session: SessionStore
 
     let icons = [
@@ -108,6 +109,11 @@ struct TabView: View {
                             
                         } else if session.isLoggedIn == true { // if logged in
                             self.selectedTabIndex = i
+                            if i == 2 {
+                                plusTabPressed = true
+                            } else {
+                                plusTabPressed = false
+                            }
                         }
                         
                         
@@ -122,14 +128,15 @@ struct TabView: View {
                                               design: .default))
                                 .foregroundColor(.black)
                                 .frame(width: 64, height: 64)
-                                .background(CustomColor.sxcgreen)
+                                .background(plusTabPressed ? CustomColor.sxcgreen : .white)
                                 .cornerRadius(32)
-                                .shadow(color: .gray, radius: 5, x: 0, y: 0)
+                                .shadow(color: .gray, radius: plusTabPressed ? 5 : 0, x: 0, y: 0)
                                 .overlay(
                                         RoundedRectangle(cornerRadius: 32)
                                             .stroke(.black, lineWidth: 2)
                                     )
                                 .offset(y: -2)
+                                .rotationEffect(.degrees(plusTabPressed ? 360 : 0))
                 
                         } else {
                             Image(systemName: selectedTabIndex == i ? icons[i]+".fill" : icons[i])

@@ -109,7 +109,7 @@ struct CreateListingView: View {
                     if listingVM.categories.count != 0 {
                         
                         ScrollView(.horizontal) {
-                            HStack {
+                            HStack(spacing: -25) {
                                 ForEach(listingVM.categories, id: \.self) { category in
                                     
                                     FilterTag(filterData: category)
