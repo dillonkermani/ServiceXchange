@@ -6,19 +6,92 @@
 //
 
 import SwiftUI
+import SDWebImageSwiftUI
+import FirebaseCore
+import FirebaseFirestore
+import FirebaseAuth
+
+struct ChatUser {
+    let uid, email, profileImageUrl: String
+}
+
+class MessagesViewModel: ObservableObject {
+    
+    @Published var errorMessage = ""
+    @Published var chatUser: ChatUser?
+    var handle: AuthStateDidChangeListenerHandle?
+
+    init() {
+        fetchCurrentUser()
+    }
+
+    private func fetchCurrentUser() {
+        handle = Auth.auth().addStateDidChangeListener({ auth, user in
+            if let user = user {
+                let uid = Ref.FIRESTORE_DOCUMENT_USERID(userId: user.uid)
+                uid.getDocument { snapshot, error in
+                    if let error = error {
+                        self.errorMessage = "Failed to fetch current user \(error)"
+                        print("Failed to fetch current user:", error)
+                        return
+                    }
+                    
+                    guard let data = snapshot?.data() else {
+                        self.errorMessage = "No data found"
+                        return
+                    }
+                    
+                    let uid = data["uid"] as? String ?? ""
+                    let email = data["email"] as? String ?? ""
+                    let profileImageUrl = data["profileImageUrl"] as? String ?? ""
+                    self.chatUser = ChatUser(uid: uid, email: email, profileImageUrl: profileImageUrl)
+                }
+            } else {
+                self.errorMessage = "User not logged in"
+                return
+            }
+        })
+    }
+}
 
 struct MessagesView: View {
     
     @State var shouldShowLogOutOptions = false
     
+    @ObservedObject private var vm = MessagesViewModel()
+    
+    var body: some View {
+        NavigationView {
+            
+            VStack {
+                Text("Current user: \(vm.errorMessage)")
+                
+                customNavBar
+                messagesView
+            }
+            .overlay(
+                newMessageButton, alignment: .bottom)
+            .navigationBarHidden(true)
+        }
+    }
+    
     private var customNavBar: some View {
         HStack(spacing: 16) {
             
-            Image(systemName: "person.fill")
-                .font(.system(size: 34, weight: .heavy))
+            WebImage(url: URL(string: vm.chatUser?.profileImageUrl ?? ""))
+                .resizable()
+                .scaledToFill()
+                .frame(width: 44, height: 44)
+                .clipped()
+                .cornerRadius(44)
+                .overlay(RoundedRectangle(cornerRadius: 44)
+                    .stroke(Color(.label), lineWidth: 1)
+                )
+                .shadow(radius: 5)
             
             VStack(alignment: .leading, spacing: 4) {
-                Text("USERNAME")
+                let email = vm.chatUser?.email.replacingOccurrences(of: "@gmail.com", with: "")
+                Text(email ?? "")
                     .font(.system(size: 24, weight: .bold))
                 
                 HStack {
@@ -49,19 +122,6 @@ struct MessagesView: View {
                 }),
                     .cancel()
             ])
-        }
-    }
-    
-    var body: some View {
-        NavigationView {
-            
-            VStack {
-                customNavBar
-                messagesView
-            }
-            .overlay(
-                newMessageButton, alignment: .bottom)
-            .navigationBarHidden(true)
         }
     }
     
@@ -118,6 +178,12 @@ struct MessagesView: View {
     }
 }
 
+struct MessagesView_Previews: PreviewProvider {
+    static var previews: some View {
+        MessagesView()
+    }
+}
+
 //struct MessagesView: View {
 //
 //    var body: some View {
@@ -144,8 +210,3 @@ struct MessagesView: View {
 //    }.cornerRadius(30)
 //}
 //
-//struct MessagesView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        MessagesView()
-//    }
-//}
