@@ -112,8 +112,9 @@ struct HomeView: View {
                 }
             }
         }
-            .padding([.top, .bottom], 10)
-            .padding(.leading, 3)
+        .padding(.vertical, 10)
+        .padding(.horizontal, 3)
+        .padding(.trailing, 15)
             .background(Color.white)
             .offset(x: 15)
     }
