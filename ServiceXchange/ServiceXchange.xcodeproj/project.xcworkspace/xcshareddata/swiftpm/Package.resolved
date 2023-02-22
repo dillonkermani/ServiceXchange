@@ -73,15 +73,6 @@
       }
     },
     {
-      "identity" : "imagemorphing",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/kodlian/ImageMorphing",
-      "state" : {
-        "revision" : "6c1f2b9c7dd79238d1e4ddb3223803c318995eb0",
-        "version" : "1.0.0"
-      }
-    },
-    {
       "identity" : "kingfisher",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/onevcat/Kingfisher.git",
@@ -115,24 +106,6 @@
       "state" : {
         "revision" : "3e4e743631e86c8c70dbc6efdc7beaa6e90fd3bb",
         "version" : "2.1.1"
-      }
-    },
-    {
-      "identity" : "sdwebimage",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SDWebImage/SDWebImage.git",
-      "state" : {
-        "revision" : "a812079ae91a7f2e627364c42ea7b98abfa366ed",
-        "version" : "5.15.4"
-      }
-    },
-    {
-      "identity" : "sdwebimageswiftui",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SDWebImage/SDWebImageSwiftUI",
-      "state" : {
-        "revision" : "61fefe9c284fd41ddef77d02749e88f00c305196",
-        "version" : "2.2.2"
       }
     },
     {
