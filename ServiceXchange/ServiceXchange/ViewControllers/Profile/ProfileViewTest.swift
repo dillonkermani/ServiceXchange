@@ -12,23 +12,59 @@ import SwiftUI
 
 struct ProfileViewTest: View {
     
-
+    @State var thisUserProfile = false
+   // var user: User
+    
     
     var body: some View {
         
         VStack {
-            ZStack{
-                showDetailImage()
-                    .padding(.top, -450)
-                showProfileImage()
-                    .padding(.top, -260)
-               settingMenu()
+            
+            imageOverlayTop(thisUserProfile: thisUserProfile)
+            
+
+        }
+    }
+    
+    
+    //returns the detail image bahind profile and either setting or message icon
+    func imageOverlayTop(thisUserProfile : Bool) -> some View {
+        return  ZStack{
+             showDetailImage()
+                 .padding(.top, -450)
+             showProfileImage()
+                 .padding(.top, -260)
+            
+            
+            if thisUserProfile {
+                settingMenu()
+                     .padding(.leading, 270)
+                     .padding(.top, -400)
+            }
+            else {
+                messageNavButton()
                     .padding(.leading, 270)
                     .padding(.top, -400)
             }
-
-          
-            Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        }
+      
+    }
+    
+    
+    func messageNavButton() -> some View {
+        return VStack {
+            //changethis later so that it navigates straight to
+            //a message with that person
+            NavigationLink(destination: MessagesView(), label: {
+                Image(systemName: "paperplane")
+                    .font(.system(size: 35,
+                                  weight: .semibold,
+                                  design: .default))
+                    .foregroundColor(.black)
+                    .frame(width: 47, height: 47)
+                    .background(.clear)
+                    .cornerRadius(40)
+            })
         }
     }
     
@@ -59,44 +95,6 @@ struct ProfileViewTest: View {
     
     func order() {}
     
-    func settingButton() -> some View {
-        return VStack {
-            Button(action: {
-                print("hello")
-                
-                //make dropdown menu
-                
-                
-                //make spinnning animation
-                
-            }, label: {
-                Image(systemName: "gearshape.fill")
-                    .font(.system(size: 35,
-                                  weight: .regular,
-                                  design: .default))
-                    .foregroundColor(.black)
-                    .frame(width: 47, height: 47)
-                    .background(.white)
-                    .cornerRadius(40)
-            })
-        }
-        
-    }
-    
-    
-    func settingLink() -> some View {
-        return VStack {
-            Image(systemName: "gearshape.fill")
-                .font(.system(size: 35,
-                              weight: .regular,
-                              design: .default))
-                .foregroundColor(.black)
-                .frame(width: 47, height: 47)
-                .background(.white)
-                .cornerRadius(40)
-        }
-    }
-    
     func showProfileImage() -> some View {
         return VStack {
             Image("blankprofile")
@@ -114,7 +112,6 @@ struct ProfileViewTest: View {
                     .aspectRatio(contentMode: .fill)
                     .frame(width: 400.0, height: 250.0, alignment: .top)
                     .clipShape(Rectangle())
-            
         }
     }
     
