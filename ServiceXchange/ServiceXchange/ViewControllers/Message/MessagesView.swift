@@ -64,7 +64,7 @@ struct MessagesView: View {
         NavigationView {
             
             VStack {
-                Text("Current user: \(vm.errorMessage)")
+//                Text("Current user: \(vm.errorMessage)")
                 
                 customNavBar
                 messagesView
@@ -158,9 +158,11 @@ struct MessagesView: View {
         }
     }
     
+    @State var showNewMessageScreen = false
+    
     private var newMessageButton: some View {
         Button {
-            
+            showNewMessageScreen.toggle()
         } label: {
             HStack {
                 Spacer()
@@ -175,6 +177,9 @@ struct MessagesView: View {
                 .padding(.horizontal)
                 .shadow(radius: 15)
         }
+        .fullScreenCover(isPresented: $showNewMessageScreen) {
+            CreateNewMessageView()
+        }
     }
 }
 
@@ -183,30 +188,3 @@ struct MessagesView_Previews: PreviewProvider {
         MessagesView()
     }
 }
-
-//struct MessagesView: View {
-//
-//    var body: some View {
-//        Text("MessagesView")
-//        return ZStack{
-//            VStack{
-//                NavigationLink(destination: ServiceProfileView(), label: {
-//                        CustomProfileButtonView(title: "Profile View", foregroundColor: .green, backgroundColor: .gray.opacity(0.5))
-//                })
-//            }
-//        }
-//    }
-//}
-//
-//private func CustomProfileButtonView(title: String, foregroundColor: Color, backgroundColor: Color) -> some View {
-//    return ZStack {
-//        Rectangle()
-//            .frame(width: UIScreen.main.bounds.width / 1.3, height: 50)
-//            .shadow(radius: 5)
-//            .foregroundColor(backgroundColor)
-//        Text(title)
-//            .font(.system(size: 17)).bold()
-//            .foregroundColor(foregroundColor)
-//    }.cornerRadius(30)
-//}
-//
