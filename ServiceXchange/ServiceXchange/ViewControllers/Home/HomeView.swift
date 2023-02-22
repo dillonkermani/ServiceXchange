@@ -92,13 +92,8 @@ struct HomeView: View {
                                     selectedCategories.append(category)
                                 }
                             }
-                            if selectedCategories.count == 1 && selectedCategories[0].title == "All" {
+                            if selectedCategories.count == 0 {
                                 selectedCategories = controls.categoryList
-                            } else if selectedCategories.count == 0 {
-                                controls.categoryList[0].isSelected = true
-                                selectedCategories = controls.categoryList
-                            } else {
-                                controls.categoryList[0].isSelected = false
                             }
                             homeVM.selectedCategories = selectedCategories
                             homeVM.categoriesDidChange()

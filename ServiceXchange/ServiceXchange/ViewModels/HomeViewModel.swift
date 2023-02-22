@@ -32,7 +32,6 @@ class HomeViewModel: ObservableObject {
                     }
                 }
             }
-            print("updated listings")
             self.listings = listings
         }
     }
