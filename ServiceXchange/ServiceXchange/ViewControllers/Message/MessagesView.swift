@@ -14,70 +14,35 @@ struct ChatUser {
     let uid, email, profileImageUrl: String
 }
 
-class MessagesViewModel: ObservableObject {
-    
-    @Published var errorMessage = ""
-    @Published var chatUser: ChatUser?
-    var handle: AuthStateDidChangeListenerHandle?
+struct MessagesControls {
+    var showNewMessageScreen = false
+    var shouldShowLogOutOptions = false
 
-    init() {
-        fetchCurrentUser()
-    }
-
-    private func fetchCurrentUser() {
-        handle = Auth.auth().addStateDidChangeListener({ auth, user in
-            if let user = user {
-                let uid = Ref.FIRESTORE_DOCUMENT_USERID(userId: user.uid)
-                uid.getDocument { snapshot, error in
-                    if let error = error {
-                        self.errorMessage = "Failed to fetch current user \(error)"
-                        print("Failed to fetch current user:", error)
-                        return
-                    }
-                    
-                    guard let data = snapshot?.data() else {
-                        self.errorMessage = "No data found"
-                        return
-                    }
-                    
-                    let uid = data["uid"] as? String ?? ""
-                    let email = data["email"] as? String ?? ""
-                    let profileImageUrl = data["profileImageUrl"] as? String ?? ""
-                    self.chatUser = ChatUser(uid: uid, email: email, profileImageUrl: profileImageUrl)
-                }
-            } else {
-                self.errorMessage = "User not logged in"
-                return
-            }
-        })
-    }
 }
 
 struct MessagesView: View {
     
-    @State var shouldShowLogOutOptions = false
-    
-    @ObservedObject private var vm = MessagesViewModel()
+    @State var controls = MessagesControls()
+    @EnvironmentObject var session: SessionStore // Contains currently signed in user's info.
+
     
     var body: some View {
         NavigationView {
             
             VStack {
-//                Text("Current user: \(vm.errorMessage)")
-                
-                customNavBar
-                messagesView
+                CustomNavBar()
+                MessagesList()
             }
             .overlay(
-                newMessageButton, alignment: .bottom)
+                newMessageButton(), alignment: .bottom)
             .navigationBarHidden(true)
         }
     }
     
-    private var customNavBar: some View {
+    private func CustomNavBar() -> some View {
         HStack(spacing: 16) {
             
-            UrlImage(url: vm.chatUser?.profileImageUrl ?? "")
+            UrlImage(url: session.userSession?.profileImageUrl ?? "")
                 .scaledToFill()
                 .frame(width: 44, height: 44)
                 .clipped()
@@ -88,8 +53,7 @@ struct MessagesView: View {
                 .shadow(radius: 5)
             
             VStack(alignment: .leading, spacing: 4) {
-                let email = vm.chatUser?.email.replacingOccurrences(of: "@gmail.com", with: "")
-                Text(email ?? "")
+                Text(session.userSession?.firstName ?? "")
                     .font(.system(size: 24, weight: .bold))
                 
                 HStack {
@@ -105,7 +69,7 @@ struct MessagesView: View {
             
             Spacer()
             Button {
-                shouldShowLogOutOptions.toggle()
+                controls.shouldShowLogOutOptions.toggle()
             } label: {
                 Image(systemName: "gear")
                     .font(.system(size: 24, weight: .bold))
@@ -113,7 +77,7 @@ struct MessagesView: View {
             }
         }
         .padding()
-        .actionSheet(isPresented: $shouldShowLogOutOptions) {
+        .actionSheet(isPresented: $controls.shouldShowLogOutOptions) {
             .init(title: Text("Settings"), message: Text("What do you want to do?"), buttons: [
                 .destructive(Text("Sign Out"), action: {
                     print("handle sign out")
@@ -123,59 +87,67 @@ struct MessagesView: View {
         }
     }
     
-    private var messagesView: some View {
+    private func MessagesList() -> some View {
         ScrollView {
             ForEach(0..<10, id: \.self) { num in
                 VStack {
-                    HStack(spacing: 16) {
-                        Image(systemName: "person.fill")
-                            .font(.system(size: 32))
-                            .padding(8)
-                            .overlay(RoundedRectangle(cornerRadius: 44)
-                                        .stroke(Color(.label), lineWidth: 1)
-                            )
+                    NavigationLink(destination: EmptyView()) {
                         
-                        
-                        VStack(alignment: .leading) {
-                            Text("Username")
-                                .font(.system(size: 16, weight: .bold))
-                            Text("Message sent to user")
-                                .font(.system(size: 14))
-                                .foregroundColor(Color(.lightGray))
+                        HStack(spacing: 16) {
+                            Image(systemName: "person.fill")
+                                .font(.system(size: 32))
+                                .padding(8)
+                                .overlay(RoundedRectangle(cornerRadius: 44)
+                                    .stroke(Color(.label), lineWidth: 1)
+                                )
+                            
+                            
+                            VStack(alignment: .leading) {
+                                Text("Username")
+                                    .font(.system(size: 16, weight: .bold))
+                                Text("Message sent to user")
+                                    .font(.system(size: 14))
+                                    .foregroundColor(Color(.lightGray))
+                            }
+                            Spacer()
+                            
+                            Text("2d")
+                                .font(.system(size: 14, weight: .semibold))
                         }
-                        Spacer()
                         
-                        Text("2d")
-                            .font(.system(size: 14, weight: .semibold))
-                    }
+                    }.foregroundColor(.black)
                     Divider()
                         .padding(.vertical, 8)
                 }.padding(.horizontal)
                 
-            }.padding(.bottom, 50)
+            }.padding(.vertical)
+            .padding(.bottom, 50)
         }
     }
     
-    @State var showNewMessageScreen = false
     
-    private var newMessageButton: some View {
+    
+    private func newMessageButton() -> some View {
         Button {
-            showNewMessageScreen.toggle()
+            controls.showNewMessageScreen.toggle()
         } label: {
             HStack {
                 Spacer()
-                Text("+ New Message")
+                Text("+  New Message")
                     .font(.system(size: 16, weight: .bold))
+                    .padding(15)
                 Spacer()
             }
-            .foregroundColor(.white)
-            .padding(.vertical)
-                .background(Color.green)
-                .cornerRadius(32)
-                .padding(.horizontal)
-                .shadow(radius: 15)
+            .background(CustomColor.sxcgreen)
+            .foregroundColor(.black)
+            .cornerRadius(17)
+            .overlay(
+                RoundedRectangle(cornerRadius: 17)
+                    .stroke(.black, lineWidth: 2)
+            )
+            .padding(15)
         }
-        .fullScreenCover(isPresented: $showNewMessageScreen) {
+        .sheet(isPresented: $controls.showNewMessageScreen) {
             CreateNewMessageView()
         }
     }
