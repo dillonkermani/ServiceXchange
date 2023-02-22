@@ -40,7 +40,18 @@ class UserViewModel: ObservableObject{
         
     }//update local user variables fucntion
     
-
+    //clear the local variables --> used for logout functionality
+    func clearLocalUserVariables() {
+        
+        self.initialized = false
+        
+        self.localUserId = ""
+        self.localBio = ""
+        self.localCompanyName = ""
+        self.localPrimaryLocationServed = ""
+        self.localProfileImageUrl = ""
+    }
+    
     
     //store user data into
     func update_user_info(userId : String, company_name: String, location_served: String, bio: String, profileImageData: Data, onError: @escaping(_ errorMessage: String) -> Void){

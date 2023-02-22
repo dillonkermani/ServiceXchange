@@ -28,7 +28,7 @@ struct ProfileView: View {
         }.onAppear{
             
             //initailize the local user variables if you have not already
-            if (userVM.initialized == false){
+            if (userVM.initialized == false && session.userSession != nil){
                 userVM.updateLocalUserVariables(user: session.userSession!)
             }//if uninitailized (this can get moved if we want info in other pages (maybe tabview icon?))
         }//onAppear

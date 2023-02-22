@@ -5,6 +5,11 @@
 //  Created by colton jeffrey on 2/13/23.
 //
 
+
+//I am thinking that this does not need to be an view and instead it could be some kind of dropdown
+//that would navigate to other places
+
+
 import SwiftUI
 import FirebaseCore
 import FirebaseFirestore
@@ -51,9 +56,6 @@ struct ProfileSettingsView: View {
     
     private func ButtonStack() -> some View {
         return VStack(spacing: 30) {
-            //addProfilePhoto()
-            // .padding(.bottom, 20)
-            
             
             Spacer()
             
@@ -67,15 +69,20 @@ struct ProfileSettingsView: View {
                 CustomProfileButtonView(title: "Saved Listings", foregroundColor: .white, backgroundColor: .blue.opacity(0.3))
             })
             
-            //to do -> clear local varibales on sign out
-            Button {
+            
+            NavigationLink(destination: SavedListingsView(), label: {
+                CustomProfileButtonView(title: "Sign Out", foregroundColor: .white, backgroundColor: .gray.opacity(0.3))
+            }).simultaneousGesture(TapGesture().onEnded{
                 session.logout()
                 controls.alertMessage = "Sucessfully Logged Out"
                 controls.showAlert.toggle()
-            } label: {
-                CustomProfileButtonView(title: "Sign Out", foregroundColor: .red, backgroundColor: .gray.opacity(0.5))
                 
-            }
+                //clear local user variables
+                userVM.clearLocalUserVariables()
+            })
+            
+            
+
         }//button stack
     }
     
