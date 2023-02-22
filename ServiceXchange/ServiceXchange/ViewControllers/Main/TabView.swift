@@ -68,7 +68,7 @@ struct TabView: View {
                                 if session.isLoggedIn {
                                     MessagesView()
                                 }
-                            }.navigationTitle("Messages")
+                            }
                         }
                     case 4:
                         NavigationView {

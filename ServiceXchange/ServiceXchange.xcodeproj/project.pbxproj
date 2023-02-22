@@ -39,7 +39,6 @@
 		65E992762989F5AC00C3C5BA /* ListingDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E992752989F5AC00C3C5BA /* ListingDetailViewModel.swift */; };
 		65F932E32991B15C00A63F37 /* ShimmerPlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F932E22991B15C00A63F37 /* ShimmerPlaceholderView.swift */; };
 		65F932E62991B4E100A63F37 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 65F932E52991B4E100A63F37 /* Kingfisher */; };
-		65FE2B46298749220077F505 /* ImageMorphing in Frameworks */ = {isa = PBXBuildFile; productRef = 65FE2B45298749220077F505 /* ImageMorphing */; };
 		65FE2B4929874C140077F505 /* UIComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65FE2B4829874C140077F505 /* UIComponents.swift */; };
 		65FE2B4C29874C6C0077F505 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65FE2B4B29874C6C0077F505 /* LoginViewModel.swift */; };
 		6DCDAE392999F597006CECA0 /* ServiceProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DCDAE382999F597006CECA0 /* ServiceProfileView.swift */; };
@@ -53,6 +52,7 @@
 		DFBF8BDB29A006270084FF0B /* CreateListingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFBF8BDA29A006270084FF0B /* CreateListingViewModel.swift */; };
 		DFED901129942CC6004E7177 /* ListingDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFED901029942CC6004E7177 /* ListingDetailView.swift */; };
 		DFED901529982B1A004E7177 /* URLCarouselView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFED901429982B1A004E7177 /* URLCarouselView.swift */; };
+		FDF77FF629A6A75500984360 /* CreateNewMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDF77FF529A6A75500984360 /* CreateNewMessageView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -95,6 +95,7 @@
 		DFBF8BDA29A006270084FF0B /* CreateListingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateListingViewModel.swift; sourceTree = "<group>"; };
 		DFED901029942CC6004E7177 /* ListingDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListingDetailView.swift; sourceTree = "<group>"; };
 		DFED901429982B1A004E7177 /* URLCarouselView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLCarouselView.swift; sourceTree = "<group>"; };
+		FDF77FF529A6A75500984360 /* CreateNewMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNewMessageView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,7 +104,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				65522C0B2980DD3800CC898F /* FirebaseMessaging in Frameworks */,
-				65FE2B46298749220077F505 /* ImageMorphing in Frameworks */,
 				65522C092980DD3800CC898F /* FirebaseFirestoreSwift in Frameworks */,
 				65F932E62991B4E100A63F37 /* Kingfisher in Frameworks */,
 				65522C012980DD3800CC898F /* FirebaseAnalytics in Frameworks */,
@@ -235,6 +235,7 @@
 			isa = PBXGroup;
 			children = (
 				65C3EB9F2981DC4F00766659 /* MessagesView.swift */,
+				FDF77FF429A695F700984360 /* NewMessages */,
 			);
 			path = Message;
 			sourceTree = "<group>";
@@ -298,6 +299,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		FDF77FF429A695F700984360 /* NewMessages */ = {
+			isa = PBXGroup;
+			children = (
+				FDF77FF529A6A75500984360 /* CreateNewMessageView.swift */,
+			);
+			path = NewMessages;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -321,7 +330,6 @@
 				65522C062980DD3800CC898F /* FirebaseFirestore */,
 				65522C082980DD3800CC898F /* FirebaseFirestoreSwift */,
 				65522C0A2980DD3800CC898F /* FirebaseMessaging */,
-				65FE2B45298749220077F505 /* ImageMorphing */,
 				DF96D062298C22C4009C80BB /* FirebaseStorage */,
 				65F932E52991B4E100A63F37 /* Kingfisher */,
 			);
@@ -355,7 +363,6 @@
 			mainGroup = 65522BE32980DB5600CC898F;
 			packageReferences = (
 				65522BFF2980DD3800CC898F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
-				65FE2B44298749220077F505 /* XCRemoteSwiftPackageReference "ImageMorphing" */,
 				65F932E42991B4E000A63F37 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			productRefGroup = 65522BED2980DB5600CC898F /* Products */;
@@ -399,6 +406,7 @@
 				65C3EBA62981F69400766659 /* TabView.swift in Sources */,
 				65F932E32991B15C00A63F37 /* ShimmerPlaceholderView.swift in Sources */,
 				DFBF8BDB29A006270084FF0B /* CreateListingViewModel.swift in Sources */,
+				FDF77FF629A6A75500984360 /* CreateNewMessageView.swift in Sources */,
 				658D1CBE298854250026DC5B /* Ref.swift in Sources */,
 				65E992762989F5AC00C3C5BA /* ListingDetailViewModel.swift in Sources */,
 				65C3EB972981DB9500766659 /* MapView.swift in Sources */,
@@ -649,14 +657,6 @@
 				kind = branch;
 			};
 		};
-		65FE2B44298749220077F505 /* XCRemoteSwiftPackageReference "ImageMorphing" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/kodlian/ImageMorphing";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.0;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -694,11 +694,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 65F932E42991B4E000A63F37 /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = Kingfisher;
-		};
-		65FE2B45298749220077F505 /* ImageMorphing */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 65FE2B44298749220077F505 /* XCRemoteSwiftPackageReference "ImageMorphing" */;
-			productName = ImageMorphing;
 		};
 		DF96D062298C22C4009C80BB /* FirebaseStorage */ = {
 			isa = XCSwiftPackageProductDependency;

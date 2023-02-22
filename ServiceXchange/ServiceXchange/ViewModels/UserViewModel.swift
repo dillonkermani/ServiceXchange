@@ -19,7 +19,6 @@ class UserViewModel: ObservableObject{
     //store user data into
     func update_user_info(userId : String, company_name: String, location_served: String, bio: String, profileImageData: Data, onError: @escaping(_ errorMessage: String) -> Void){
         
-        
         //this is a reference to soemthing that has user stuff in it
         let user_ref = Ref.FIRESTORE_DOCUMENT_USERID(userId: userId)
         
@@ -65,10 +64,6 @@ class UserViewModel: ObservableObject{
             }
              return
         }//update function
-        
-        
-        
- 
     }
     
     
