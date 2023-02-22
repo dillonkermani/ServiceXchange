@@ -49,18 +49,23 @@ class UserViewModel: ObservableObject{
         //this is a reference to soemthing that has user stuff in it
         let user_ref = Ref.FIRESTORE_DOCUMENT_USERID(userId: userId)
         
-        //updates all textual data to firebase
-        user_ref.updateData( [
-            "companyName": company_name,
-            "primaryLocationServed": location_served,
-            "bio": bio,
-        ] )
-        
         //update the local variables as long as they are not an empty string
-        if bio != "" { self.localBio  = bio }
         
+        if bio != "" { self.localBio  = bio }
         if location_served != "" { self.localPrimaryLocationServed = location_served }
         if company_name != "" { self.localCompanyName = company_name }
+        
+        
+        
+        
+        //updates all textual data to firebase
+        user_ref.updateData( [
+            "companyName": localCompanyName,
+            "primaryLocationServed": localPrimaryLocationServed,
+            "bio": localBio,
+        ] )
+        
+
         
         
         //now lets work on the image

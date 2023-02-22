@@ -67,7 +67,7 @@ struct ProfileSettingsView: View {
                 CustomProfileButtonView(title: "Saved Listings", foregroundColor: .white, backgroundColor: .blue.opacity(0.3))
             })
             
-            
+            //to do -> clear local varibales on sign out
             Button {
                 session.logout()
                 controls.alertMessage = "Sucessfully Logged Out"

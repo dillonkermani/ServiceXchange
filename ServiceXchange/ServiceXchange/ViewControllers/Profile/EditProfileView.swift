@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+import Kingfisher
 
 struct CreateProfileControls {
     var pickedImageType = ""
@@ -107,14 +107,33 @@ struct EditProfileView: View {
                             controls.showImagePicker = true
                         }) {
                             if controls.pickedImage == Image("user-placeholder") {
-                                ZStack {
-                                    Circle()
-                                        .fill(CustomColor.sxcgreen)
-                                        .frame(width: 100, height: 100)
-                                    Text("Add Image")
-                                        .foregroundColor(.white)
+                                
+                                //if user does not have a profile picture yet
+                                if userVM.localProfileImageUrl == "none" {
+                                    ZStack {
+                                        Image("blankprofile")
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fill)
+                                            .frame(width: 100.0, height: 100.0, alignment: .center)
+                                            .clipShape(Circle())
+                                    }
+                                    
                                 }
-                            } else {
+                                
+                                else { //they do have a profile image -> display it
+                                    ZStack {
+                                        KFImage(URL(string: userVM.localProfileImageUrl))
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fill)
+                                            .frame(width: 100.0, height: 100.0, alignment: .center)
+                                            .clipShape(Circle())
+                                    }//ZStack
+                                }
+                                
+
+                            } //if the user has not picked image
+                            
+                            else { //user has picked a new image
                                
                                 
                                 controls.pickedImage
