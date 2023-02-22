@@ -32,20 +32,30 @@ struct HomeView: View {
         VStack {
             NavigationStack {
                 ScrollView {
-                    VStack {
+                    LazyVStack(pinnedViews:[.sectionHeaders]) {
+                        
                         HStack {
                             HeaderLabel()
                             Spacer()
                             searchButton()
-                        }.padding(.bottom, 15)
+                        }.padding(.bottom, 25)
                         if controls.showSearchBar {
                             SearchBar(initialText: "Search services", text: $homeVM.searchText, onSearchButtonChanged: homeVM.searchTextDidChange)
                                 .padding(.horizontal, 5)
                         }
-                        CategoryPicker()
-                        ListingsGrid()
-                    }.padding([.top, .bottom], 65)
+                        
+                        
+                        Section(header:
+                                    CategoryPicker()
+                                
+                        
+                        ) {
+                            ListingsGrid()
+                        }
+                    }
+                        
                 }
+                .padding(.top, 0.1)
             }.toolbar(.hidden)
         }
     }
@@ -101,8 +111,11 @@ struct HomeView: View {
                      }
                 }
             }
-        }.padding([.leading], 20)
-            .padding(.top, 25)
+        }
+            .padding([.top, .bottom], 10)
+            .padding(.leading, 3)
+            .background(Color.white)
+            .offset(x: 15)
     }
     
     private func ListingsGrid() -> some View {
@@ -118,7 +131,11 @@ struct HomeView: View {
                 LazyVGrid(columns: controls.gridItems, alignment: .center, spacing: 15) {
                     if homeVM.allListings.isEmpty || homeVM.isLoading {
                         ForEach(0..<10) { _ in
-                            ShimmerPlaceholderView(width: controls.width, height: controls.height, cornerRadius: 5, animating: true)
+                            ShimmerPlaceholderView(width: controls.width, height: controls.height, cornerRadius: 17, animating: true)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 17)
+                                        .stroke(.black, lineWidth: 1)
+                                )
                         }
                     } else {
                         ForEach(homeVM.listings, id: \.listingId) { listing in
