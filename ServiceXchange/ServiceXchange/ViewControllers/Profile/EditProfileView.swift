@@ -55,15 +55,6 @@ struct EditProfileView: View {
                 underlinedTextField(title: locationServeTitle, text: $locationServe, width: 310, height: 40, color: CustomColor.sxcgreen)
                 underlinedTextField(title: shortBioTitle, text: $shortBio, width: 310, height: 40, color: CustomColor.sxcgreen)
                 
-//                NavigationLink(destination: HomeView(), label: {
-//                    CustomProfileButtonView(title: "Save Changes", foregroundColor: .red, backgroundColor:           }).simultaneousGesture(TapGesture().onEnded{
-//                        let userId = userVM.localUserId
-//    
-//                        //update values of my_user
-//                        userVM.update_user_info(userId: userId, company_name: username, location_served: locationServe, bio: shortBio, profileImageData: ProfImageData, onError: { errorMessage in
-//                            print("Update user error: \(errorMessage)")
-//                })
-//                
                 
                 NavigationLink(destination: ProfileView(), label: {
                     CustomProfileButtonView(title: "Save Changes", foregroundColor: .white, backgroundColor: .red.opacity(0.3))

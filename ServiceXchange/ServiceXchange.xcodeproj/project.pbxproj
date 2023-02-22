@@ -45,6 +45,7 @@
 		9C5F611D299AE15700139265 /* ProfileSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C5F611C299AE15700139265 /* ProfileSettingsView.swift */; };
 		9C5F611F299D6DBE00139265 /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C5F611E299D6DBE00139265 /* EditProfileView.swift */; };
 		9C5F6123299D766F00139265 /* SavedListingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C5F6122299D766F00139265 /* SavedListingsView.swift */; };
+		9C5F612529A5E12800139265 /* ProfileViewTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C5F612429A5E12800139265 /* ProfileViewTest.swift */; };
 		9CF3A2742994318F006E3E5D /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CF3A2732994318F006E3E5D /* UserViewModel.swift */; };
 		DF0F902B299ABDAF000D9AD1 /* UrlImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF0F902A299ABDAF000D9AD1 /* UrlImage.swift */; };
 		DF0F902D299ABF1D000D9AD1 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF0F902C299ABF1D000D9AD1 /* LoadingView.swift */; };
@@ -90,9 +91,7 @@
 		9C5F611C299AE15700139265 /* ProfileSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSettingsView.swift; sourceTree = "<group>"; };
 		9C5F611E299D6DBE00139265 /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
 		9C5F6122299D766F00139265 /* SavedListingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedListingsView.swift; sourceTree = "<group>"; };
-		9CF3A2732994318F006E3E5D /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
-		DFED901029942CC6004E7177 /* ListingDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListingDetailView.swift; sourceTree = "<group>"; };
-		DFED90122996C9F0004E7177 /* ListingDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListingDetailViewModel.swift; sourceTree = "<group>"; };
+		9C5F612429A5E12800139265 /* ProfileViewTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewTest.swift; sourceTree = "<group>"; };
 		9CF3A2732994318F006E3E5D /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
 		DF0F902A299ABDAF000D9AD1 /* UrlImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UrlImage.swift; sourceTree = "<group>"; };
 		DF0F902C299ABF1D000D9AD1 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
@@ -252,6 +251,7 @@
 				9C5F611C299AE15700139265 /* ProfileSettingsView.swift */,
 				9C5F6122299D766F00139265 /* SavedListingsView.swift */,
 				9C5F611E299D6DBE00139265 /* EditProfileView.swift */,
+				9C5F612429A5E12800139265 /* ProfileViewTest.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -396,6 +396,7 @@
 			files = (
 				65FE2B4929874C140077F505 /* UIComponents.swift in Sources */,
 				65C3EB952981DB7800766659 /* HomeView.swift in Sources */,
+				9C5F612529A5E12800139265 /* ProfileViewTest.swift in Sources */,
 				DFED901129942CC6004E7177 /* ListingDetailView.swift in Sources */,
 				65E992722989E67900C3C5BA /* Listing.swift in Sources */,
 				659462DD298A17AF0093A71D /* ImagePicker.swift in Sources */,
