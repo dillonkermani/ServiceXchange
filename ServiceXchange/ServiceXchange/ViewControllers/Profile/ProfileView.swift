@@ -13,6 +13,10 @@ import FirebaseFirestore
 import Kingfisher
 
 
+//TODO make this view have to pass in a user and a isYours boolean if it is yours -> use local varibles ->
+// if it is not yours then make a database request for the other users information
+// Q -> where do you get the other user from
+
 struct ProfileView: View {
     
     @Environment(\.presentationMode) var presentationMode // Allows us to dismiss views.

@@ -20,10 +20,18 @@ struct listingDetailViewControls {
 
 }
 
+
 struct ListingDetailView : View {
-
+    
+    
     @Environment(\.presentationMode) var presentationMode
-
+    
+    @EnvironmentObject var session: SessionStore
+    
+    @EnvironmentObject var userVM: UserViewModel
+    
+    
+    
     @State private var report_clicked = false
     @State var rating = 0.0
 
@@ -31,6 +39,18 @@ struct ListingDetailView : View {
 
     @ObservedObject var listingVM = ListingDetailViewModel()
 
+    //to be passed to the profile view
+    @State private var userToPass : User = User(
+        userId: "",
+        firstName: "cole",
+        lastName: "",
+        email: "",
+        isServiceProvider: false,
+        listingIDs: []
+    )
+    @State private var thisUser : Bool = true
+    
+    
     var listing: Listing
 
     var body: some View {
@@ -82,6 +102,7 @@ struct ListingDetailView : View {
         .onAppear {
             Task{
                 await listingVM.getListingPoster(posterId: listing.posterId)
+                userToPass = listingVM.poster
             }
         }
     }
@@ -106,10 +127,14 @@ struct ListingDetailView : View {
     }
 
     func PosterDataView() -> some View {
+        
+//        @State private var userToPass : User = listingVM.poster
+//        @State private var thisUser : Bool = false
 
         return HStack {
             //TODO: make Profile View take in a userid instead of nothing (profile view my be the wrong view to link)
-            NavigationLink(destination: ProfileView()){
+            //NavigationLink(destination: ProfileView()){
+            NavigationLink(destination: ProfileViewMultiTest(user : $userToPass , thisUser : $thisUser)){
                 HStack{
                     UrlImage(url: listingVM.poster.profileImageUrl ?? "")
                         .scaledToFill()
@@ -127,6 +152,7 @@ struct ListingDetailView : View {
                     }
                 }.task {
                     await self.listingVM.getListingPoster(posterId: listing.posterId)
+                    //await userToPass = listingVM.poster
                 }
             }
             Spacer()

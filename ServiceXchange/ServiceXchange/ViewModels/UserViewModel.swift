@@ -9,6 +9,17 @@ import Foundation
 import SwiftUI
 import FirebaseCore
 
+
+let skeletonUser = User(
+    userId: "",
+    firstName: "",
+    lastName: "",
+    email: "",
+    isServiceProvider: false,
+    listingIDs: []
+)
+
+
 class UserViewModel: ObservableObject{
     
     @EnvironmentObject var session: SessionStore
@@ -18,6 +29,7 @@ class UserViewModel: ObservableObject{
     @Published var localUserId: String = "" //maybe we want this so that we dont have to use
                                             //   session store exect for at sign in
     
+    @Published var skUser : User = skeletonUser
     
     @Published var initialized: Bool = false
     @Published var localProfileImageUrl: String = ""

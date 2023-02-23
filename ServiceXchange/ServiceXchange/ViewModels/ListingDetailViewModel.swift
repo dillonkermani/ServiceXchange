@@ -9,19 +9,28 @@ import Foundation
 import SwiftUI
 import FirebaseCore
 
-let skeletonUser = User(
-    userId: "",
-    firstName: "",
-    lastName: "",
-    email: "",
-    isServiceProvider: false,
-    listingIDs: []
-)
+//let skeletonUser = User(
+//    userId: "",
+//    firstName: "",
+//    lastName: "",
+//    email: "",
+//    isServiceProvider: false,
+//    listingIDs: []
+//)
 
 class ListingDetailViewModel: ObservableObject {
     
     @Published var loadingPoster = true
-    @Published var poster = skeletonUser
+    //@Published var poster = skeletonUser
+    
+    @Published var poster = User(
+        userId: "",
+        firstName: "",
+        lastName: "",
+        email: "",
+        isServiceProvider: false,
+        listingIDs: []
+    )
     
     @MainActor
     func getListingPoster(posterId: String) async {
