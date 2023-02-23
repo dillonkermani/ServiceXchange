@@ -168,7 +168,7 @@ struct EditProfileView: View {
        
          }.frame(maxWidth: .infinity, maxHeight: .infinity)
              .sheet(isPresented: $controlsDesc.showImagePicker, content: {
-                 ImagePicker(showImagePicker: $controlsDesc.showImagePicker, pickedImage: $controlsDesc.pickedImage, imageData: $ProfImageData, sourceType: .photoLibrary)
+                 ImagePicker(showImagePicker: $controlsDesc.showImagePicker, pickedImage: $controlsDesc.pickedImage, imageData: $backgroundImageData, sourceType: .photoLibrary)
                      
              })
         
@@ -253,7 +253,7 @@ struct EditProfileView: View {
       
         }.frame(maxWidth: .infinity, maxHeight: .infinity)
             .sheet(isPresented: $controls.showImagePicker, content: {
-                ImagePicker(showImagePicker: $controls.showImagePicker, pickedImage: $controls.pickedImage, imageData: $backgroundImageData, sourceType: .photoLibrary)
+                ImagePicker(showImagePicker: $controls.showImagePicker, pickedImage: $controls.pickedImage, imageData: $ProfImageData, sourceType: .photoLibrary)
                     
             })
         
