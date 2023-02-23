@@ -18,6 +18,20 @@ struct CreateProfileControls {
     var alertMessage = ""
 }
 
+struct CreateDescriptiveControls {
+    var pickedImageType = ""
+    var showImagePicker = false
+    var pickedImage = Image("user-placeholder")
+    var width = (UIScreen.main.bounds.width * 0.43)
+    var height = (UIScreen.main.bounds.width * 0.43)
+    var showAlert = false
+    var alertMessage = ""
+}
+
+//TODO have editing view look like the what the profile view will look like --doing
+//TODO make imagepicker for the descriptive image
+//TODO alter the userVM load data so that it includes the descriptive image
+
 
 struct EditProfileView: View {
     
@@ -27,6 +41,7 @@ struct EditProfileView: View {
     @EnvironmentObject var userVM: UserViewModel
     
     @State var controls = CreateProfileControls()
+    @State var controlsDesc = CreateDescriptiveControls()
     
     //state varibles
     @State private var username: String = ""
@@ -34,6 +49,7 @@ struct EditProfileView: View {
     @State private var shortBio: String = ""
     @State private var service: String = ""
     @State var ProfImageData = Data()
+    @State var backgroundImageData = Data()
     
     //varibles that autofill the edit prompts if you already have somthing in that variable
     @State var companyNameTitle: String = "company name"
@@ -45,12 +61,17 @@ struct EditProfileView: View {
             
             VStack {
                 
+                ZStack{
+                    
+                    addDescriptiveImage()
+                        .padding(.top, -300)
+                    
+                    //add the profile image button thing
+                    addProfilePhoto()
+                        .padding(.top, -70)
+                }
                 
-                //add the profile image button thing
-                addProfilePhoto()
-                
-                
-                
+                //make these names different location: Santa Cruz autofill
                 underlinedTextField(title: companyNameTitle, text: $username, width: 310, height: 20, color: CustomColor.sxcgreen)
                 underlinedTextField(title: locationServeTitle, text: $locationServe, width: 310, height: 40, color: CustomColor.sxcgreen)
                 underlinedTextField(title: shortBioTitle, text: $shortBio, width: 310, height: 40, color: CustomColor.sxcgreen)
@@ -60,35 +81,16 @@ struct EditProfileView: View {
                     CustomProfileButtonView(title: "Save Changes", foregroundColor: .white, backgroundColor: .red.opacity(0.3))
                 }).simultaneousGesture(TapGesture().onEnded{
                     let userId = userVM.localUserId
-                    userVM.update_user_info(userId: userId, company_name: username, location_served: locationServe, bio: shortBio, profileImageData: ProfImageData, onError: { errorMessage in
+                    userVM.update_user_info(userId: userId, company_name: username, location_served: locationServe, bio: shortBio, profileImageData: ProfImageData, backgroundImageData: backgroundImageData, onError: { errorMessage in
                         print("Update user error: \(errorMessage)")
                     })
-                    print("hello")
+                    //print("hello")
                 })
                 
                 
-               // this button sends user info to databse
-                //To Do -- make this button a navigation link that sends user back to the main profile
-                                Button(action: {
+
                 
-                                    let userId = userVM.localUserId
-                
-                                    //update values of my_user
-                                    userVM.update_user_info(userId: userId, company_name: username, location_served: locationServe, bio: shortBio, profileImageData: ProfImageData, onError: { errorMessage in
-                                        print("Update user error: \(errorMessage)")
-                                    })
-                
-                
-                
-                                }){
-                                    Text("Send a user to our database")
-                                }
-                                .padding()
-                                .foregroundColor(.white)
-                                .background(Color.red)
-                                .cornerRadius(20)
-                
-                            }
+            }//VStack
                 
                 
             }.onAppear{
@@ -104,8 +106,85 @@ struct EditProfileView: View {
                 }
                 
                 
-            }
+            }.toolbar(.hidden)
         }
+    
+    
+    
+
+    
+    //either make button able to be pressed or make a different button that pulls up the image picker
+    func addDescriptiveImage() -> some View {
+        
+          
+              return VStack {
+                         Button(action: {
+                             print("button pressed")
+                             UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                             controlsDesc.pickedImageType = "card"
+                             controlsDesc.showImagePicker = true
+                         }) {
+                             if controlsDesc.pickedImage == Image("user-placeholder") {
+                                 let _ = print("this should print")
+                                 
+                                 //if user does not have a profile picture yet
+                                 if userVM.localDescriptiveImageStr == "none" {
+                                     ZStack {
+                                         Image("sunsetTest")
+                                               .resizable()
+                                                   .aspectRatio(contentMode: .fill)
+                                                   .frame(width: 400.0, height: 250.0, alignment: .top)
+                                                   .clipShape(Rectangle())
+                                     }
+                                     
+                                 }
+                                 
+                                 else { //they do have a profile image -> display it
+                                     ZStack {
+                                         KFImage(URL(string: userVM.localDescriptiveImageStr))
+                                             .resizable()
+                                                 .aspectRatio(contentMode: .fill)
+                                                 .frame(width: 400.0, height: 250.0, alignment: .top)
+                                                 .clipShape(Rectangle())
+                                     }//ZStack
+                                 }
+                                 
+
+                             } //if the user has not picked image
+                             
+                             else { //user has picked a new image
+                                
+                                 
+                                 controlsDesc.pickedImage
+                                     .resizable()
+                                         .aspectRatio(contentMode: .fill)
+                                         .frame(width: 400.0, height: 250.0, alignment: .top)
+                                         .clipShape(Rectangle())
+                                 
+                             }
+                         }
+                     
+               
+       
+         }.frame(maxWidth: .infinity, maxHeight: .infinity)
+             .sheet(isPresented: $controlsDesc.showImagePicker, content: {
+                 ImagePicker(showImagePicker: $controlsDesc.showImagePicker, pickedImage: $controlsDesc.pickedImage, imageData: $ProfImageData, sourceType: .photoLibrary)
+                     
+             })
+        
+    }
+    
+
+    func showDetailImage() -> some View {
+        return VStack {
+          Image("sunsetTest")
+                .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: 400.0, height: 250.0, alignment: .top)
+                    .clipShape(Rectangle())
+        }
+    }
+    
     
                                
     private func CustomProfileButtonView(title: String, foregroundColor: Color, backgroundColor: Color) -> some View {
@@ -139,7 +218,7 @@ struct EditProfileView: View {
                                         Image("blankprofile")
                                             .resizable()
                                             .aspectRatio(contentMode: .fill)
-                                            .frame(width: 100.0, height: 100.0, alignment: .center)
+                                            .frame(width: 125.0, height: 125.0, alignment: .center)
                                             .clipShape(Circle())
                                     }
                                     
@@ -150,7 +229,7 @@ struct EditProfileView: View {
                                         KFImage(URL(string: userVM.localProfileImageUrl))
                                             .resizable()
                                             .aspectRatio(contentMode: .fill)
-                                            .frame(width: 100.0, height: 100.0, alignment: .center)
+                                            .frame(width: 125.0, height: 125.0, alignment: .center)
                                             .clipShape(Circle())
                                     }//ZStack
                                 }
@@ -164,21 +243,17 @@ struct EditProfileView: View {
                                 controls.pickedImage
                                     .resizable()
                                     .aspectRatio(contentMode: .fill)
-                                    .frame(width: 100, height: 100)
-                                    .cornerRadius(100)
+                                    .frame(width: 125.0, height: 125.0, alignment: .center)
+                                    .clipShape(Circle())
                                 
                             }
                         }
-        
-                    
-
-                    
                     
                 }
       
         }.frame(maxWidth: .infinity, maxHeight: .infinity)
             .sheet(isPresented: $controls.showImagePicker, content: {
-                ImagePicker(showImagePicker: $controls.showImagePicker, pickedImage: $controls.pickedImage, imageData: $ProfImageData, sourceType: .photoLibrary)
+                ImagePicker(showImagePicker: $controls.showImagePicker, pickedImage: $controls.pickedImage, imageData: $backgroundImageData, sourceType: .photoLibrary)
                     
             })
         
@@ -191,3 +266,27 @@ struct EditProfileView: View {
 //        EditProfileView()
 //    }
 //}
+
+
+
+
+// this button sends user info to databse
+//                //To Do -- make this button a navigation link that sends user back to the main profile
+//                                Button(action: {
+//
+//                                    let userId = userVM.localUserId
+//
+//                                    //update values of my_user
+//                                    userVM.update_user_info(userId: userId, company_name: username, location_served: locationServe, bio: shortBio, profileImageData: ProfImageData, onError: { errorMessage in
+//                                        print("Update user error: \(errorMessage)")
+//                                    })
+//
+//
+//
+//                                }){
+//                                    Text("Send a user to our database")
+//                                }
+//                                .padding()
+//                                .foregroundColor(.white)
+//                                .background(Color.red)
+//                                .cornerRadius(20)

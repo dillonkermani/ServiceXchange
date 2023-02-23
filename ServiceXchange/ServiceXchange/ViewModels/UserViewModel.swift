@@ -24,9 +24,9 @@ class UserViewModel: ObservableObject{
     @Published var localCompanyName: String = ""
     @Published var localBio: String = ""
     @Published var localPrimaryLocationServed: String = ""
+    @Published var localDescriptiveImageStr: String = ""
     
-    
-    
+    @State var imageName: String = ""
     
     func updateLocalUserVariables(user : User) {
         
@@ -37,6 +37,7 @@ class UserViewModel: ObservableObject{
         self.localCompanyName = user.companyName ?? "none"
         self.localPrimaryLocationServed = user.primaryLocationServed ?? "none"
         self.localProfileImageUrl = user.profileImageUrl ?? "none"
+        self.localDescriptiveImageStr = "none"
         
     }//update local user variables fucntion
     
@@ -54,7 +55,7 @@ class UserViewModel: ObservableObject{
     
     
     //store user data into
-    func update_user_info(userId : String, company_name: String, location_served: String, bio: String, profileImageData: Data, onError: @escaping(_ errorMessage: String) -> Void){
+    func update_user_info(userId : String, company_name: String, location_served: String, bio: String, profileImageData: Data, backgroundImageData: Data, onError: @escaping(_ errorMessage: String) -> Void){
         
         
         //this is a reference to soemthing that has user stuff in it
@@ -81,6 +82,7 @@ class UserViewModel: ObservableObject{
         
         //now lets work on the image
         
+        //updateUserImages(imageToUpload: backgroundImageData, isProfile: false)
         
         //check if there is an image to add, if not then just return
         if profileImageData.isEmpty {
@@ -121,9 +123,54 @@ class UserViewModel: ObservableObject{
     }//update function
     
     
-
+    
+    private func updateUserImages(imageToUpload: Data, isProfile: Bool){
+        
+        //this is a reference to soemthing that has user stuff in it
+        let userRef = Ref.FIRESTORE_DOCUMENT_USERID(userId: self.localUserId)
+        
+        if isProfile {
+            imageName = "\(self.localUserId)-profileimage.jpg"
+        }
+        else {
+            imageName = "\(self.localUserId)-backgroundimage.jpg"
+        }
+        
+        //make a reference for the storage of the image
+        let imageRef = Ref.FIREBASE_STORAGE.reference().child(imageName)
+        
+        imageRef.putData(imageToUpload) {(metadata, error) in
+            guard let _ = metadata else {
+                print("no image metadata...")
+                return
+            } //if no image data return
+            
+            imageRef.downloadURL { (url, error) in
+                guard let downloadURL = url else {
+                    print("image upload failed: no download url")
+                    return
+                }
+                
+                if isProfile {
+                    //store the url of the image to firebase
+                    userRef.updateData( [
+                        "profileImageUrl": downloadURL.absoluteString,
+                    ] )
+                    //now comvert downloadURL back to string and store into the local variable
+                    self.localProfileImageUrl = downloadURL.absoluteString
+                }
+                else {
+                    userRef.updateData(["descriptiveImageStr": downloadURL.absoluteString])
+                    self.localDescriptiveImageStr = downloadURL.absoluteString
+                }
+                
+            }//downloadURL
+            
+        }//putData
+        
+    }//update user image function
+ 
     
 }
-
 
 
