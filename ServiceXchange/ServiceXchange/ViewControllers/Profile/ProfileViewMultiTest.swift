@@ -29,6 +29,8 @@ struct ProfileViewMultiTest: View {
      //
     
     
+    @State var navigateTo: AnyView?
+    @State var isNavigationActive = false
     
     var body: some View {
         
@@ -121,7 +123,11 @@ func messageNavButton() -> some View {
 func settingMenu() -> some View {
     return VStack {
         Menu {
-            Button("Edit Profile", action: order)
+            NavigationLink(destination: MessagesView(), label: {
+                Label("Send Message", systemImage: "envelope")
+            })
+            NavigationLink("Edit Profile", destination: EditProfileView())
+            //Button("Edit Profile", action: order)
             Button("Change Password", action: order)
             Button("Saved Listings", action: order)
             Button("History", action: order)
@@ -139,6 +145,37 @@ func settingMenu() -> some View {
     }
     
 }
+
+
+//func settingMenu2() -> some View {
+//    @State var navigateTo: AnyView?
+//    @State var isNavigationActive = false
+//    return NavigationView {
+//        Menu {
+//            Button {
+//                navigateTo = AnyView(EditProfileView())
+//                isNavigationActive = true
+//            } label: {
+//                Label("Edit Profile", systemImage: "doc")
+//            }
+//
+////            Button {
+////                navigateTo = AnyView(EditProfileView())
+////                isNavigationActive = true
+////            } label: {
+////                Label("Create a category", systemImage: "folder")
+////            }
+//        } label: {
+//            Label("Add", systemImage: "plus")
+//        }
+//        .background(
+//            NavigationLink(destination: navigateTo, isActive: $isNavigationActive) {
+//                EmptyView()
+//            })
+//    }
+//}
+
+
 
 func order() {}
 
@@ -200,7 +237,7 @@ func showDetailImage(image : String) -> some View {
 //                Text("Go back")
 //            }
 //        }
-//        
+//
 //    }
 //}
 
