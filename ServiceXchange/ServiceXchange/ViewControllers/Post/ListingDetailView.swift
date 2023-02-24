@@ -42,13 +42,13 @@ struct ListingDetailView : View {
     //to be passed to the profile view
     @State private var userToPass : User = User(
         userId: "",
-        firstName: "cole",
+        firstName: "",
         lastName: "",
         email: "",
         isServiceProvider: false,
         listingIDs: []
     )
-    @State private var thisUser : Bool = true
+    @State private var thisUser : Bool = false
     
     
     var listing: Listing

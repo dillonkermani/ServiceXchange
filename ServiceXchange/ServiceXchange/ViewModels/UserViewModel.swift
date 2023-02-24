@@ -10,13 +10,19 @@ import SwiftUI
 import FirebaseCore
 
 
-let skeletonUser = User(
+let mySkeletonUser = User(
     userId: "",
     firstName: "",
     lastName: "",
     email: "",
     isServiceProvider: false,
-    listingIDs: []
+    listingIDs: [],
+    
+    profileImageUrl: "",
+    descriptiveImageStr: "",
+    companyName: "",
+    bio: "",
+    primaryLocationServed: ""
 )
 
 
@@ -29,7 +35,7 @@ class UserViewModel: ObservableObject{
     @Published var localUserId: String = "" //maybe we want this so that we dont have to use
                                             //   session store exect for at sign in
     
-    @Published var skUser : User = skeletonUser
+    @Published var skUser : User = mySkeletonUser
     
     @Published var initialized: Bool = false
     @Published var localProfileImageUrl: String = ""
@@ -50,6 +56,13 @@ class UserViewModel: ObservableObject{
         self.localPrimaryLocationServed = user.primaryLocationServed ?? "none"
         self.localProfileImageUrl = user.profileImageUrl ?? "none"
         self.localDescriptiveImageStr = user.descriptiveImageStr ?? "none"
+        
+        
+        skUser.bio = user.bio ?? "none"
+        skUser.companyName = user.companyName ?? "none"
+        skUser.primaryLocationServed = user.primaryLocationServed ?? "none"
+        skUser.profileImageUrl = user.profileImageUrl ?? "none"
+        skUser.descriptiveImageStr = user.descriptiveImageStr ?? "none"
         
     }//update local user variables fucntion
     
