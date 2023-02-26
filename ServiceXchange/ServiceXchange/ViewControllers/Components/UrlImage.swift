@@ -6,20 +6,18 @@
 //
 
 import SwiftUI
-import Kingfisher
 
 struct UrlImage: View {
     var url: String
     var body: some View {
-        KFImage(URL(string: url))
-            .placeholder({
-                LoadingView()
-            })
-            .scaleFactor(UIScreen.main.scale)
-            .cacheOriginalImage(true)
-            .renderingMode(.original)
-            .resizable()
-            .scaledToFit()
+        AsyncImage(url: URL(string: url)) { image in
+            image
+                .resizable()
+                .scaledToFit()
+        } placeholder: {
+            LoadingView()
+        }
+            
     }
 }
 

@@ -1,22 +1,21 @@
 // Reusable Public UI Components
 
 import SwiftUI
-import Kingfisher
 
 var controls = HomeViewControls()
 
 func ListingCardView(listing: Listing) -> some View {
     let image_url = listing.imageUrls.first ?? ""
     return ZStack(alignment: .bottom) {
-        KFImage(URL(string:  image_url))
-            .placeholder({
-                ShimmerPlaceholderView(width: controls.width, height: controls.height, cornerRadius: 0, animating: true)
-            })
-            .basicKFModifiers(cgSize: CGSize(width: controls.height, height: controls.width))
-            .aspectRatio(contentMode: .fill)
-            .frame(width: controls.width, height: controls.height)
-            .clipped()
-        
+        AsyncImage(url: URL(string:  image_url)) { image in
+            image
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .frame(width: controls.width, height: controls.height)
+                .clipped()
+        } placeholder: {
+            ShimmerPlaceholderView(width: controls.width, height: controls.height, cornerRadius: 0, animating: true)
+        }
         
         cardGradient()
             .rotationEffect(.degrees(180))

@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import Kingfisher
 
 struct URLCarouselView: View {
     var urls: [String]

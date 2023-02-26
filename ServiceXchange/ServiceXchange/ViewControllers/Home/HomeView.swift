@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import Kingfisher
 
 struct HomeViewControls {
     let gridItems = [GridItem(.flexible()), GridItem(.flexible())]
