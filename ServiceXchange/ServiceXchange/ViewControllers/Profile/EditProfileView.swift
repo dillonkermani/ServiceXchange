@@ -56,6 +56,18 @@ struct EditProfileView: View {
     @State var shortBioTitle: String = "short bio"
     @State var locationServeTitle: String = "location served"
     
+    
+    @State private var userToPass : User = User(
+        userId: "",
+        firstName: "",
+        lastName: "",
+        email: "",
+        isServiceProvider: false,
+        listingIDs: []
+    )
+    @State private var thisUser : Bool = true
+    
+    
     var body: some View {
         ZStack {
             
@@ -64,21 +76,36 @@ struct EditProfileView: View {
                 ZStack{
                     
                     addDescriptiveImage()
-                        .padding(.top, -300)
+                        .padding(.top, -430)
                     
                     //add the profile image button thing
                     addProfilePhoto()
-                        .padding(.top, -70)
+                        .padding(.top, -200)
                 }
                 
-                //make these names different location: Santa Cruz autofill
-                underlinedTextField(title: companyNameTitle, text: $username, width: 310, height: 20, color: CustomColor.sxcgreen)
-                underlinedTextField(title: locationServeTitle, text: $locationServe, width: 310, height: 40, color: CustomColor.sxcgreen)
-                underlinedTextField(title: shortBioTitle, text: $shortBio, width: 310, height: 40, color: CustomColor.sxcgreen)
+                
+                underlinedTextField(title: "company name: " + companyNameTitle, text: $username, width: 310, height: 20, color: .black)
+                    .padding(.top, -200)
+                underlinedTextField(title: "location Served: " + locationServeTitle, text: $locationServe, width: 310, height: 40, color: .black)
+                    .padding(.top, -140)
+                underlinedTextField(title: "short bio: " + shortBioTitle, text: $shortBio, width: 310, height: 40, color: .black)
+                    .padding(.top, -70)
                 
                 
-                NavigationLink(destination: ProfileView(), label: {
-                    CustomProfileButtonView(title: "Save Changes", foregroundColor: .white, backgroundColor: .red.opacity(0.3))
+                NavigationLink(destination: ProfileViewMultiTest(user: $userToPass, thisUser: $thisUser), label: {
+                    Text("Save Changes")
+                        .fontWeight(.semibold)
+                        .font(.title)
+                        .padding()
+                        .background(Color.white)
+                        .cornerRadius(40)
+                        .foregroundColor(.black)
+                        .padding(10)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 40)
+                                .stroke(Color.black, lineWidth: 5)
+                                .frame(width: 250, height: 50)
+                        )
                 }).simultaneousGesture(TapGesture().onEnded{
                     let userId = userVM.localUserId
                     userVM.update_user_info(userId: userId, company_name: username, location_served: locationServe, bio: shortBio, profileImageData: ProfImageData, backgroundImageData: backgroundImageData, onError: { errorMessage in
@@ -185,6 +212,7 @@ struct EditProfileView: View {
         }
     }
     
+  //private func SaveDataButton
     
                                
     private func CustomProfileButtonView(title: String, foregroundColor: Color, backgroundColor: Color) -> some View {
@@ -193,6 +221,7 @@ struct EditProfileView: View {
                 .frame(width: UIScreen.main.bounds.width / 1.3, height: 50)
                 .shadow(radius: 5)
                 .foregroundColor(backgroundColor)
+                .border(Color.black, width: 5)
             Text(title)
                 .font(.system(size: 17)).bold()
                 .foregroundColor(foregroundColor)

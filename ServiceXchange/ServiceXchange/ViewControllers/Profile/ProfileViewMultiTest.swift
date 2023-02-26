@@ -28,9 +28,9 @@ struct ProfileViewMultiTest: View {
      
      //
     
-    
     @State var navigateTo: AnyView?
-    @State var isNavigationActive = false
+     @State private var isActive = false
+
     
     var body: some View {
         
@@ -38,10 +38,23 @@ struct ProfileViewMultiTest: View {
             
             imageOverlayTop(thisUserProfile: thisUser, user: user)
             
-            Text( name )
+            //Text( name )
             //let _ = print("name in testView: ", name )
+            //settingMenu3()
             
-            //btnback
+            
+            NavigationLink(destination: ProfileMakeMenuNav(), label: {Image(systemName: "gearshape.fill")
+                    .font(.system(size: 35,
+                                  weight: .regular,
+                                  design: .default))
+                    .foregroundColor(.black)
+                    .frame(width: 47, height: 47)
+                    .background(.white)
+                .cornerRadius(40)
+                
+            })
+//
+   
             
         }.onAppear {
             
@@ -66,7 +79,81 @@ struct ProfileViewMultiTest: View {
         }.toolbar(.hidden)
       
     }
+     
+    
+    
+    //returns the detail image bahind profile and either setting or message icon
+    private func imageOverlayTop(thisUserProfile : Bool, user: User) -> some View {
+        return  ZStack{
+            
+            let image1 = (user.descriptiveImageStr ?? "sunsetTest")
+            showDetailImage(image: image1)
+                 .padding(.top, -390)
+            
+            let image = (user.profileImageUrl ?? "blankprofile")
+            showProfileImage(image: image)
+                 .padding(.top, -205)
+            
+            
+            if thisUserProfile {
+                settingMenu3()
+                     .padding(.leading, 270)
+                     .padding(.top, -320)
+            }
+            else {
+                messageNavButton()
+                    .padding(.leading, 270)
+                    .padding(.top, -320)
+            }
+        }
+      
+    }//imageOverlayTop
+    
+    
+    private func settingMenu3() -> some View{
        
+        return VStack {
+            Menu {
+                Button("edit profile") {
+                    navigateTo = AnyView(EditProfileView())
+                    self.isActive = true
+                }
+                Button("sign out"){ //we have implemented this go back and put it in
+                    print("not implemented")
+                }
+                Button("delete account"){
+                    print("not implemented")
+                }
+                Button("History"){
+                    print("not implemented")
+                }
+                Button("change password"){
+                    print("not implemented")
+                }
+                Button("Saved Listigns"){
+                    print("not implemented")
+                }
+
+                
+            } label: {
+                Image(systemName: "gearshape.fill")
+                    .font(.system(size: 35,
+                                  weight: .regular,
+                                  design: .default))
+                    .foregroundColor(.black)
+                    .frame(width: 47, height: 47)
+                    .background(.white)
+                    .cornerRadius(40)
+            }
+            .background(
+                //do we care if this is about to go away or something?
+                NavigationLink(destination: self.navigateTo , isActive: $isActive) {
+                    EmptyView()
+                })
+        }
+    }
+
+    
 }
 
 
@@ -147,33 +234,8 @@ func settingMenu() -> some View {
 }
 
 
-//func settingMenu2() -> some View {
-//    @State var navigateTo: AnyView?
-//    @State var isNavigationActive = false
-//    return NavigationView {
-//        Menu {
-//            Button {
-//                navigateTo = AnyView(EditProfileView())
-//                isNavigationActive = true
-//            } label: {
-//                Label("Edit Profile", systemImage: "doc")
-//            }
-//
-////            Button {
-////                navigateTo = AnyView(EditProfileView())
-////                isNavigationActive = true
-////            } label: {
-////                Label("Create a category", systemImage: "folder")
-////            }
-//        } label: {
-//            Label("Add", systemImage: "plus")
-//        }
-//        .background(
-//            NavigationLink(destination: navigateTo, isActive: $isNavigationActive) {
-//                EmptyView()
-//            })
-//    }
-//}
+
+
 
 
 
