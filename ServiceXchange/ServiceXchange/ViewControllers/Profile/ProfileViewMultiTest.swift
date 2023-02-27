@@ -5,6 +5,10 @@
 //  Created by colton jeffrey on 2/23/23.
 //
 
+
+
+//my todo ---> make loading image while images change --> maybe a state variable ---> clean up my code
+
 import SwiftUI
 import Kingfisher
 
@@ -19,6 +23,8 @@ struct ProfileViewMultiTest: View {
 
     
     @State var name : String = "hold"
+    @State var profile : String = "none"
+    @State var background : String = "none"
 
     
     //
@@ -34,27 +40,12 @@ struct ProfileViewMultiTest: View {
     
     var body: some View {
         
+        
+        if !thisUser {
+        
         VStack {
             
             imageOverlayTop(thisUserProfile: thisUser, user: user)
-            
-            //Text( name )
-            //let _ = print("name in testView: ", name )
-            //settingMenu3()
-            
-            
-            NavigationLink(destination: ProfileMakeMenuNav(), label: {Image(systemName: "gearshape.fill")
-                    .font(.system(size: 35,
-                                  weight: .regular,
-                                  design: .default))
-                    .foregroundColor(.black)
-                    .frame(width: 47, height: 47)
-                    .background(.white)
-                .cornerRadius(40)
-                
-            })
-//
-   
             
         }.onAppear {
             
@@ -62,9 +53,6 @@ struct ProfileViewMultiTest: View {
             if (userVM.initialized == false && session.userSession != nil){
                 userVM.updateLocalUserVariables(user: session.userSession!)
             }//if uninitailized (this can get moved if we want info in other pages (maybe tabview icon?))
-            
-        
-            
             
             if thisUser {
                 user = userVM.skUser
@@ -76,22 +64,91 @@ struct ProfileViewMultiTest: View {
                 name = user.firstName
             }
             
-        }.toolbar(.hidden)
-      
-    }
+        }//.toolbar(.hidden)
+        // if !thisUser {
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button {
+                    presentationMode.wrappedValue.dismiss()
+                } label: {
+                    HStack {
+                        Image(systemName: "arrow.left")
+                            .font(.system(size: 17)).bold()
+                    }.foregroundColor(.black)
+                }
+            }
+        }
+        // }//if not this user we need a back button
+        
+    }//if not this user
+        
+        else {
+            VStack {
+                
+                imageOverlayTopMine(thisUserProfile: thisUser, user: user)
+                
+                //Text( name )
+                //let _ = print("name in testView: ", name )
+                //settingMenu3()
+                
+                
+                NavigationLink(destination: ProfileMakeMenuNav(), label: {Image(systemName: "gearshape.fill")
+                        .font(.system(size: 35,
+                                      weight: .regular,
+                                      design: .default))
+                        .foregroundColor(.black)
+                        .frame(width: 47, height: 47)
+                        .background(.white)
+                        .cornerRadius(40)
+                    
+                })
+                //
+                
+                
+            }.onAppear {
+                
+                //initailize the local user variables if you have not already
+                if (userVM.initialized == false && session.userSession != nil){
+                    userVM.updateLocalUserVariables(user: session.userSession!)
+                }//if uninitailized (this can get moved if we want info in other pages (maybe tabview icon?))
+                
+                
+                
+                
+                if thisUser {
+                    user = userVM.skUser
+                    let _ = print ("userVM.localCompanyName: ", userVM.localCompanyName)
+                    name = userVM.localCompanyName
+                    profile = userVM.localProfileImageUrl
+                    background = userVM.localDescriptiveImageStr
+                }
+                else {
+                    let _ = print("user.firstname = ", user.firstName)
+                    name = user.firstName
+                    profile = user.profileImageUrl ?? "blankprofile"
+                    background = user.descriptiveImageStr ?? "sunsetTest"
+                }
+                
+            }.toolbar(.hidden)
+        }
+        
+        
+    }//some view
      
     
-    
-    //returns the detail image bahind profile and either setting or message icon
-    private func imageOverlayTop(thisUserProfile : Bool, user: User) -> some View {
+    //figure out how to make it wait or show some kind of loading before proceeding to show the iamge
+    private func imageOverlayTopMine(thisUserProfile : Bool, user: User) -> some View {
         return  ZStack{
             
-            let image1 = (user.descriptiveImageStr ?? "sunsetTest")
-            showDetailImage(image: image1)
+            
+            //let image1 = (user.descriptiveImageStr ?? "sunsetTest")
+           // while background == "none" {}
+            showDetailImage(image: userVM.localDescriptiveImageStr)
                  .padding(.top, -390)
             
-            let image = (user.profileImageUrl ?? "blankprofile")
-            showProfileImage(image: image)
+            //let image = (user.profileImageUrl ?? "blankprofile")
+            showProfileImage(image: userVM.localProfileImageUrl)
                  .padding(.top, -205)
             
             
@@ -103,7 +160,36 @@ struct ProfileViewMultiTest: View {
             else {
                 messageNavButton()
                     .padding(.leading, 270)
-                    .padding(.top, -320)
+                    .padding(.top, -150)
+            }
+        }
+      
+    }
+    
+    //returns the detail image bahind profile and either setting or message icon
+    private func imageOverlayTop(thisUserProfile : Bool, user: User) -> some View {
+        return  ZStack{
+            
+            
+            let image1 = (user.descriptiveImageStr ?? "sunsetTest")
+           // while background == "none" {}
+            showDetailImage(image: image1)
+                 .padding(.top, -420)
+            
+            let image = (user.profileImageUrl ?? "blankprofile")
+            showProfileImage(image: image)
+                 .padding(.top, -235)
+            
+            
+            if thisUserProfile {
+                settingMenu3()
+                     .padding(.leading, 270)
+                     .padding(.top, -320)
+            }
+            else {
+                messageNavButton()
+                    .padding(.leading, 270)
+                    .padding(.top, -150)
             }
         }
       

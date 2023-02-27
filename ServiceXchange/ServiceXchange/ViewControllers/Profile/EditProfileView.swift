@@ -103,13 +103,14 @@ struct EditProfileView: View {
                         .padding(10)
                         .overlay(
                             RoundedRectangle(cornerRadius: 40)
-                                .stroke(Color.black, lineWidth: 5)
+                                .stroke(Color.black, lineWidth: 3)
                                 .frame(width: 250, height: 50)
                         )
                 }).simultaneousGesture(TapGesture().onEnded{
                     let userId = userVM.localUserId
                     userVM.update_user_info(userId: userId, company_name: username, location_served: locationServe, bio: shortBio, profileImageData: ProfImageData, backgroundImageData: backgroundImageData, onError: { errorMessage in
                         print("Update user error: \(errorMessage)")
+                        sleep(1)
                     })
                     //print("hello")
                 })

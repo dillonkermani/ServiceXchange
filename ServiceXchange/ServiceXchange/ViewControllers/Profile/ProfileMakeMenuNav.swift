@@ -56,8 +56,10 @@ struct ProfileMakeMenuNav: View {
         
     }
     
-    private func save
-    
+//    private func customBack() -> some View {
+//        
+//    }
+//    
     private func saveChangesNav2() -> some View {
         return VStack {
             NavigationLink(destination: HomeView(), label: {
