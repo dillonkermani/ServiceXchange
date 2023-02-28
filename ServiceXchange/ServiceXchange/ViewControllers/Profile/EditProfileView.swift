@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import Kingfisher
+
 
 struct CreateProfileControls {
     var pickedImageType = ""
@@ -169,8 +169,23 @@ struct EditProfileView: View {
                                  
                                  else { //they do have a profile image -> display it
                                      ZStack {
-                                         KFImage(URL(string: userVM.localDescriptiveImageStr))
-                                             .resizable()
+                                         
+                                         
+                                         //images are fucked now haha will have to look into how to fix them later yay
+                                         
+                                         AsyncImage(url: URL(string:  userVM.localDescriptiveImageStr)) { image in
+                                             image
+                                             //.resizable()
+                                                 .aspectRatio(contentMode: .fill)
+                                                 .frame(width: 400.0, height: 250.0, alignment: .top)
+                                                 .clipShape(Rectangle())
+                                         } placeholder: {
+                                             ShimmerPlaceholderView(width: 400, height: 250, cornerRadius: 0, animating: true)
+                                         }
+                                         
+                                         //UrlImage(url: userVM.localDescriptiveImageStr)
+                                         //KFImage(URL(string: userVM.localDescriptiveImageStr))
+                                             //.resizable()
                                                  .aspectRatio(contentMode: .fill)
                                                  .frame(width: 400.0, height: 250.0, alignment: .top)
                                                  .clipShape(Rectangle())
@@ -256,11 +271,24 @@ struct EditProfileView: View {
                                 
                                 else { //they do have a profile image -> display it
                                     ZStack {
-                                        KFImage(URL(string: userVM.localProfileImageUrl))
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fill)
-                                            .frame(width: 125.0, height: 125.0, alignment: .center)
-                                            .clipShape(Circle())
+                                        
+                                        AsyncImage(url: URL(string:  userVM.localProfileImageUrl)) { image in
+                                            image
+                                                .resizable()
+                                                .aspectRatio(contentMode: .fill)
+                                                .frame(width: 125.0, height: 125.0, alignment: .center)
+                                                .clipShape(Circle())
+                                        } placeholder: {
+                                            ShimmerPlaceholderView(width: 125, height: 125, cornerRadius: 125, animating: true)
+                                        }
+                                        
+                                        
+                                        //AsyncImage(
+                                        //KFImage(URL(string: userVM.localProfileImageUrl))
+//                                            .resizable()
+//                                            .aspectRatio(contentMode: .fill)
+//                                            .frame(width: 125.0, height: 125.0, alignment: .center)
+//                                            .clipShape(Circle())
                                     }//ZStack
                                 }
                                 

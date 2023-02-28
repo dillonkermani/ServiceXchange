@@ -10,7 +10,7 @@
 //my todo ---> make loading image while images change --> maybe a state variable ---> clean up my code
 
 import SwiftUI
-import Kingfisher
+
 
 struct ProfileViewMultiTest: View {
     
@@ -42,10 +42,16 @@ struct ProfileViewMultiTest: View {
         
         
         if !thisUser {
+        //if true {
         
         VStack {
             
-            imageOverlayTop(thisUserProfile: thisUser, user: user)
+            //how do I make this shit wait on a state variable?
+            if !userVM.loadingData {
+                imageOverlayTop(thisUserProfile: thisUser, user: user)
+            }
+            let _ = print("profile image is (user) : ", user.profileImageUrl)
+            let _ = print("profile image is (userVM.skUser)", userVM.skUser.profileImageUrl)
             
         }.onAppear {
             
@@ -55,7 +61,9 @@ struct ProfileViewMultiTest: View {
             }//if uninitailized (this can get moved if we want info in other pages (maybe tabview icon?))
             
             if thisUser {
-                user = userVM.skUser
+                if(!userVM.loadingData){
+                    user = userVM.skUser
+                }
                 let _ = print ("userVM.localCompanyName: ", userVM.localCompanyName)
                 name = userVM.localCompanyName
             }
@@ -145,21 +153,21 @@ struct ProfileViewMultiTest: View {
             //let image1 = (user.descriptiveImageStr ?? "sunsetTest")
             // while background == "none" {}
             if userVM.localDescriptiveImageStr == "none"{
-                showDetailImage(image: "sunsetTest")
+                showDetailImage(imageStr: "sunsetTest")
                     .padding(.top, -390)
             }
             else{
-                showDetailImage(image: userVM.localDescriptiveImageStr)
+                showDetailImage(imageStr: userVM.localDescriptiveImageStr)
                     .padding(.top, -390)
             }
             
             if userVM.localProfileImageUrl == "none" {
-                showProfileImage(image: "blankprofile")
+                showProfileImage(imageStr: "blankprofile")
                     .padding(.top, -205)
             }
             else {
                 //let image = (user.profileImageUrl ?? "blankprofile")
-                showProfileImage(image: userVM.localProfileImageUrl)
+                showProfileImage(imageStr: userVM.localProfileImageUrl)
                     .padding(.top, -205)
             }
             
@@ -184,11 +192,11 @@ struct ProfileViewMultiTest: View {
             
             let image1 = (user.descriptiveImageStr ?? "sunsetTest")
            // while background == "none" {}
-            showDetailImage(image: image1)
+            showDetailImage(imageStr: image1)
                  .padding(.top, -420)
             
             let image = (user.profileImageUrl ?? "blankprofile")
-            showProfileImage(image: image)
+            showProfileImage(imageStr: image)
                  .padding(.top, -235)
             
             
@@ -247,55 +255,25 @@ struct ProfileViewMultiTest: View {
                     .frame(width: 47, height: 47)
                     .background(.white)
                     .cornerRadius(40)
-            }
+            } //label
             .background(
                 //do we care if this is about to go away or something?
                 NavigationLink(destination: self.navigateTo , isActive: $isActive) {
                     EmptyView()
                 }
                 
-
-            )
+            )//background
             
-            
-            
-        }
-    }
+        }//VStack
+    } //setting Menu 3
 
     
 }
 
 
 
-
-//returns the detail image bahind profile and either setting or message icon
-func imageOverlayTop(thisUserProfile : Bool, user: User) -> some View {
-    return  ZStack{
-        
-        let image1 = (user.descriptiveImageStr ?? "sunsetTest")
-        showDetailImage(image: image1)
-             .padding(.top, -390)
-        
-        let image = (user.profileImageUrl ?? "blankprofile")
-        showProfileImage(image: image)
-             .padding(.top, -205)
-        
-        
-        if thisUserProfile {
-            settingMenu()
-                 .padding(.leading, 270)
-                 .padding(.top, -320)
-        }
-        else {
-            messageNavButton()
-                .padding(.leading, 270)
-                .padding(.top, -320)
-        }
-    }
-  
-}
-
-
+//navigation link that sends you to messaging view
+//will have to change later to make it go right to a message with that person
 func messageNavButton() -> some View {
     return VStack {
         //changethis later so that it navigates straight to
@@ -313,70 +291,43 @@ func messageNavButton() -> some View {
     }
 }
 
-//make this a button and make it spin and drop down a menu
-//replace the settiung view with just this menu
-//change these things to navigation links -> that go to the appropriate pages
-func settingMenu() -> some View {
-    return VStack {
-        Menu {
-            NavigationLink(destination: MessagesView(), label: {
-                Label("Send Message", systemImage: "envelope")
-            })
-            NavigationLink("Edit Profile", destination: EditProfileView())
-            //Button("Edit Profile", action: order)
-            Button("Change Password", action: order)
-            Button("Saved Listings", action: order)
-            Button("History", action: order)
-            Button("sign out", action: order)
-        } label: {
-            Image(systemName: "gearshape.fill")
-                .font(.system(size: 35,
-                              weight: .regular,
-                              design: .default))
-                .foregroundColor(.black)
-                .frame(width: 47, height: 47)
-                .background(.white)
-                .cornerRadius(40)
-        }
-    }
-    
-}
 
-
-
-
-
-
-
-func order() {}
-
-func showProfileImage(image : String) -> some View {
+//shows profile image as a circle
+func showProfileImage(imageStr : String) -> some View {
     return VStack {
         
         
         
-        if image != "blankprofile"  && image != ""{
-            KFImage(URL(string: image))
-            //Image("blankprofile")
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: 125.0, height: 125.0, alignment: .center)
-                .clipShape(Circle())
+        if imageStr != "blankprofile"  && imageStr != ""{
+            
+            
+            AsyncImage(url: URL(string:  imageStr)) { image in
+                image
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: 125.0, height: 125.0, alignment: .center)
+                    .clipShape(Circle())
+            } placeholder: {
+                ShimmerPlaceholderView(width: 125, height: 125, cornerRadius: 0, animating: true)
+            }
+            
         }
         else {
-            Image(image)
+            Image(imageStr)
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .frame(width: 125.0, height: 125.0, alignment: .center)
                 .clipShape(Circle())
         }
     }
-}
+}//showProfileImage
 
-func showDetailImage(image : String) -> some View {
+
+//show detail or backround image
+func showDetailImage(imageStr : String) -> some View {
     return VStack {
         
-        if image == "" || image == "sunsetTest"{
+        if imageStr == "" || imageStr == "sunsetTest"{
             Image("sunsetTest")
                 .resizable()
                 .aspectRatio(contentMode: .fill)
@@ -384,33 +335,24 @@ func showDetailImage(image : String) -> some View {
                 .clipShape(Rectangle())
         }
         else {
-            KFImage(URL(string : image))
-            //Image("sunsetTest")
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: 400.0, height: 250.0, alignment: .top)
-                .clipShape(Rectangle())
+            
+            AsyncImage(url: URL(string:  imageStr)) { image in
+                image
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: 400, height: 250)
+                    .clipShape(Rectangle())
+            } placeholder: {
+                ShimmerPlaceholderView(width: 400, height: 250, cornerRadius: 0, animating: true)
+            }
+            
+
         }
     }
-}
+}//showDetailImage
 
 
-//TODO make the back arrow custom button -> steal from dillon mawhhahaha
-//func backArrow() -> some View {
-//    return VStack {
-//        Button(action: {
-//            self.presentationMode.wrappedValue.dismiss()
-//        }) {
-//            HStack {
-//                Image("ic_back") // set image here
-//                    .aspectRatio(contentMode: .fit)
-//                    .foregroundColor(.white)
-//                Text("Go back")
-//            }
-//        }
-//
-//    }
-//}
+
 
 
 

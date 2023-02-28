@@ -10,7 +10,7 @@
 import SwiftUI
 import FirebaseCore
 import FirebaseFirestore
-import Kingfisher
+//import Kingfisher
 
 
 //TODO make this view have to pass in a user and a isYours boolean if it is yours -> use local varibles ->
@@ -43,7 +43,7 @@ struct ProfileView: View {
     
     private func SettingNavButton() -> some View {
         return VStack{
-            NavigationLink(destination: ProfileSettingsView(), label: {
+            NavigationLink(destination: HomeView(), label: {
                 Image(systemName: "gear")
                 
                     .font(.system(size: 35,
