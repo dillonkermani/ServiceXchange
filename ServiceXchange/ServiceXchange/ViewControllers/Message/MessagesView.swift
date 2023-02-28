@@ -10,10 +10,6 @@ import FirebaseCore
 import FirebaseFirestore
 import FirebaseAuth
 
-struct ChatUser {
-    let uid, email, profileImageUrl: String
-}
-
 struct MessagesControls {
     var showNewMessageScreen = false
     var shouldShowLogOutOptions = false
@@ -155,6 +151,6 @@ struct MessagesView: View {
 
 struct MessagesView_Previews: PreviewProvider {
     static var previews: some View {
-        MessagesView()
+        MessagesView().environmentObject(SessionStore())
     }
 }
