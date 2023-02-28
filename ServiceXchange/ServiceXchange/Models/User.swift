@@ -25,4 +25,6 @@ struct User: Encodable, Decodable {
     // Firebase Cloud Messaging Device ID
     var fcmToken: Int?
     
+    var chats: [String]?
+    
 }

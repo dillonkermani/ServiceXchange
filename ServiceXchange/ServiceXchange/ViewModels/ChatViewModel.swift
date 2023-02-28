@@ -6,18 +6,60 @@
 //
 
 import Foundation
+import Firebase
 
 class ChatViewModel: ObservableObject {
-    
-    @Published var message = ""
-    
-    
-    func createChat(fromUser: String, toUser: String, onSuccess: @escaping(_ chat: Chat) -> Void, onError: @escaping(_ errorMessage: String) -> Void) {
         
+    @Published var fromUser: User
+    @Published var toUser: User
+    
+    init(fromUser: User, toUser: User) {
+        self.fromUser = fromUser
+        self.toUser = toUser
+    }
+    
+    
+    func sendMessage(message: String) {
+        
+        // First check if users have messaged eachother before to decide if we need to craete a new chat or add to an existing one.
+        if fromUser.chats != nil && toUser.chats != nil {
+            let commonChats = fromUser.chats!.filter { toUser.chats!.contains($0) }
+            if commonChats.count > 0 {
+                print("Users have messaged eachother before.")
+                // TODO: Add message to existing chat and update most recently sent message
+                
+            }
+        } else {
+            print("users have never messages eachother before.")
+            // Create new chat and add message
+            if fromUser.chats == nil || toUser.chats == nil { // One of the users has no chat conversations
+                // Create chat and add message
+                self.createChat(fromUser: fromUser.userId, toUser: toUser.userId, onSuccess: {chat in // If users have never previously chatted: createChat
+                    print("Successfully created chat: \(chat). Now about to addMessage()")
+                    
+                    self.addMessage(text: message, fromUser: self.fromUser.userId, toChat: chat.id, onSuccess: {message in
+                        print("Successfully added message: \(message)")
+                    }, onError: {error in
+                        print("Error adding message: \(error)")
+                    })
+                    
+                }, onError: {error in
+                    print("Error creating chat: \(error)")
+                })
+            }
+        }
+        
+    }
+    
+    private func createChat(fromUser: String, toUser: String, onSuccess: @escaping(_ chat: Chat) -> Void, onError: @escaping(_ errorMessage: String) -> Void) {
+        
+        // Create Firestore Chat reference.
         let chatDocumentRef = Ref.FIRESTORE_COLLECTION_CHATS.document()
         
+        // Create Chat object.
         let newChat = Chat(id: chatDocumentRef.documentID, createdAt: Date(), createdBy: fromUser, lastUpdated: Date(), members: [fromUser, toUser])
         
+        // Encode Chat object to dictionary
         guard let dict = try? newChat.toDictionary() else {return}
         
         chatDocumentRef.setData(dict) {error in
@@ -29,9 +71,20 @@ class ChatViewModel: ObservableObject {
             }
         }
         
+        // Add chatId to fromUser's array of chats.
+        Ref.FIRESTORE_COLLECTION_USERS.document(fromUser).updateData([
+            "chat": FieldValue.arrayUnion([chatDocumentRef.documentID])
+        ])
+        
+        // Add chatId to toUser's array of chats.
+        Ref.FIRESTORE_COLLECTION_USERS.document(toUser).updateData([
+            "chat": FieldValue.arrayUnion([chatDocumentRef.documentID])
+        ])
+        
+        
     }
     
-    func addMessage(text: String, fromUser: String, toChat: String, onSuccess: @escaping(_ message: Message) -> Void, onError: @escaping(_ errorMessage: String) -> Void) {
+    private func addMessage(text: String, fromUser: String, toChat: String, onSuccess: @escaping(_ message: Message) -> Void, onError: @escaping(_ errorMessage: String) -> Void) {
         
         let messageDocumentRef = Ref.FIRESTORE_COLLECTION_MESSAGES.document(toChat).collection("messages").document()
         

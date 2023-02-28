@@ -9,12 +9,9 @@ import SwiftUI
 
 struct MessageDetailView: View {
     
-    @ObservedObject var chatVM = ChatViewModel()
+    var chatVM: ChatViewModel
     
-    
-    var fromUser: User
-    var toUser: User
-    
+    @State var message = ""
     
     var body: some View {
         VStack {
@@ -44,34 +41,23 @@ struct MessageDetailView: View {
             }
             .background(CustomColor.sxcgreen)
             
-            MessageTextField(message: chatVM.message)
+            MessageTextField()
 
         }
     }
     
-    private func MessageTextField(message: String) -> some View {
+    func MessageTextField() -> some View {
         HStack {
             // Custom text field created below
-            CustomTextField(placeholder: Text("Enter your message here"), text: $chatVM.message)
+            CustomTextField(placeholder: Text("Enter your message here"), text: $message)
                             .frame(height: 52)
                             .disableAutocorrection(true)
                             .background(Color.gray.opacity(0.5))
                             .cornerRadius(35)
 
             Button {
-                chatVM.createChat(fromUser: fromUser.userId, toUser: toUser.userId, onSuccess: {chat in // If users have never previously chatted: createChat
-                    print("Successfully created chat: \(chat). Now about to addMessage()")
-                    
-                    chatVM.addMessage(text: message, fromUser: fromUser.userId, toChat: chat.id, onSuccess: {message in
-                        print("Successfully added message: \(message)")
-                    }, onError: {error in
-                        print("Error adding message: \(error)")
-                    })
-                    
-                }, onError: {error in
-                    print("Error creating chat: \(error)")
-                })
-                chatVM.message = ""
+                chatVM.sendMessage(message: message)
+                message = ""
             } label: {
                 Image(systemName: "paperplane.fill")
                     .foregroundColor(.white)
@@ -89,7 +75,7 @@ struct MessageDetailView: View {
     
     private func TitleRow() -> some View {
         HStack(spacing: 20) {
-            AsyncImage(url: URL(string: toUser.profileImageUrl ?? "")) { image in
+            AsyncImage(url: URL(string: chatVM.toUser.profileImageUrl ?? "")) { image in
                 image.resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(width: 50, height: 50)
@@ -99,7 +85,7 @@ struct MessageDetailView: View {
             }
             
             VStack(alignment: .leading) {
-                Text("\(toUser.firstName) \(toUser.lastName)")
+                Text("\(chatVM.toUser.firstName) \(chatVM.toUser.lastName)")
                     .font(.title).bold()
                 
                 Text("Online")
@@ -118,9 +104,6 @@ struct MessageDetailView: View {
     }
 }
 
-
-
-
 struct CustomTextField: View {
     var placeholder: Text
     @Binding var text: String
@@ -137,12 +120,6 @@ struct CustomTextField: View {
             TextField("", text: $text, onEditingChanged: editingChanged, onCommit: commit)
             
         }.padding()
-    }
-}
-
-struct MessageDetailView_Previews: PreviewProvider {
-    static var previews: some View {
-        MessageDetailView(fromUser: User(userId: "", firstName: "Sending", lastName: "User", email: "", isServiceProvider: false, listingIDs: []), toUser: User(userId: "", firstName: "Recipient", lastName: "User", email: "", isServiceProvider: false, listingIDs: []))
     }
 }
 
@@ -173,5 +150,11 @@ struct MessageBubble: View {
         .frame(maxWidth: .infinity, alignment: message.received ? .leading : .trailing)
         .padding(message.received ? .leading : .trailing)
         .padding(.horizontal, 10)
+    }
+}
+
+struct MessageDetailView_Previews: PreviewProvider {
+    static var previews: some View {
+        MessageDetailView(chatVM: ChatViewModel(fromUser: User(userId: "", firstName: "Sending", lastName: "User", email: "", isServiceProvider: false, listingIDs: []), toUser: User(userId: "", firstName: "Recipient", lastName: "User", email: "", isServiceProvider: false, listingIDs: [])))
     }
 }

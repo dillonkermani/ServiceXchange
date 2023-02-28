@@ -157,7 +157,7 @@ struct ListingDetailView : View {
         }
         .sheet(isPresented: $controls.sendMessagePressed) {
             if session.isLoggedIn {
-                MessageDetailView(fromUser: session.userSession!, toUser: listingVM.poster)
+                MessageDetailView(chatVM: ChatViewModel(fromUser: session.userSession!, toUser: listingVM.poster))
             } else {
                 LoginView()
             }
