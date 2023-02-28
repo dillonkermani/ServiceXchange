@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import Kingfisher
 import FirebaseStorage
 
 enum ActiveAlert {
@@ -17,6 +16,7 @@ struct listingDetailViewControls {
     var deleteClicked = false
     var showAlert = false
     var activeAlert: ActiveAlert = .reportListing
+    var savePressed = false
 
 }
 
@@ -58,17 +58,83 @@ struct ListingDetailView : View {
             ScrollView {
                 URLCarouselView(urls: listing.imageUrls)
                     .frame(maxHeight: 400)
-                Text(listing.title)
-                    .font(.system(size: 36)).bold()
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding()
+                HStack {
+                    Text(listing.title)
+                        .font(.system(size: 36)).bold()
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding()
+                    Spacer()
+                    Button {
+                        UIImpactFeedbackGenerator(style: .rigid).impactOccurred()
+                        controls.savePressed.toggle()
+                    } label: {
+                        Image(systemName: controls.savePressed ? "bookmark.fill" : "bookmark")
+                            .font(.system(size: 27))
+                            .foregroundColor(controls.savePressed ? .blue : .black)
+                    }.padding(.trailing, 30)
+
+                    
+                }
+                
 
                 PosterDataView()
-                Text(listing.description)
-                    .font(.system(size: 20))
-                    .padding()
+                    .padding(.bottom, 25)
+                
+                DetailsView()
+                
+                Spacer()
+                
+                ListingCategoriesView()
+                
+                
             }
-        }.gesture(DragGesture()
+        }.navigationBarBackButtonHidden(true)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        presentationMode.wrappedValue.dismiss()
+                    } label: {
+                        HStack {
+                            Image(systemName: "arrow.left")
+                                .font(.system(size: 17)).bold()
+                        }.foregroundColor(.black)
+                    }
+                }
+                
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Menu {
+                        NavigationLink(destination: MessagesView(), label: {
+                            Label("Send Message", systemImage: "paperplane")
+                        })
+                        Button(role: .none, action: {
+                            controls.activeAlert = .reportListing
+                            controls.showAlert.toggle()
+
+                        }, label: {
+                            Label("Report", systemImage: "flag.fill")
+                                .foregroundColor(.red)
+                        })
+                        if true {//session.userSession?.userId == listing.posterId { // If currently signed in user is the poster of the Listing
+                            Button(role: .none, action: {
+                                controls.activeAlert = .deleteListing
+                                controls.showAlert.toggle()
+                            }, label: {
+                                Label("Delete", systemImage: "trash")
+                                    .foregroundColor(.black)
+                            })
+
+                        }
+
+                    }
+                    label: {
+                        Image(systemName: "ellipsis")
+                            .font(.system(size: 20))
+                            .foregroundColor(.black)
+                            .padding()
+                    }
+                }
+            }
+            .gesture(DragGesture()
             .onEnded { value in
               let direction = self.detectDirection(value: value)
               if direction == .left {
@@ -106,6 +172,45 @@ struct ListingDetailView : View {
             }
         }
     }
+    
+    private func DetailsView() -> some View {
+        return VStack {
+            HStack {
+                Text("Details:")
+                    .font(.system(size: 18)).bold()
+                    .padding(.bottom, 1)
+                Spacer()
+            }
+            HStack {
+                Text(listing.description)
+                    .font(.system(size: 20))
+                Spacer()
+            }
+            
+            Spacer()
+        }.padding(25)
+    }
+    
+    private func ListingCategoriesView() -> some View {
+        return
+            VStack {
+                if listing.categories != nil {
+                    HStack {
+                        Text("Categories:")
+                            .font(.system(size: 17)).bold()
+                        Spacer()
+                    }
+                    HStack {
+                        ForEach(listing.categories ?? [], id: \.self) { category in
+                            FilterTag(filterData: CategoryCell(title: category, imageName: "square.grid.2x2", isSelected: true))
+                                
+                        }
+                        Spacer()
+                    }
+                }
+            }.padding(25)
+        
+    }
 
     enum SwipeHVDirection: String {
         case left, right, up, down, none
@@ -142,7 +247,9 @@ struct ListingDetailView : View {
                         .clipShape(Circle())
                     VStack(alignment: .leading) {
                         Text("\(listingVM.poster.firstName) \(listingVM.poster.lastName)")
-                            .padding(.horizontal, 0)
+                            .padding(.horizontal, 5)
+                            .foregroundColor(.black)
+                            .font(.system(size: 20))
                         RatingView(rating: rating)
                             .padding(.horizontal, 5)
                             .task {
@@ -156,45 +263,10 @@ struct ListingDetailView : View {
                 }
             }
             Spacer()
-            Menu {
-                NavigationLink(destination: MessagesView(), label: {
-                    Label("Send Message", systemImage: "envelope")
-                })
-                Button(role: .destructive, action: {
-                    controls.activeAlert = .reportListing
-                    controls.showAlert.toggle()
-
-                }, label: {
-                    Label("Report", systemImage: "flag.fill")
-                        .foregroundColor(Color.red)
-                })
-                if true {//session.userSession?.userId == listing.posterId { // If currently signed in user is the poster of the Listing
-                    Button(role: .destructive, action: {
-                        controls.activeAlert = .deleteListing
-                        controls.showAlert.toggle()
-                    }, label: {
-                        Label("Delete", systemImage: "trash")
-                            .foregroundColor(.black)
-                    })
-
-                }
-
-            }
-            label: {
-                VStack {
-                    ForEach(0..<3) { _ in
-                        Rectangle()
-                            .cornerRadius(.infinity)
-                            .frame(width: 5, height: 5)
-                            .foregroundColor(.black) //TODO: make a default text color, give this that color
-                    }
-                }
-                .padding()
-
-            }
+            
         }
         .frame(height: 50)
-        .padding(.horizontal, 20)
+        .padding(.horizontal, 25)
     }
 
 

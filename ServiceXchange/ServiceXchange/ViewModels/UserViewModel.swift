@@ -154,6 +154,24 @@ class UserViewModel: ObservableObject{
                 self.localProfileImageUrl = downloadURL.absoluteString
             }
              return
+        }//update function
+    }
+    
+    
+    /*
+    func addListing(posterId: String, onSuccess: @escaping(_ listing: Listing) -> Void, onError: @escaping(_ errorMessage: String) -> Void) {
+        
+        
+        
+        let listing = Listing(posterId: posterId, title: self.title, description: self.description, datePosted: Date().timeIntervalSince1970)
+        
+        guard let dict = try? listing.toDictionary() else { return }
+        
+        let listing_ref = Ref.FIRESTORE_COLLECTION_LISTINGS.addDocument(data: dict){ error in
+            if let error = error {
+                onError(error.localizedDescription)
+                return
+            }
         }
         */
     }//update function

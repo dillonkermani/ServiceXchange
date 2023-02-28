@@ -15,6 +15,26 @@ class HomeViewModel: ObservableObject {
     @Published var isLoading = false
     @Published var loadErrorMsg = ""
     var searchText: String = ""
+    var selectedCategories: [CategoryCell] = []
+    
+    func categoriesDidChange() {
+        var listings: [Listing] = []
+        
+        if selectedCategories.isEmpty {
+            return
+        } else {
+            for category in selectedCategories {
+                for listing in self.allListings {
+                    if listing.categories != nil {
+                        if listing.categories!.contains(category.title) {
+                            listings.append(listing)
+                        }
+                    }
+                }
+            }
+            self.listings = listings
+        }
+    }
     
     func searchTextDidChange() {
         if searchText.isEmpty {

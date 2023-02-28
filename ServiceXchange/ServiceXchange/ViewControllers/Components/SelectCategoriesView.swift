@@ -112,19 +112,7 @@ class FilterModel: NSObject, ObservableObject {
     // 1. normally you would get this data from a remote service, so factor that in if you use
     // this in your own projects. If this data is not static, consider making it @Published
     // so that any changes to it will get reflected by the UI
-    @Published var categories = [
-        CategoryCell(title: "Jobs", imageName: "suitcase.fill"),
-        CategoryCell(title: "Food", imageName: "fork.knife"),
-        CategoryCell(title: "Clothing", imageName: "tshirt"),
-        CategoryCell(title: "Electronics", imageName: "laptopcomputer.and.iphone"),
-        CategoryCell(title: "Education", imageName: "brain.head.profile"),
-        CategoryCell(title: "Entertainment", imageName: "ticket"),
-        CategoryCell(title: "Health", imageName: "heart"),
-        CategoryCell(title: "Automotive", imageName: "car"),
-        CategoryCell(title: "Home Decor", imageName: "house"),
-        CategoryCell(title: "Pet Services", imageName: "comb"),
-        CategoryCell(title: "Travel", imageName: "airplane.departure")
-    ]
+    @Published var categories = Constants.categoryList
     
     // 2. these are the FilterData that have been selected using the toggleFilter(at:)
     // function.
@@ -174,7 +162,7 @@ struct FilterTag: View {
                         
             VStack {
                 Image(systemName: filterData.imageName)
-                    .font(.system(size: 17)).bold()
+                    .font(.system(size: 23))
                     .padding(.bottom, 3)
                 Text(filterData.title)
                     .font(.system(size: 10)).bold()
