@@ -16,17 +16,15 @@ class MessageViewModel: ObservableObject {
     // Firebase Cloud Messaging API endpoint
     private let fcmURL = URL(string: "https://fcm.googleapis.com/fcm/send")!
     
-    @Published private(set) var messages: [Message] = [Message(id: "", text: "Mesage1", received: true, timestamp: Date()), Message(id: "", text: "Mesage2", received: false, timestamp: Date())]
-    @Published private(set) var lastMessageId: String = ""
-    
-    // Create an instance of our Firestore database
-    let db = Firestore.firestore()
-    
     // On initialize of the MessagesManager class, get the messages from Firestore
     init() {
         //getMessages()
     }
     
+    
+    
+    
+    /*
     // Add a message in Firestore
     func sendMessage(text: String, onSuccess: @escaping(_ message: Message) -> Void, onError: @escaping(_ errorMessage: String) -> Void) {
         do {
@@ -47,7 +45,6 @@ class MessageViewModel: ObservableObject {
             
         }
     }
-
     // Send a message to the specified FCM token
     func sendFCMMessage(to token: String, with message: String) {
         // Construct the FCM message
@@ -88,9 +85,6 @@ class MessageViewModel: ObservableObject {
 
         task.resume()
     }
-    
-    
-
     // Read message from Firestore in real-time with the addSnapShotListener
     func getMessages() {
         db.collection("messages").addSnapshotListener { querySnapshot, error in
@@ -125,6 +119,7 @@ class MessageViewModel: ObservableObject {
             }
         }
     }
+     */
     
     
 }

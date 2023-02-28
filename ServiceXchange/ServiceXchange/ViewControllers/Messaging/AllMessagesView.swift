@@ -91,7 +91,7 @@ struct MessagesView: View {
         ScrollView {
             ForEach(0..<10, id: \.self) { num in
                 VStack {
-                    NavigationLink(destination: MessageDetailView()) {
+                    NavigationLink(destination: EmptyView()) {
                         
                         HStack(spacing: 16) {
                             Image(systemName: "person.fill")

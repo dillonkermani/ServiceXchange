@@ -12,22 +12,23 @@ enum ActiveAlert {
     case reportListing, deleteListing
 }
 
-struct listingDetailViewControls {
+struct ListingDetailViewControls {
     var deleteClicked = false
     var showAlert = false
     var activeAlert: ActiveAlert = .reportListing
     var savePressed = false
-
+    var sendMessagePressed = false
 }
 
 struct ListingDetailView : View {
 
     @Environment(\.presentationMode) var presentationMode
+    @EnvironmentObject var session: SessionStore
 
     @State private var report_clicked = false
     @State var rating = 0.0
 
-    @State var controls = listingDetailViewControls()
+    @State var controls = ListingDetailViewControls()
 
     @ObservedObject var listingVM = ListingDetailViewModel()
 
@@ -61,6 +62,10 @@ struct ListingDetailView : View {
                     .padding(.bottom, 25)
                 
                 DetailsView()
+                
+                Spacer()
+                
+                SendMessageButton()
                 
                 Spacer()
                 
@@ -148,6 +153,13 @@ struct ListingDetailView : View {
         .onAppear {
             Task{
                 await listingVM.getListingPoster(posterId: listing.posterId)
+            }
+        }
+        .sheet(isPresented: $controls.sendMessagePressed) {
+            if session.isLoggedIn {
+                MessageDetailView(fromUser: session.userSession!, toUser: listingVM.poster)
+            } else {
+                LoginView()
             }
         }
     }
@@ -241,6 +253,29 @@ struct ListingDetailView : View {
         }
         .frame(height: 50)
         .padding(.horizontal, 25)
+    }
+    
+    private func SendMessageButton() -> some View {
+        Button {
+            controls.sendMessagePressed.toggle()
+        } label: {
+            HStack {
+                Spacer()
+                Text("+  New Message")
+                    .font(.system(size: 16, weight: .bold))
+                    .padding(15)
+                Spacer()
+            }
+            .background(CustomColor.sxcgreen)
+            .foregroundColor(.black)
+            .cornerRadius(17)
+            .overlay(
+                RoundedRectangle(cornerRadius: 17)
+                    .stroke(.black, lineWidth: 2)
+            )
+            .padding(15)
+        }
+        
     }
 
 

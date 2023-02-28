@@ -25,6 +25,12 @@ class Ref {
         return FIRESTORE_COLLECTION_LISTINGS.document(listingId)
     }
     
+    // Firestore - Chats
+    static var FIRESTORE_COLLECTION_CHATS = FIRESTORE_ROOT.collection("chats")
+    static func FIRESTORE_DOCUMENT_CHATID(chatId: String) -> DocumentReference {
+        return FIRESTORE_COLLECTION_CHATS.document(chatId)
+    }
+    
     // Firestore - Messages
     static var FIRESTORE_COLLECTION_MESSAGES = FIRESTORE_ROOT.collection("messages")
     static func FIRESTORE_DOCUMENT_MESSAGEID(messageId: String) -> DocumentReference {

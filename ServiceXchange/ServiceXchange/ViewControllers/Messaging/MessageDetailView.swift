@@ -9,10 +9,12 @@ import SwiftUI
 
 struct MessageDetailView: View {
     
-    @StateObject var messageVM = MessageViewModel()
+    @ObservedObject var chatVM = ChatViewModel()
     
-    //var sender: User
-    //var reciepient: User
+    
+    var fromUser: User
+    var toUser: User
+    
     
     var body: some View {
         VStack {
@@ -21,35 +23,73 @@ struct MessageDetailView: View {
                 
                 ScrollViewReader { proxy in
                     ScrollView {
+                        /*
                         ForEach(messageVM.messages, id: \.id) { message in
                             MessageBubble(message: message)
                         }
+                         */
                     }
                     .padding(.top, 10)
                     .background(.white)
+                    /*
                     .onChange(of: messageVM.lastMessageId) { id in
                         // When the lastMessageId changes, scroll to the bottom of the conversation
                         withAnimation {
                             proxy.scrollTo(id, anchor: .bottom)
                         }
                     }
+                     */
                 }
+                
             }
             .background(CustomColor.sxcgreen)
             
-            MessageField()
-                .environmentObject(messageVM)
+            MessageTextField(message: chatVM.message)
+
         }
     }
-}
-
-struct TitleRow: View {
-    var imageUrl = URL(string: "https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8")
-    var name = "Sarah Smith"
     
-    var body: some View {
+    private func MessageTextField(message: String) -> some View {
+        HStack {
+            // Custom text field created below
+            CustomTextField(placeholder: Text("Enter your message here"), text: $chatVM.message)
+                            .frame(height: 52)
+                            .disableAutocorrection(true)
+                            .background(Color.gray.opacity(0.5))
+                            .cornerRadius(35)
+
+            Button {
+                chatVM.createChat(fromUser: fromUser.userId, toUser: toUser.userId, onSuccess: {chat in // If users have never previously chatted: createChat
+                    print("Successfully created chat: \(chat). Now about to addMessage()")
+                    
+                    chatVM.addMessage(text: message, fromUser: fromUser.userId, toChat: chat.id, onSuccess: {message in
+                        print("Successfully added message: \(message)")
+                    }, onError: {error in
+                        print("Error adding message: \(error)")
+                    })
+                    
+                }, onError: {error in
+                    print("Error creating chat: \(error)")
+                })
+                chatVM.message = ""
+            } label: {
+                Image(systemName: "paperplane.fill")
+                    .foregroundColor(.white)
+                    .padding(10)
+                    .background(CustomColor.sxcgreen)
+                    .cornerRadius(50)
+            }
+        }
+        .padding(.horizontal)
+        .padding(.vertical, 10)
+        .background(.gray)
+        .cornerRadius(50)
+        .padding()
+    }
+    
+    private func TitleRow() -> some View {
         HStack(spacing: 20) {
-            AsyncImage(url: imageUrl) { image in
+            AsyncImage(url: URL(string: toUser.profileImageUrl ?? "")) { image in
                 image.resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(width: 50, height: 50)
@@ -59,7 +99,7 @@ struct TitleRow: View {
             }
             
             VStack(alignment: .leading) {
-                Text(name)
+                Text("\(toUser.firstName) \(toUser.lastName)")
                     .font(.title).bold()
                 
                 Text("Online")
@@ -78,43 +118,8 @@ struct TitleRow: View {
     }
 }
 
-struct MessageField: View {
-    @EnvironmentObject var messageVM: MessageViewModel
-    @State private var message = ""
 
-    var body: some View {
-        HStack {
-            // Custom text field created below
-            CustomTextField(placeholder: Text("Enter your message here"), text: $message)
-                            .frame(height: 52)
-                            .disableAutocorrection(true)
-                            .background(Color.gray.opacity(0.5))
-                            .cornerRadius(35)
 
-            Button {
-                messageVM.sendMessage(text: message) { message in
-                    print("Successfully sent message \(message.text)")
-                    
-                } onError: { error in
-                    print("Error sending message: \(error)")
-                }
-                message = ""
-            } label: {
-                Image(systemName: "paperplane.fill")
-                    .foregroundColor(.white)
-                    .padding(10)
-                    .background(CustomColor.sxcgreen)
-                    .cornerRadius(50)
-            }
-        }
-        .padding(.horizontal)
-        .padding(.vertical, 10)
-        .background(.gray)
-        .cornerRadius(50)
-        .padding()
-    }
-    
-}
 
 struct CustomTextField: View {
     var placeholder: Text
@@ -137,7 +142,7 @@ struct CustomTextField: View {
 
 struct MessageDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        MessageDetailView()
+        MessageDetailView(fromUser: User(userId: "", firstName: "Sending", lastName: "User", email: "", isServiceProvider: false, listingIDs: []), toUser: User(userId: "", firstName: "Recipient", lastName: "User", email: "", isServiceProvider: false, listingIDs: []))
     }
 }
 
