@@ -93,16 +93,16 @@ struct ProfileViewMultiTest: View {
                 //settingMenu3()
                 
                 
-                NavigationLink(destination: ProfileMakeMenuNav(), label: {Image(systemName: "gearshape.fill")
-                        .font(.system(size: 35,
-                                      weight: .regular,
-                                      design: .default))
-                        .foregroundColor(.black)
-                        .frame(width: 47, height: 47)
-                        .background(.white)
-                        .cornerRadius(40)
-                    
-                })
+//                NavigationLink(destination: ProfileMakeMenuNav(), label: {Image(systemName: "gearshape.fill")
+//                        .font(.system(size: 35,
+//                                      weight: .regular,
+//                                      design: .default))
+//                        .foregroundColor(.black)
+//                        .frame(width: 47, height: 47)
+//                        .background(.white)
+//                        .cornerRadius(40)
+//                    
+//                })
                 //
                 
                 
@@ -143,14 +143,25 @@ struct ProfileViewMultiTest: View {
             
             
             //let image1 = (user.descriptiveImageStr ?? "sunsetTest")
-           // while background == "none" {}
-            showDetailImage(image: userVM.localDescriptiveImageStr)
-                 .padding(.top, -390)
+            // while background == "none" {}
+            if userVM.localDescriptiveImageStr == "none"{
+                showDetailImage(image: "sunsetTest")
+                    .padding(.top, -390)
+            }
+            else{
+                showDetailImage(image: userVM.localDescriptiveImageStr)
+                    .padding(.top, -390)
+            }
             
-            //let image = (user.profileImageUrl ?? "blankprofile")
-            showProfileImage(image: userVM.localProfileImageUrl)
-                 .padding(.top, -205)
-            
+            if userVM.localProfileImageUrl == "none" {
+                showProfileImage(image: "blankprofile")
+                    .padding(.top, -205)
+            }
+            else {
+                //let image = (user.profileImageUrl ?? "blankprofile")
+                showProfileImage(image: userVM.localProfileImageUrl)
+                    .padding(.top, -205)
+            }
             
             if thisUserProfile {
                 settingMenu3()
@@ -204,8 +215,14 @@ struct ProfileViewMultiTest: View {
                     navigateTo = AnyView(EditProfileView())
                     self.isActive = true
                 }
-                Button("sign out"){ //we have implemented this go back and put it in
-                    print("not implemented")
+                Button("sign out"){ //works but maybe look into a warning "are you sure you want to sign out?"
+                    
+                    session.logout()
+                    //clear local user variables
+                    userVM.clearLocalUserVariables()
+                    
+                    navigateTo = AnyView(HomeView())
+                    self.isActive = true
                 }
                 Button("delete account"){
                     print("not implemented")
@@ -235,7 +252,13 @@ struct ProfileViewMultiTest: View {
                 //do we care if this is about to go away or something?
                 NavigationLink(destination: self.navigateTo , isActive: $isActive) {
                     EmptyView()
-                })
+                }
+                
+
+            )
+            
+            
+            
         }
     }
 

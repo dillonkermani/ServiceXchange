@@ -158,8 +158,8 @@ class UserViewModel: ObservableObject{
         */
     }//update function
     
-    
-    
+    //going forwords change all to user and try to make only one call 
+    //maybe in here check if both values are optional and only do a db call once
     private func updateImages2(imageData: Data, isProfile: Bool, userId : String){
         
         let user_ref = Ref.FIRESTORE_DOCUMENT_USERID(userId: userId)
