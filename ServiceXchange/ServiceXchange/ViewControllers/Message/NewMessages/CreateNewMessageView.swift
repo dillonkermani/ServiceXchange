@@ -78,11 +78,23 @@ struct CreateNewMessageView: View {
                                 .clipped()
                                 .cornerRadius(50)
                             } else {
-                                UrlImage(url: user.profileImageUrl)
-                                    .scaledToFill()
-                                    .frame(width: 50, height: 50)
-                                    .clipped()
-                                    .cornerRadius(50)
+                                AsyncImage(url: URL(string: user.profileImageUrl)) { phase in
+                                    if let image = phase.image {
+                                        image.resizable()
+//                                                .scaledToFit()
+//                                                .clipped()
+                                            .cornerRadius(50)
+                                            .frame(width: 50, height: 50)
+                                    } else if phase.error != nil {
+                                        Image(systemName: "person.fill")
+                                        .scaledToFill()
+                                        .frame(width: 50, height: 50)
+                                        .clipped()
+                                        .cornerRadius(50)
+                                    } else {
+                                        ProgressView()
+                                    }
+                                }
                             }
                             Text(user.firstName)
                                 .foregroundColor(Color(.label))
@@ -90,7 +102,7 @@ struct CreateNewMessageView: View {
                         }.padding(.horizontal)
                     }
                     Divider()
-                        .padding(.vertical, 4)
+                        .padding(.vertical, 2)
                 }
             }.navigationTitle("New Message")
                 .toolbar {

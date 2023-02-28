@@ -38,15 +38,27 @@ struct MessagesView: View {
     private func CustomNavBar() -> some View {
         HStack(spacing: 16) {
             
-            UrlImage(url: session.userSession?.profileImageUrl ?? "")
-                .scaledToFill()
-                .frame(width: 44, height: 44)
-                .clipped()
-                .cornerRadius(44)
-                .overlay(RoundedRectangle(cornerRadius: 44)
-                    .stroke(Color(.label), lineWidth: 1)
-                )
-                .shadow(radius: 5)
+            AsyncImage(url: URL(string: session.userSession?.profileImageUrl ?? "")) { phase in
+                if let image = phase.image {
+                    image.resizable()
+//                        .scaledToFill()
+//                        .clipped()
+                        .frame(width: 44, height: 44)
+                        .cornerRadius(44)
+                        .overlay(RoundedRectangle(cornerRadius: 44)
+                            .stroke(Color(.label), lineWidth: 1)
+                        )
+                        .shadow(radius: 5)
+                } else if phase.error != nil {
+                    Image(systemName: "person.fill")
+                    .scaledToFill()
+                    .frame(width: 50, height: 50)
+                    .clipped()
+                    .cornerRadius(50)
+                } else {
+                    ProgressView()
+                }
+            }
             
             VStack(alignment: .leading, spacing: 4) {
                 Text(session.userSession?.firstName ?? "")
