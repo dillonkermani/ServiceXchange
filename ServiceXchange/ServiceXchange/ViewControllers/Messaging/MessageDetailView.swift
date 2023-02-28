@@ -9,7 +9,7 @@ import SwiftUI
 
 struct MessageDetailView: View {
     
-    @ObservedObject var messageVM = MessageViewModel()
+    @StateObject var messageVM = MessageViewModel()
     
     //var sender: User
     //var reciepient: User
@@ -27,7 +27,6 @@ struct MessageDetailView: View {
                     }
                     .padding(.top, 10)
                     .background(.white)
-                    //.cornerRadius(30, corners: [.topLeft, .topRight]) // Custom cornerRadius modifier added in Extensions file
                     .onChange(of: messageVM.lastMessageId) { id in
                         // When the lastMessageId changes, scroll to the bottom of the conversation
                         withAnimation {
@@ -36,7 +35,7 @@ struct MessageDetailView: View {
                     }
                 }
             }
-            .background(Color("Peach"))
+            .background(CustomColor.sxcgreen)
             
             MessageField()
                 .environmentObject(messageVM)
@@ -86,24 +85,53 @@ struct MessageField: View {
     var body: some View {
         HStack {
             // Custom text field created below
-            underlinedTextField(title: "Enter Message here", text: $message, width: 310, height: 40, color: .black)
+            CustomTextField(placeholder: Text("Enter your message here"), text: $message)
+                            .frame(height: 52)
+                            .disableAutocorrection(true)
+                            .background(Color.gray.opacity(0.5))
+                            .cornerRadius(35)
 
             Button {
-                messageVM.sendMessage(text: message)
+                messageVM.sendMessage(text: message) { message in
+                    print("Successfully sent message \(message.text)")
+                    
+                } onError: { error in
+                    print("Error sending message: \(error)")
+                }
                 message = ""
             } label: {
                 Image(systemName: "paperplane.fill")
                     .foregroundColor(.white)
                     .padding(10)
-                    .background(Color("Peach"))
+                    .background(CustomColor.sxcgreen)
                     .cornerRadius(50)
             }
         }
         .padding(.horizontal)
         .padding(.vertical, 10)
-        .background(Color("Gray"))
+        .background(.gray)
         .cornerRadius(50)
         .padding()
+    }
+    
+}
+
+struct CustomTextField: View {
+    var placeholder: Text
+    @Binding var text: String
+    var editingChanged: (Bool)->() = { _ in }
+    var commit: ()->() = { }
+
+    var body: some View {
+        ZStack(alignment: .leading) {
+            // If text is empty, show the placeholder on top of the TextField
+            if text.isEmpty {
+                placeholder
+                .opacity(0.5)
+            }
+            TextField("", text: $text, onEditingChanged: editingChanged, onCommit: commit)
+            
+        }.padding()
     }
 }
 
@@ -122,7 +150,7 @@ struct MessageBubble: View {
             HStack {
                 Text(message.text)
                     .padding()
-                    .background(message.received ? Color("Gray") : Color("Peach"))
+                    .background(message.received ? .gray : CustomColor.sxcgreen)
                     .cornerRadius(30)
             }
             .frame(maxWidth: 300, alignment: message.received ? .leading : .trailing)

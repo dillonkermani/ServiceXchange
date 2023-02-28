@@ -16,7 +16,7 @@ class MessageViewModel: ObservableObject {
     // Firebase Cloud Messaging API endpoint
     private let fcmURL = URL(string: "https://fcm.googleapis.com/fcm/send")!
     
-    @Published private(set) var messages: [Message] = []
+    @Published private(set) var messages: [Message] = [Message(id: "", text: "Mesage1", received: true, timestamp: Date()), Message(id: "", text: "Mesage2", received: false, timestamp: Date())]
     @Published private(set) var lastMessageId: String = ""
     
     // Create an instance of our Firestore database
@@ -24,27 +24,32 @@ class MessageViewModel: ObservableObject {
     
     // On initialize of the MessagesManager class, get the messages from Firestore
     init() {
-        getMessages()
+        //getMessages()
     }
     
     // Add a message in Firestore
-    func sendMessage(text: String) {
+    func sendMessage(text: String, onSuccess: @escaping(_ message: Message) -> Void, onError: @escaping(_ errorMessage: String) -> Void) {
         do {
             // Create a new Message instance, with a unique ID, the text we passed, a received value set to false (since the user will always be the sender), and a timestamp
-            let newMessage = Message(id: "\(UUID())", text: text, received: false, timestamp: Date())
+            let message = Message(id: "\(UUID())", text: text, received: false, timestamp: Date())
             
-            // Create a new document in Firestore with the newMessage variable above, and use setData(from:) to convert the Message into Firestore data
-            // Note that setData(from:) is a function available only in FirebaseFirestoreSwift package - remember to import it at the top
-            //try db.collection("messages").document().setData(from: newMessage)
             
-        } catch {
-            // If we run into an error, print the error in the console
-            print("Error adding message to Firestore: \(error)")
+            guard let dict = try? message.toDictionary() else { return }
+            
+            //adding listing without the image to the firebase
+            let message_ref = Ref.FIRESTORE_COLLECTION_MESSAGES.addDocument(data: dict){ error in
+                if let error = error {
+                    onError(error.localizedDescription)
+                    return
+                }
+            }
+            onSuccess(message)
+            
         }
     }
 
     // Send a message to the specified FCM token
-    func sendMessage(to token: String, with message: String) {
+    func sendFCMMessage(to token: String, with message: String) {
         // Construct the FCM message
         let fcmMessage: [String: Any] = [
             "to": token,
