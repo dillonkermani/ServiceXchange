@@ -8,31 +8,18 @@
 import SwiftUI
 import Firebase
 
-struct ChatUser: Identifiable {
-    
-    var id: String { uid }
-    
-    let uid, firstName, email, profileImageUrl: String
-    
-    init(data: [String: Any]) {
-        self.uid = data["userId"] as? String ?? ""
-        self.email = data["email"] as? String ?? ""
-        self.firstName = data["firstName"] as? String ?? ""
-        self.profileImageUrl = data["profileImageUrl"] as? String ?? ""
-    }
-}
-
 class CreateNewMessageViewModel: ObservableObject {
     
     @Published var users = [ChatUser]()
     @Published var errorMessage = ""
+    @EnvironmentObject var session: SessionStore // Contains currently signed in user's info.
     
     init() {
         fetchAllUsers()
     }
     
     private func fetchAllUsers() {
-        Firestore.firestore().collection("users")
+        Ref.FIRESTORE_COLLECTION_USERS
             .getDocuments { documentsSnapshot, error in
                 if let error = error {
                     self.errorMessage = "Failed to fetch users: \(error)"
