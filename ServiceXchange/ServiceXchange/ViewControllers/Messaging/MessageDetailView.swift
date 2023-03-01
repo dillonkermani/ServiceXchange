@@ -20,22 +20,18 @@ struct MessageDetailView: View {
                 
                 ScrollViewReader { proxy in
                     ScrollView {
-                        /*
-                        ForEach(messageVM.messages, id: \.id) { message in
+                        ForEach(chatVM.messages, id: \.id) { message in
                             MessageBubble(message: message)
                         }
-                         */
                     }
                     .padding(.top, 10)
                     .background(.white)
-                    /*
-                    .onChange(of: messageVM.lastMessageId) { id in
+                    .onChange(of: chatVM.lastMessageId) { id in
                         // When the lastMessageId changes, scroll to the bottom of the conversation
                         withAnimation {
                             proxy.scrollTo(id, anchor: .bottom)
                         }
                     }
-                     */
                 }
                 
             }

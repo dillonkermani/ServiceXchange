@@ -9,6 +9,9 @@ import Foundation
 import Firebase
 
 class ChatViewModel: ObservableObject {
+    
+    @Published var messages: [Message] = []
+    @Published var lastMessageId: String = ""
         
     @Published var fromUser: User
     @Published var toUser: User
@@ -18,19 +21,29 @@ class ChatViewModel: ObservableObject {
         self.toUser = toUser
     }
     
-    
-    func sendMessage(message: String) {
+    func sendMessage(message: String, toChat: String? = nil) {
         
+        // If chat is specified.
+        if toChat != nil {
+            // TODO: add message to chat commonChats[0] and update most recently sent message.
+            
+            return
+        }
+        
+        // Else if chat isn't specified.
         // First check if users have messaged eachother before to decide if we need to craete a new chat or add to an existing one.
         if fromUser.chats != nil && toUser.chats != nil {
             let commonChats = fromUser.chats!.filter { toUser.chats!.contains($0) }
-            if commonChats.count > 0 {
-                print("Users have messaged eachother before.")
-                // TODO: Add message to existing chat and update most recently sent message
+            if commonChats.count == 1 {
+                print("\(fromUser.firstName) and \(toUser.firstName) have previously chatted in chat: \(commonChats[0])")
+                // TODO: Pull/display previous messages, then add message to chat commonChats[0] and update most recently sent message.
                 
+                                
+            } else {
+                print("sendMessage() Error: \(fromUser.firstName) and \(toUser.firstName) have \(commonChats.count) chats with eachother.")
             }
         } else {
-            print("users have never messages eachother before.")
+            print("\(fromUser.firstName) and \(toUser.firstName) have never messages eachother before.")
             // Create new chat and add message
             if fromUser.chats == nil || toUser.chats == nil { // One of the users has no chat conversations
                 // Create chat and add message
