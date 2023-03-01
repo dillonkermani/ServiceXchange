@@ -12,5 +12,5 @@ struct Message: Identifiable, Codable {
     var fromUser: String
     var text: String
     var received: Bool
-    var timestamp: Date
+    var timestamp: Double
 }

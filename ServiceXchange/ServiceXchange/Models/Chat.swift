@@ -9,8 +9,8 @@ import Foundation
 
 struct Chat: Identifiable, Codable {
     var id: String
-    var createdAt: Date
+    var createdAt: Double
     var createdBy: String
-    var lastUpdated: Date
+    var lastUpdated: Double
     var members: [String]
 }

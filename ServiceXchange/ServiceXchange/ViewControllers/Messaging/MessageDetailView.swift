@@ -9,7 +9,7 @@ import SwiftUI
 
 struct MessageDetailView: View {
     
-    var chatVM: ChatViewModel
+    @StateObject var chatVM: ChatViewModel
     
     @State var message = ""
     
@@ -34,11 +34,16 @@ struct MessageDetailView: View {
                     }
                 }
                 
+                 
+                
             }
             .background(CustomColor.sxcgreen)
             
             MessageTextField()
 
+        }
+        .onAppear {
+            chatVM.getMessages()
         }
     }
     
@@ -137,7 +142,7 @@ struct MessageBubble: View {
             }
             
             if showTime {
-                Text("\(message.timestamp.formatted(.dateTime.hour().minute()))")
+                Text("\(message.timestamp)")
                     .font(.caption2)
                     .foregroundColor(.gray)
                     .padding(message.received ? .leading : .trailing, 25)
