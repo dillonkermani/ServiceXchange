@@ -9,7 +9,7 @@ import SwiftUI
 
 struct MessageDetailView: View {
     
-    @StateObject var chatVM: ChatViewModel
+    @StateObject var messagesVM: MessagesViewModel
     
     @State var message = ""
     
@@ -20,13 +20,13 @@ struct MessageDetailView: View {
                 
                 ScrollViewReader { proxy in
                     ScrollView {
-                        ForEach(chatVM.messages, id: \.id) { message in
+                        ForEach(messagesVM.messages, id: \.id) { message in
                             MessageBubble(message: message)
                         }
                     }
                     .padding(.top, 10)
                     .background(.white)
-                    .onChange(of: chatVM.lastMessageId) { id in
+                    .onChange(of: messagesVM.lastMessageId) { id in
                         // When the lastMessageId changes, scroll to the bottom of the conversation
                         withAnimation {
                             proxy.scrollTo(id, anchor: .bottom)
@@ -43,7 +43,7 @@ struct MessageDetailView: View {
 
         }
         .onAppear {
-            chatVM.getMessages()
+            messagesVM.getMessages()
         }
     }
     
@@ -57,7 +57,7 @@ struct MessageDetailView: View {
                             .cornerRadius(35)
 
             Button {
-                chatVM.sendMessage(message: message)
+                messagesVM.sendMessage(message: message)
                 message = ""
             } label: {
                 Image(systemName: "paperplane.fill")
@@ -76,7 +76,7 @@ struct MessageDetailView: View {
     
     private func TitleRow() -> some View {
         HStack(spacing: 20) {
-            AsyncImage(url: URL(string: chatVM.toUser.profileImageUrl ?? "")) { image in
+            AsyncImage(url: URL(string: messagesVM.toUser.profileImageUrl ?? "")) { image in
                 image.resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(width: 50, height: 50)
@@ -86,7 +86,7 @@ struct MessageDetailView: View {
             }
             
             VStack(alignment: .leading) {
-                Text("\(chatVM.toUser.firstName) \(chatVM.toUser.lastName)")
+                Text("\(messagesVM.toUser.firstName) \(messagesVM.toUser.lastName)")
                     .font(.title).bold()
                 
                 Text("Online")
@@ -156,6 +156,6 @@ struct MessageBubble: View {
 
 struct MessageDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        MessageDetailView(chatVM: ChatViewModel(fromUser: User(userId: "", firstName: "Sending", lastName: "User", email: "", isServiceProvider: false, listingIDs: []), toUser: User(userId: "", firstName: "Recipient", lastName: "User", email: "", isServiceProvider: false, listingIDs: [])))
+        MessageDetailView(messagesVM: MessagesViewModel(fromUser: User(userId: "", firstName: "Sending", lastName: "User", email: "", isServiceProvider: false, listingIDs: []), toUser: User(userId: "", firstName: "Recipient", lastName: "User", email: "", isServiceProvider: false, listingIDs: [])))
     }
 }

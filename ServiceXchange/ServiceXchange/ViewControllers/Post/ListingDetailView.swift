@@ -108,7 +108,7 @@ struct ListingDetailView : View {
             }
             .sheet(isPresented: $controls.sendMessagePressed) {
                 if session.isLoggedIn {
-                    MessageDetailView(chatVM: ChatViewModel(fromUser: session.userSession!, toUser: listingVM.poster))
+                    MessageDetailView(messagesVM: MessagesViewModel(fromUser: session.userSession!, toUser: listingVM.poster))
                 } else {
                     LoginView()
                 }
@@ -135,7 +135,7 @@ struct ListingDetailView : View {
     
     private func ListingMenuButton() -> some View {
         Menu {
-            NavigationLink(destination: MessagesView(), label: {
+            NavigationLink(destination: ChatsView(), label: {
                 Label("Send Message", systemImage: "paperplane")
             })
             Button(role: .none, action: {

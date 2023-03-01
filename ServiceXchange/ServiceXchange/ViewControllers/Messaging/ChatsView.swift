@@ -1,5 +1,5 @@
 //
-//  MessagesView.swift
+//  ChatsView.swift
 //  ServiceXchange
 //
 //  Created by Dillon Kermani on 1/25/23.
@@ -20,22 +20,26 @@ struct MessagesControls {
 
 }
 
-struct MessagesView: View {
+struct ChatsView: View {
     
     @State var controls = MessagesControls()
     @EnvironmentObject var session: SessionStore // Contains currently signed in user's info.
-
     
+    @ObservedObject var chatVM = ChatViewModel()
+
     var body: some View {
         NavigationView {
             
             VStack {
                 CustomNavBar()
-                MessagesList()
+                AllChatsList()
             }
             .overlay(
                 newMessageButton(), alignment: .bottom)
             .navigationBarHidden(true)
+        }
+        .onAppear {
+            chatVM.loadChatData(forUser: session.userSession!)
         }
     }
     
@@ -82,30 +86,32 @@ struct MessagesView: View {
                 .destructive(Text("Sign Out"), action: {
                     print("handle sign out")
                 }),
-                    .cancel()
+                .cancel()
             ])
         }
     }
     
-    private func MessagesList() -> some View {
+    private func AllChatsList() -> some View {
         ScrollView {
-            ForEach(0..<10, id: \.self) { num in
+            ForEach(chatVM.users, id: \.self) { user in
                 VStack {
-                    NavigationLink(destination: EmptyView()) {
+                    NavigationLink(destination: MessageDetailView(messagesVM: MessagesViewModel(fromUser: session.userSession!, toUser: user))) {
                         
                         HStack(spacing: 16) {
-                            Image(systemName: "person.fill")
-                                .font(.system(size: 32))
-                                .padding(8)
-                                .overlay(RoundedRectangle(cornerRadius: 44)
-                                    .stroke(Color(.label), lineWidth: 1)
-                                )
+                            AsyncImage(url: URL(string: user.profileImageUrl ?? "")) { image in
+                                image.resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: 50, height: 50)
+                                    .cornerRadius(50)
+                            } placeholder: {
+                                ProgressView()
+                            }
                             
                             
                             VStack(alignment: .leading) {
-                                Text("Username")
+                                Text("\(user.firstName) \(user.lastName)")
                                     .font(.system(size: 16, weight: .bold))
-                                Text("Message sent to user")
+                                Text("Most recent message")
                                     .font(.system(size: 14))
                                     .foregroundColor(Color(.lightGray))
                             }
@@ -153,8 +159,8 @@ struct MessagesView: View {
     }
 }
 
-struct MessagesView_Previews: PreviewProvider {
+struct ChatsView_Previews: PreviewProvider {
     static var previews: some View {
-        MessagesView()
+        ChatsView()
     }
 }
