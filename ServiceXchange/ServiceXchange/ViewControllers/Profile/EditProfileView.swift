@@ -28,15 +28,9 @@ struct CreateDescriptiveControls {
     var alertMessage = ""
 }
 
-//TODO have editing view look like the what the profile view will look like --doing
-//TODO make imagepicker for the descriptive image
-//TODO alter the userVM load data so that it includes the descriptive image
 
 
 struct EditProfileView: View {
-    
-    @EnvironmentObject var session: SessionStore
-    //@ObservedObject var userVM : UserViewModel
     
     @EnvironmentObject var userVM: UserViewModel
     
@@ -76,21 +70,18 @@ struct EditProfileView: View {
                 ZStack{
                     
                     addDescriptiveImage()
-                        .padding(.top, -430)
+                        .padding(.top, -400)
                     
                     //add the profile image button thing
                     addProfilePhoto()
-                        .padding(.top, -200)
-                }
+                        .padding(.top, -154)
+                }//Zstack
                 
                 
-                underlinedTextField(title: "company name: " + companyNameTitle, text: $username, width: 310, height: 20, color: .black)
+      
+                textEditFields()
                     .padding(.top, -200)
-                underlinedTextField(title: "location Served: " + locationServeTitle, text: $locationServe, width: 310, height: 40, color: .black)
-                    .padding(.top, -140)
-                underlinedTextField(title: "short bio: " + shortBioTitle, text: $shortBio, width: 310, height: 40, color: .black)
-                    .padding(.top, -70)
-                
+                    .padding(.bottom, 60)
                 
                 NavigationLink(destination: ProfileViewMultiTest(user: $userToPass, thisUser: $thisUser), label: {
                     Text("Save Changes")
@@ -100,11 +91,11 @@ struct EditProfileView: View {
                         .background(Color.white)
                         .cornerRadius(40)
                         .foregroundColor(.black)
-                        .padding(10)
+                        .padding(0)
                         .overlay(
                             RoundedRectangle(cornerRadius: 40)
                                 .stroke(Color.black, lineWidth: 3)
-                                .frame(width: 250, height: 50)
+                                .frame(width: 250, height: 70)
                         )
                 }).simultaneousGesture(TapGesture().onEnded{
                     let userId = userVM.localUserId
@@ -114,6 +105,7 @@ struct EditProfileView: View {
                     })
                     //print("hello")
                 })
+                .padding(.bottom, 30)
                 
                 
 
@@ -135,9 +127,24 @@ struct EditProfileView: View {
                 
                 
             }.toolbar(.hidden)
+        
+        
+
+        
+        } //view structure
+    
+    
+    
+    func textEditFields() -> some View {
+        return VStack {
+            underlinedTextField(title: "company name: " + companyNameTitle, text: $username, width: 310, height: 20, color: .black)
+                //.padding(.top, -270)
+            underlinedTextField(title: "location Served: " + locationServeTitle, text: $locationServe, width: 310, height: 40, color: .black)
+                //.padding(.top, -220)
+            underlinedTextField(title: "short bio: " + shortBioTitle, text: $shortBio, width: 310, height: 40, color: .black)
+                //.padding(.top, -150)
         }
-    
-    
+    }//textFields function
     
 
     
@@ -180,7 +187,7 @@ struct EditProfileView: View {
                                                  .frame(width: 400.0, height: 250.0, alignment: .top)
                                                  .clipShape(Rectangle())
                                          } placeholder: {
-                                             ShimmerPlaceholderView(width: 400, height: 250, cornerRadius: 0, animating: true)
+                                             ShimmerPlaceholderView(width: 400, height: 250, cornerRadius: 0, animating: false)
                                          }
                                          
                                          //UrlImage(url: userVM.localDescriptiveImageStr)
@@ -279,16 +286,9 @@ struct EditProfileView: View {
                                                 .frame(width: 125.0, height: 125.0, alignment: .center)
                                                 .clipShape(Circle())
                                         } placeholder: {
-                                            ShimmerPlaceholderView(width: 125, height: 125, cornerRadius: 125, animating: true)
+                                            ShimmerPlaceholderView(width: 125, height: 125, cornerRadius: 125, animating: false)
                                         }
                                         
-                                        
-                                        //AsyncImage(
-                                        //KFImage(URL(string: userVM.localProfileImageUrl))
-//                                            .resizable()
-//                                            .aspectRatio(contentMode: .fill)
-//                                            .frame(width: 125.0, height: 125.0, alignment: .center)
-//                                            .clipShape(Circle())
                                     }//ZStack
                                 }
                                 
@@ -319,11 +319,24 @@ struct EditProfileView: View {
     
 }
 
-//struct EditProfileView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        EditProfileView()
-//    }
-//}
+struct EditProfileView_Previews: PreviewProvider {
+    static var previews: some View {
+        
+//        var userToPass : User = User(
+//            userId: "",
+//            firstName: "",
+//            lastName: "",
+//            email: "",
+//            isServiceProvider: false,
+//            listingIDs: []
+//        )
+        
+       // @EnvironmentObject var userVM = UserViewModel()
+        
+        EditProfileView()
+            .environmentObject(UserViewModel())
+    }
+}
 
 
 
