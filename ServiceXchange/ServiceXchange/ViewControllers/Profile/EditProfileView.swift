@@ -175,7 +175,7 @@ struct EditProfileView: View {
                                          
                                          AsyncImage(url: URL(string:  userVM.localDescriptiveImageStr)) { image in
                                              image
-                                             //.resizable()
+                                                 .resizable()
                                                  .aspectRatio(contentMode: .fill)
                                                  .frame(width: 400.0, height: 250.0, alignment: .top)
                                                  .clipShape(Rectangle())
