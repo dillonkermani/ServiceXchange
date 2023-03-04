@@ -30,6 +30,10 @@ class MessagesViewModel: ObservableObject {
             // (Assumes that getMessages() has already been called.)
             self.addMessage(text: message, fromUser: self.fromUser.userId, toChat: toChat!, onSuccess: {message in
                 print("Successfully added message: \(message)")
+                // Add chatId to fromUser's array of chats.
+                Ref.FIRESTORE_COLLECTION_CHATS.document(toChat!).updateData([
+                    "lastUpdated": Date().timeIntervalSince1970
+                ])
             }, onError: {error in
                 print("Error adding message: \(error)")
             })
@@ -77,6 +81,8 @@ class MessagesViewModel: ObservableObject {
             }
         }
         
+        
+        
     }
     
     func getMessages(fromChat: String? = nil) {
@@ -104,7 +110,7 @@ class MessagesViewModel: ObservableObject {
         }
         
         if chatId != nil {
-            Ref.FIRESTORE_COLLECTION_MESSAGES.document(chatId!).collection("messages").order(by: "timestamp", descending: true).addSnapshotListener { querySnapshot, error in
+            Ref.FIRESTORE_COLLECTION_MESSAGES.document(chatId!).collection("messages").order(by: "timestamp", descending: false).addSnapshotListener { querySnapshot, error in
                 
                 // If we don't have documents, exit the function
                 guard let documents = querySnapshot?.documents else {

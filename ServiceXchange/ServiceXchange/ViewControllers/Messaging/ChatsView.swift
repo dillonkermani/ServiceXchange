@@ -32,14 +32,26 @@ struct ChatsView: View {
             
             VStack {
                 CustomNavBar()
-                AllChatsList()
+                if session.userSession!.chats != nil {
+                    if !session.userSession!.chats!.isEmpty {
+                        AllChatsList()
+                    }
+                } else {
+                    Spacer()
+                    Text("No Chats")
+                    Spacer()
+                }
+                
             }
-            .overlay(
-                newMessageButton(), alignment: .bottom)
             .navigationBarHidden(true)
         }
         .onAppear {
-            chatVM.loadChatData(forUser: session.userSession!)
+            // Check if user has any chats before trying to load chat data.
+            if session.userSession!.chats != nil {
+                if !session.userSession!.chats!.isEmpty {
+                    chatVM.loadChatData(forUser: session.userSession!)
+                }
+            }
         }
     }
     
@@ -98,16 +110,16 @@ struct ChatsView: View {
                     NavigationLink(destination: MessageDetailView(messagesVM: MessagesViewModel(fromUser: session.userSession!, toUser: user))) {
                         
                         HStack(spacing: 16) {
-                            AsyncImage(url: URL(string: user.profileImageUrl ?? "")) { image in
-                                image.resizable()
-                                    .aspectRatio(contentMode: .fill)
-                                    .frame(width: 50, height: 50)
-                                    .cornerRadius(50)
-                            } placeholder: {
-                                ProgressView()
-                            }
-                            
-                            
+                            UrlImage(url: user.profileImageUrl ?? "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png")
+                                .scaledToFill()
+                                .frame(width: 44, height: 44)
+                                .clipped()
+                                .cornerRadius(44)
+                                .overlay(RoundedRectangle(cornerRadius: 44)
+                                    .stroke(Color(.label), lineWidth: 1)
+                                )
+                                .shadow(radius: 5)
+                                        
                             VStack(alignment: .leading) {
                                 Text("\(user.firstName) \(user.lastName)")
                                     .font(.system(size: 16, weight: .bold))

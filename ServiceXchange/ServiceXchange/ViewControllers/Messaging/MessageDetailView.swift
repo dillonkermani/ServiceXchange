@@ -8,53 +8,82 @@
 import SwiftUI
 
 struct MessageDetailView: View {
-    
+    @Environment(\.presentationMode) var presentationMode
+
     @StateObject var messagesVM: MessagesViewModel
     
     @State var message = ""
     
     var body: some View {
         VStack {
-            VStack {
-                TitleRow()
-                
-                ScrollViewReader { proxy in
-                    ScrollView {
-                        ForEach(messagesVM.messages, id: \.id) { message in
-                            MessageBubble(message: message)
-                        }
-                    }
-                    .padding(.top, 10)
-                    .background(.white)
-                    .onChange(of: messagesVM.lastMessageId) { id in
-                        // When the lastMessageId changes, scroll to the bottom of the conversation
-                        withAnimation {
-                            proxy.scrollTo(id, anchor: .bottom)
-                        }
-                    }
-                }
-                
-                 
-                
-            }
-            .background(CustomColor.sxcgreen)
             
+            TitleRow()
+                .background(CustomColor.sxcgreen)
+            
+            VStack {
+                if !messagesVM.messages.isEmpty {
+                    ScrollViewReader { proxy in
+                        VStack {
+                            ScrollView {
+                                ForEach(messagesVM.messages, id: \.id) { message in
+                                    MessageBubble(message: message)
+                                }
+                            }
+                        }.padding(10)
+                        .background(.white)
+                        .cornerRadius(30, corners: [.topLeft, .topRight]) // Custom cornerRadius modifier added in Extensions file
+                        .onChange(of: messagesVM.lastMessageId) { id in
+                            // When the lastMessageId changes, scroll to the bottom of the conversation
+                            withAnimation {
+                                proxy.scrollTo(id, anchor: .bottom)
+                            }
+                        }
+                    }
+                } else {
+                        Spacer()
+                        Text("No message history")
+                        Spacer()
+                }
+            }.background(messagesVM.messages.isEmpty ? .white : CustomColor.sxcgreen)
+                .offset(y: messagesVM.messages.isEmpty ? 0 : -10)
+
             MessageTextField()
 
         }
         .onAppear {
             messagesVM.getMessages()
         }
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                HStack {
+                    Button {
+                        presentationMode.wrappedValue.dismiss()
+                    } label: {
+                        HStack {
+                            Image(systemName: "arrow.left")
+                                .font(.system(size: 17)).bold()
+                        }.foregroundColor(.black)
+                    }
+                    
+                }
+            }
+        }
+        .gesture(DragGesture()
+            .onEnded { value in
+                let direction = detectDirection(value: value)
+                if direction == .left {
+                    presentationMode.wrappedValue.dismiss()
+                }
+            }
+        )
     }
     
     func MessageTextField() -> some View {
         HStack {
             // Custom text field created below
             CustomTextField(placeholder: Text("Enter your message here"), text: $message)
-                            .frame(height: 52)
-                            .disableAutocorrection(true)
-                            .background(Color.gray.opacity(0.5))
-                            .cornerRadius(35)
+                
 
             Button {
                 messagesVM.sendMessage(message: message)
@@ -64,26 +93,30 @@ struct MessageDetailView: View {
                     .foregroundColor(.white)
                     .padding(10)
                     .background(CustomColor.sxcgreen)
-                    .cornerRadius(50)
+                    .cornerRadius(30)
+                    .padding(.trailing, 15)
+                    
             }
         }
-        .padding(.horizontal)
-        .padding(.vertical, 10)
-        .background(.gray)
-        .cornerRadius(50)
-        .padding()
+        .background(Color.white)
+        .overlay(
+            RoundedRectangle(cornerRadius: 30)
+                .stroke(message.isEmpty ? .black : CustomColor.sxcgreen, lineWidth: 2)
+        )
+        .padding(15)
     }
     
     private func TitleRow() -> some View {
         HStack(spacing: 20) {
-            AsyncImage(url: URL(string: messagesVM.toUser.profileImageUrl ?? "")) { image in
-                image.resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 50, height: 50)
-                    .cornerRadius(50)
-            } placeholder: {
-                ProgressView()
-            }
+            UrlImage(url: messagesVM.toUser.profileImageUrl ?? "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png")
+                .scaledToFill()
+                .frame(width: 44, height: 44)
+                .clipped()
+                .cornerRadius(44)
+                .overlay(RoundedRectangle(cornerRadius: 44)
+                    .stroke(Color(.label), lineWidth: 1)
+                )
+                .shadow(radius: 5)
             
             VStack(alignment: .leading) {
                 Text("\(messagesVM.toUser.firstName) \(messagesVM.toUser.lastName)")
@@ -95,11 +128,6 @@ struct MessageDetailView: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             
-            Image(systemName: "phone.fill")
-                .foregroundColor(.gray)
-                .padding(10)
-                .background(.white)
-                .cornerRadius(50)
         }
         .padding()
     }
@@ -157,5 +185,23 @@ struct MessageBubble: View {
 struct MessageDetailView_Previews: PreviewProvider {
     static var previews: some View {
         MessageDetailView(messagesVM: MessagesViewModel(fromUser: User(userId: "", firstName: "Sending", lastName: "User", email: "", isServiceProvider: false, listingIDs: []), toUser: User(userId: "", firstName: "Recipient", lastName: "User", email: "", isServiceProvider: false, listingIDs: [])))
+    }
+}
+
+// Extension for adding rounded corners to specific corners
+extension View {
+    func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
+        clipShape(RoundedCorner(radius: radius, corners: corners) )
+    }
+}
+
+// Custom RoundedCorner shape used for cornerRadius extension above
+struct RoundedCorner: Shape {
+    var radius: CGFloat = .infinity
+    var corners: UIRectCorner = .allCorners
+
+    func path(in rect: CGRect) -> Path {
+        let path = UIBezierPath(roundedRect: rect, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
+        return Path(path.cgPath)
     }
 }

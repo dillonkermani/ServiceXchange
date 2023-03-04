@@ -76,7 +76,7 @@ struct ListingDetailView : View {
             }
             .gesture(DragGesture()
                 .onEnded { value in
-                    let direction = self.detectDirection(value: value)
+                    let direction = detectDirection(value: value)
                     if direction == .left {
                         presentationMode.wrappedValue.dismiss()
                     }
@@ -203,24 +203,7 @@ struct ListingDetailView : View {
         
     }
 
-    enum SwipeHVDirection: String {
-        case left, right, up, down, none
-    }
-    private func detectDirection(value: DragGesture.Value) -> SwipeHVDirection {
-        if value.startLocation.x < value.location.x - 24 {
-                return .left
-              }
-              if value.startLocation.x > value.location.x + 24 {
-                return .right
-              }
-              if value.startLocation.y < value.location.y - 24 {
-                return .down
-              }
-              if value.startLocation.y > value.location.y + 24 {
-                return .up
-              }
-        return .none
-    }
+    
 
     func PosterDataView() -> some View {
 
