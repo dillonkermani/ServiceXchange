@@ -9,6 +9,7 @@ import SwiftUI
 
 struct MessageDetailView: View {
     @Environment(\.presentationMode) var presentationMode
+    @EnvironmentObject var session: SessionStore
 
     @StateObject var messagesVM: MessagesViewModel
     
@@ -52,6 +53,9 @@ struct MessageDetailView: View {
         }
         .onAppear {
             messagesVM.getMessages()
+        }
+        .onDisappear {
+            session.refreshUserSession()
         }
         .navigationBarBackButtonHidden(true)
         .toolbar {
@@ -154,18 +158,20 @@ struct CustomTextField: View {
 }
 
 struct MessageBubble: View {
+    @EnvironmentObject var session: SessionStore
+
     var message: Message
     @State private var showTime = false
     
     var body: some View {
-        VStack(alignment: message.received ? .leading : .trailing) {
+        VStack(alignment: message.fromUser != session.userSession?.userId ? .leading : .trailing) {
             HStack {
                 Text(message.text)
                     .padding()
-                    .background(message.received ? .gray : CustomColor.sxcgreen)
-                    .cornerRadius(30)
+                    .background(message.fromUser != session.userSession?.userId ? .gray.opacity(0.3) : CustomColor.sxcgreen)
+                    .cornerRadius(25)
             }
-            .frame(maxWidth: 300, alignment: message.received ? .leading : .trailing)
+            .frame(maxWidth: 300, alignment: message.fromUser != session.userSession?.userId ? .leading : .trailing)
             .onTapGesture {
                 showTime.toggle()
             }
@@ -174,12 +180,11 @@ struct MessageBubble: View {
                 Text("\(message.timestamp)")
                     .font(.caption2)
                     .foregroundColor(.gray)
-                    .padding(message.received ? .leading : .trailing, 25)
+                    .padding(message.fromUser != session.userSession?.userId ? .leading : .trailing, 10)
             }
         }
-        .frame(maxWidth: .infinity, alignment: message.received ? .leading : .trailing)
-        .padding(message.received ? .leading : .trailing)
-        .padding(.horizontal, 10)
+        .frame(maxWidth: .infinity, alignment: message.fromUser != session.userSession?.userId ? .leading : .trailing)
+        .padding(message.fromUser != session.userSession?.userId ? .leading : .trailing)
     }
 }
 
