@@ -222,6 +222,9 @@ class UserViewModel: ObservableObject{
         
     }
     
+
+    
+    
     //need to reauth before we can delete a user --- ask dillon How I should go about doing this (mainly how to prompt)
 //    func reAuthUser(){
 //        let user = Auth.auth().currentUser
@@ -238,6 +241,8 @@ class UserViewModel: ObservableObject{
 //          }
 //        }
 //    }
+    
+    
     
 //    private func updateImages3(imageProfileData: Data, imageBackgroundData: Data, userId : String){
 //

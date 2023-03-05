@@ -51,7 +51,8 @@ struct ProfileViewMultiTest: View {
     
     @State var navigateTo: AnyView?
      @State private var isActive = false
-
+    
+    @State var showSignIn: Bool = false
     
     var body: some View {
         
@@ -109,26 +110,14 @@ struct ProfileViewMultiTest: View {
         else {
             VStack {
                 
+                //sends user to sign in fields if they delete account
+                NavigationLink(destination: ProfileViewTest(), isActive: self.$showSignIn) { EmptyView() }
+                
+                
                 imageOverlayTopMine(thisUserProfile: thisUser, user: user)
                 
-                //Text( name )
-                //let _ = print("name in testView: ", name )
-                //settingMenu3()
                 
-                
-//                NavigationLink(destination: ProfileMakeMenuNav(), label: {Image(systemName: "gearshape.fill")
-//                        .font(.system(size: 35,
-//                                      weight: .regular,
-//                                      design: .default))
-//                        .foregroundColor(.black)
-//                        .frame(width: 47, height: 47)
-//                        .background(.white)
-//                        .cornerRadius(40)
-//                    
-//                })
-                //
-                
-                
+
             }.onAppear {
                 
                 //initailize the local user variables if you have not already
@@ -162,16 +151,22 @@ struct ProfileViewMultiTest: View {
                         return Alert(title: Text("Delete Profile?"), message: Text("Warning: This action cannot be undone."), primaryButton: .destructive(Text("Delete")) {
 
                             //listingVM.deleteListing(listing: listing)
-                            presentationMode.wrappedValue.dismiss()
+                            //presentationMode.wrappedValue.dismiss()
                             let _ = print("the delete profile was pressed")
 
                             
                             //need to delete user and have them sign out ---> go to home page signed out
-                            session.logout()
+                            //session.logout()
                             //clear local user variables
-                            userVM.clearLocalUserVariables()
-                            signinFields()  //this just got skipped have to make some kind of link
-                            userVM.deleteUser()
+                            //userVM.clearLocalUserVariables()
+                            //signinFields()  //this just got skipped have to make some kind of link
+    
+                            //lets make a navigation link -> go to my own sign in view -> sign out or maybe not
+                            
+                            
+                            showSignIn = true
+                            
+                            //userVM.deleteUser()
                             
                             
 

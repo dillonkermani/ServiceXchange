@@ -12,6 +12,8 @@ import SwiftUI
 
 struct ProfileViewTest: View {
     
+    @ObservedObject var loginVM = LoginViewModel()
+    
     @State var thisUserProfile = false
    // var user: User
     
@@ -20,11 +22,44 @@ struct ProfileViewTest: View {
         
         VStack {
             
-            imageOverlayTop(thisUserProfile: thisUserProfile)
-            
+            //imageOverlayTop(thisUserProfile: thisUserProfile)
+            signInFields()
 
         }
     }
+    
+    
+    private func signInFields() -> some View {
+        return ZStack {
+            VStack {
+                HStack {
+                    Text("Sign In")
+                        .font(.largeTitle)
+                        .padding([.top, .bottom], 75)
+                }
+                underlinedTextField(title: "Email", text: $loginVM.email, width: 310, height: 40, color: loginVM.email.isEmpty ? .black : CustomColor.sxcgreen)
+                    .keyboardType(.emailAddress)
+                passwordTextField(title: "Password", text: $loginVM.password, width: 310, height: 40, color: loginVM.password.isEmpty ? .black : CustomColor.sxcgreen)
+                    .padding(.bottom, 40)
+                
+                Button {
+                    print("Forgot Password Pressed")
+                } label: {
+                    Text("Forgot Username or Password?")
+                        .font(.system(size: 17))
+                        .foregroundColor(.black)
+                        .underline()
+                }
+
+                
+                Spacer()
+                
+            }
+            
+        }
+    } //
+    
+    
     
     
     //returns the detail image bahind profile and either setting or message icon
