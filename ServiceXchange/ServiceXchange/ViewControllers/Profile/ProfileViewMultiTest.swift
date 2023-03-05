@@ -10,12 +10,27 @@
 //my todo ---> make loading image while images change --> maybe a state variable ---> clean up my code
 
 import SwiftUI
+import FirebaseAuth
 
+enum ActiveAlert2 {
+    case deleteProfile
+}
+
+struct ProfileViewMultiTestControls {
+    var deleteClicked = false
+    var showAlert = false
+    var activeAlert2: ActiveAlert2 = .deleteProfile
+    var savePressed = false
+
+}
 
 struct ProfileViewMultiTest: View {
     
     @EnvironmentObject var session: SessionStore
     @EnvironmentObject var userVM: UserViewModel
+    
+    
+    @State var controls = ProfileViewMultiTestControls()
     
     @Binding var user: User
     @Binding var thisUser: Bool
@@ -50,8 +65,8 @@ struct ProfileViewMultiTest: View {
             if !userVM.loadingData {
                 imageOverlayTop(thisUserProfile: thisUser, user: user)
             }
-            let _ = print("profile image is (user) : ", user.profileImageUrl)
-            let _ = print("profile image is (userVM.skUser)", userVM.skUser.profileImageUrl)
+            //let _ = print("profile image is (user) : ", user.profileImageUrl)
+            //let _ = print("profile image is (userVM.skUser)", userVM.skUser.profileImageUrl)
             
         }.onAppear {
             
@@ -139,6 +154,31 @@ struct ProfileViewMultiTest: View {
                 }
                 
             }.toolbar(.hidden)
+            
+            
+                .alert(isPresented: $controls.showAlert) {
+                    
+                    //case .deleteProfile:
+                        return Alert(title: Text("Delete Profile?"), message: Text("Warning: This action cannot be undone."), primaryButton: .destructive(Text("Delete")) {
+
+                            //listingVM.deleteListing(listing: listing)
+                            presentationMode.wrappedValue.dismiss()
+                            let _ = print("the delete profile was pressed")
+
+                            
+                            //need to delete user and have them sign out ---> go to home page signed out
+                            session.logout()
+                            //clear local user variables
+                            userVM.clearLocalUserVariables()
+                            signinFields()  //this just got skipped have to make some kind of link
+                            userVM.deleteUser()
+                            
+                            
+
+                        }, secondaryButton: .cancel())
+                    
+                }//.alert
+            
         }
         
         
@@ -154,21 +194,21 @@ struct ProfileViewMultiTest: View {
             // while background == "none" {}
             if userVM.localDescriptiveImageStr == "none"{
                 showDetailImage(imageStr: "sunsetTest")
-                    .padding(.top, -390)
+                    .padding(.top, -410)
             }
             else{
                 showDetailImage(imageStr: userVM.localDescriptiveImageStr)
-                    .padding(.top, -390)
+                    .padding(.top, -410)
             }
             
             if userVM.localProfileImageUrl == "none" {
                 showProfileImage(imageStr: "blankprofile")
-                    .padding(.top, -205)
+                    .padding(.top, -215)
             }
             else {
                 //let image = (user.profileImageUrl ?? "blankprofile")
                 showProfileImage(imageStr: userVM.localProfileImageUrl)
-                    .padding(.top, -205)
+                    .padding(.top, -215)
             }
             
             if thisUserProfile {
@@ -232,9 +272,17 @@ struct ProfileViewMultiTest: View {
                     navigateTo = AnyView(HomeView())
                     self.isActive = true
                 }
-                Button("delete account"){
-                    print("not implemented")
-                }
+                
+                
+                Button(role: .none, action: {
+                    controls.activeAlert2 = .deleteProfile
+                    controls.showAlert.toggle()
+                }, label: {
+                    Label("Delete Profile", systemImage: "trash")
+                        .foregroundColor(.black)
+                })
+                
+                
                 Button("History"){
                     print("not implemented")
                 }
@@ -352,6 +400,43 @@ func showDetailImage(imageStr : String) -> some View {
 }//showDetailImage
 
 
+
+
+
+
+//ask about Dilon putting this in its own view?
+func signinFields() -> some View {
+    
+    @ObservedObject var loginVM = LoginViewModel()
+    
+    return ZStack {
+        VStack {
+            HStack {
+                Text("Sign In")
+                    .font(.largeTitle)
+                    .padding([.top, .bottom], 75)
+            }
+            underlinedTextField(title: "Email", text: $loginVM.email, width: 310, height: 40, color: loginVM.email.isEmpty ? .black : CustomColor.sxcgreen)
+                .keyboardType(.emailAddress)
+            passwordTextField(title: "Password", text: $loginVM.password, width: 310, height: 40, color: loginVM.password.isEmpty ? .black : CustomColor.sxcgreen)
+                .padding(.bottom, 40)
+            
+            Button {
+                print("Forgot Password Pressed")
+            } label: {
+                Text("Forgot Username or Password?")
+                    .font(.system(size: 17))
+                    .foregroundColor(.black)
+                    .underline()
+            }
+
+            
+            Spacer()
+            
+        }
+        
+    }
+}
 
 
 

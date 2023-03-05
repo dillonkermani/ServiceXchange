@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 import FirebaseCore
-
+import FirebaseAuth
 
 let mySkeletonUser = User(
     userId: "",
@@ -194,6 +194,50 @@ class UserViewModel: ObservableObject{
     }//updateImages2
     
     
+    
+    
+    func editTest( onSuccess: @escaping() -> Void, onError: @escaping(_ errorMessage: String) -> Void) async {
+        
+        let _ = "bouta sleep"
+        sleep(3)
+        let _ = "yo good nap"
+        onSuccess()
+    }
+    
+    
+    //works only if signed in recently --> have to reauthenticate before deleting account
+    //maybe instead of firebase way I can sign the user out and send them to the sign in page?
+    func deleteUser () {
+        let user = Auth.auth().currentUser
+
+        user?.delete { error in
+          if let error = error {
+              print("unable to delete account")
+            // An error happened.
+          } else {
+              print("user account deleted")
+            // Account deleted.
+          }
+        }
+        
+    }
+    
+    //need to reauth before we can delete a user --- ask dillon How I should go about doing this (mainly how to prompt)
+//    func reAuthUser(){
+//        let user = Auth.auth().currentUser
+//        var credential: AuthCredential
+//
+//        // Prompt the user to re-provide their sign-in credentials
+//
+//        user?.reauthenticate(with: credential) { error in
+//          if let error = error {
+//            // An error happened.
+//          } else {
+//              print("user re-authenticated")
+//            // User re-authenticated.
+//          }
+//        }
+//    }
     
 //    private func updateImages3(imageProfileData: Data, imageBackgroundData: Data, userId : String){
 //

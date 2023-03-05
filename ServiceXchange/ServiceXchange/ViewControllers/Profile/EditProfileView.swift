@@ -62,6 +62,10 @@ struct EditProfileView: View {
     @State private var thisUser : Bool = true
     
     
+    @State var loadingStuff : Bool = false
+    @State var failureMessage : String = "you suck"
+    @State var successMessage : String = ""
+    
     var body: some View {
         ZStack {
             
@@ -77,12 +81,12 @@ struct EditProfileView: View {
                         .padding(.top, -154)
                 }//Zstack
                 
-                
+                //myButton()
       
                 textEditFields()
                     .padding(.top, -200)
                     .padding(.bottom, 60)
-                
+
                 NavigationLink(destination: ProfileViewMultiTest(user: $userToPass, thisUser: $thisUser), label: {
                     Text("Save Changes")
                         .fontWeight(.semibold)
@@ -106,7 +110,7 @@ struct EditProfileView: View {
                     //print("hello")
                 })
                 .padding(.bottom, 30)
-                
+
                 
 
                 
@@ -128,11 +132,63 @@ struct EditProfileView: View {
                 
             }.toolbar(.hidden)
         
-        
+            .overlay {
+                
+                ActivityIndicator(isShowing: $loadingStuff)
+                    .frame(width: 50, height: 50)
+                    .foregroundColor(CustomColor.sxcgreen)
+                
+                
+            }
 
         
         } //view structure
     
+    
+    
+    
+    func myButton() -> some View {
+        return Button (action: {
+            UIImpactFeedbackGenerator(style: .rigid).impactOccurred()
+            loadingStuff = true
+            Task {
+                await userVM.editTest(  onSuccess: {  // We pass in posterId so we can associate post with who
+                    successMessage = "success!"
+                    loadingStuff = false
+                    let _ = "out of awaiting and getting success"
+
+                }, onError: { errorMessage in
+                    failureMessage = "fail"
+
+                    loadingStuff = false
+
+                })
+          
+
+            }
+        }, label: {
+            HStack {
+                Spacer()
+                Text("test balls")
+                    .font(.system(size: 17))
+                    .bold()
+                    .padding(15)
+                Spacer()
+                
+            }
+            .background(CustomColor.sxcgreen)
+            .foregroundColor(.black)
+            .cornerRadius(17)
+            .overlay(
+                RoundedRectangle(cornerRadius: 17)
+                    .stroke(.black, lineWidth: 1)
+            )
+            .padding(15)
+        }).disabled(loadingStuff)
+
+            
+
+    }
     
     
     func textEditFields() -> some View {
@@ -322,16 +378,6 @@ struct EditProfileView: View {
 struct EditProfileView_Previews: PreviewProvider {
     static var previews: some View {
         
-//        var userToPass : User = User(
-//            userId: "",
-//            firstName: "",
-//            lastName: "",
-//            email: "",
-//            isServiceProvider: false,
-//            listingIDs: []
-//        )
-        
-       // @EnvironmentObject var userVM = UserViewModel()
         
         EditProfileView()
             .environmentObject(UserViewModel())
@@ -341,23 +387,3 @@ struct EditProfileView_Previews: PreviewProvider {
 
 
 
-// this button sends user info to databse
-//                //To Do -- make this button a navigation link that sends user back to the main profile
-//                                Button(action: {
-//
-//                                    let userId = userVM.localUserId
-//
-//                                    //update values of my_user
-//                                    userVM.update_user_info(userId: userId, company_name: username, location_served: locationServe, bio: shortBio, profileImageData: ProfImageData, onError: { errorMessage in
-//                                        print("Update user error: \(errorMessage)")
-//                                    })
-//
-//
-//
-//                                }){
-//                                    Text("Send a user to our database")
-//                                }
-//                                .padding()
-//                                .foregroundColor(.white)
-//                                .background(Color.red)
-//                                .cornerRadius(20)
