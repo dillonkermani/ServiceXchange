@@ -32,18 +32,15 @@ struct ChatsView: View {
             
             VStack {
                 CustomNavBar()
-                if session.isLoadingRefresh == false {
-                    if session.userSession!.chats != nil {
-                        if !session.userSession!.chats!.isEmpty {
-                            AllChatsList()
-                        }
-                    } else {
-                        Spacer()
-                        Text("No Chats")
-                        Spacer()
+                if session.userSession!.chats != nil {
+                    if !session.userSession!.chats!.isEmpty {
+                        AllChatsList()
                     }
+                } else {
+                    Spacer()
+                    Text("No Chats")
+                    Spacer()
                 }
-                
             }
             .navigationBarHidden(true)
         }
