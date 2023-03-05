@@ -47,6 +47,8 @@ struct ChatsView: View {
         }
         .onAppear {
             // Check if user has any chats before trying to load chat data.
+            session.refreshUserSession()
+            
             if session.userSession!.chats != nil {
                 if !session.userSession!.chats!.isEmpty {
                     chatVM.loadChatData(forUser: session.userSession!)

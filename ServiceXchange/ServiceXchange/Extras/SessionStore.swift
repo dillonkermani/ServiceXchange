@@ -75,4 +75,16 @@ class SessionStore: ObservableObject {
     deinit {
         unbind()
     }
+    
+    func refreshUserSession() {
+        guard let userId = userSession?.userId else { return }
+        let firestoreUserId = Ref.FIRESTORE_DOCUMENT_USERID(userId: userId)
+        firestoreUserId.getDocument { (document, error) in
+            if let dict = document?.data() {
+                guard let decoderUser = try? User.init(fromDictionary: dict) else { return }
+                self.userSession = decoderUser
+                print("User session refreshed!")
+            }
+        }
+    }
 }

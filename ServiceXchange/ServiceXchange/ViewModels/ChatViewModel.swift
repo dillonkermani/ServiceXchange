@@ -9,6 +9,8 @@ import Foundation
 import Firebase
 
 class ChatViewModel: ObservableObject {
+    
+    
         
     @Published var users: [User] = []
     @Published var chats: [Chat] = []

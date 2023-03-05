@@ -244,7 +244,7 @@ struct ListingDetailView : View {
         } label: {
             HStack {
                 Spacer()
-                Text("+  New Message")
+                Text("+  Request Service")
                     .font(.system(size: 16, weight: .bold))
                     .padding(15)
                 Spacer()

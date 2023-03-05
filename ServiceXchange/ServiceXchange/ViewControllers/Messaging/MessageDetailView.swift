@@ -88,6 +88,7 @@ struct MessageDetailView: View {
             Button {
                 messagesVM.sendMessage(message: message)
                 message = ""
+                messagesVM.refreshChatParticipantData()
             } label: {
                 Image(systemName: "paperplane.fill")
                     .foregroundColor(.white)

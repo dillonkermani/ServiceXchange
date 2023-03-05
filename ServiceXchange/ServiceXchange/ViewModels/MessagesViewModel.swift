@@ -24,7 +24,7 @@ class MessagesViewModel: ObservableObject {
     func sendMessage(message: String, toChat: String? = nil) {
         print("\nsendMessage() called\n")
         
-        // If chat is specified.
+        // If toChat is specified.
         if toChat != nil {
             // TODO: add message to chat commonChats[0] and update most recently sent message.
             // (Assumes that getMessages() has already been called.)
@@ -40,52 +40,63 @@ class MessagesViewModel: ObservableObject {
             return
         }
         
-        // Else if chat isn't specified.
-        // First check if users have messaged eachother before to decide if we need to craete a new chat or add to an existing one.
-        if fromUser.chats != nil && toUser.chats != nil {
-            let commonChats = fromUser.chats!.filter { toUser.chats!.contains($0) }
-            print("Overlap between chats: \(fromUser.chats!) and \(toUser.chats!) = \(commonChats)")
-            if commonChats.count == 1 {
-                print("\(fromUser.firstName) and \(toUser.firstName) have previously chatted in chat: \(commonChats[0])")
-                // TODO: Pull/display previous messages, then add message to chat commonChats[0] and update most recently sent message.
-                getMessages(fromChat: commonChats[0])
+        // If either user has never chatted before.
+        if (fromUser.chats == nil || toUser.chats == nil) {
+            self.createChat(fromUser: fromUser.userId, toUser: toUser.userId, onSuccess: {chat in // If users have never previously chatted: createChat
+                print("Successfully created chat: \(chat). Now about to addMessage()")
                 
-                self.addMessage(text: message, fromUser: self.fromUser.userId, toChat: commonChats[0], onSuccess: {message in
+                self.addMessage(text: message, fromUser: self.fromUser.userId, toChat: chat.id, onSuccess: {message in
                     print("Successfully added message: \(message)")
+                    self.refreshChatParticipantData()
+                    self.getMessages(fromChat: chat.id)
+                    
                 }, onError: {error in
                     print("Error adding message: \(error)")
                 })
-                                
-            } else if commonChats.count > 1 {
-                print("sendMessage() Error: \(fromUser.firstName) and \(toUser.firstName) have \(commonChats.count) chats with eachother.")
-            }
-        } else {
-            print("\(fromUser.firstName) and \(toUser.firstName) have never messaged eachother before.")
-            // Create new chat and add message
-            if fromUser.chats == nil || toUser.chats == nil { // One of the users has no chat conversations
-                // Create chat and add message
-                self.createChat(fromUser: fromUser.userId, toUser: toUser.userId, onSuccess: {chat in // If users have never previously chatted: createChat
-                    print("Successfully created chat: \(chat). Now about to addMessage()")
-                    
-                    self.addMessage(text: message, fromUser: self.fromUser.userId, toChat: chat.id, onSuccess: {message in
-                        print("Successfully added message: \(message)")
-                        self.getMessages(fromChat: chat.id)
-                        self.refreshChatParticipantData()
-                    }, onError: {error in
-                        print("Error adding message: \(error)")
-                    })
+            }, onError: {error in
+                print("Error creating chat: \(error)")
+            })
+            return
+        }
+                            
+        // If users share a chat.
+        let commonChats = fromUser.chats!.filter { toUser.chats!.contains($0) }
+        print("Overlap between chats: \(fromUser.chats!) and \(toUser.chats!) = \(commonChats)")
+        if commonChats.count == 1 {
+            print("\(fromUser.firstName) and \(toUser.firstName) have previously chatted in chat: \(commonChats[0])")
+            // TODO: Pull/display previous messages, then add message to chat commonChats[0] and update most recently sent message.
+            getMessages(fromChat: commonChats[0])
+            
+            self.addMessage(text: message, fromUser: self.fromUser.userId, toChat: commonChats[0], onSuccess: {message in
+                print("Successfully added message: \(message)")
+            }, onError: {error in
+                print("Error adding message: \(error)")
+            })
+            return
+                            
+        } else { // Else if users don't share a chat
+            self.createChat(fromUser: fromUser.userId, toUser: toUser.userId, onSuccess: {chat in // If users have never previously chatted: createChat
+                print("Successfully created chat: \(chat). Now about to addMessage()")
+                
+                self.addMessage(text: message, fromUser: self.fromUser.userId, toChat: chat.id, onSuccess: {message in
+                    print("Successfully added message: \(message)")
+                    self.refreshChatParticipantData()
+                    self.getMessages(fromChat: chat.id)
                     
                 }, onError: {error in
-                    print("Error creating chat: \(error)")
+                    print("Error adding message: \(error)")
                 })
-            }
+            }, onError: {error in
+                print("Error creating chat: \(error)")
+            })
+            return
         }
-        
         
         
     }
     
     func getMessages(fromChat: String? = nil) {
+        
         
         print("\ngetMessages() called.\n")
         
@@ -202,8 +213,26 @@ class MessagesViewModel: ObservableObject {
         }
     }
     
-    private func refreshChatParticipantData() {
+    func refreshChatParticipantData() {
+        
         // TODO: Refresh fromUser and toUser with fresh user data.
+        
+        let toUserRef = Ref.FIRESTORE_DOCUMENT_USERID(userId: toUser.userId)
+        toUserRef.getDocument { (document, error) in
+            if let dict = document?.data() {
+                guard let decoderUser = try? User.init(fromDictionary: dict) else {return}
+                self.toUser = decoderUser
+            }
+        }
+        
+        let fromUserRef = Ref.FIRESTORE_DOCUMENT_USERID(userId: fromUser.userId)
+        fromUserRef.getDocument { (document, error) in
+            if let dict = document?.data() {
+                guard let decoderUser = try? User.init(fromDictionary: dict) else {return}
+                self.fromUser = decoderUser
+            }
+        }
+        
     }
     
 }
