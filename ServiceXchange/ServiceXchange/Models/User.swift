@@ -23,7 +23,7 @@ struct User: Encodable, Decodable, Hashable {
     var primaryLocationServed: String?
     
     // Firebase Cloud Messaging Device ID
-    var fcmToken: Int?
+    var fcmToken: String?
     
     var chats: [String]?
     

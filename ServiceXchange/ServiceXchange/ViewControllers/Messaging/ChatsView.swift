@@ -32,14 +32,16 @@ struct ChatsView: View {
             
             VStack {
                 CustomNavBar()
-                if session.userSession!.chats != nil {
-                    if !session.userSession!.chats!.isEmpty {
-                        AllChatsList()
+                if session.isLoadingRefresh == false {
+                    if session.userSession!.chats != nil {
+                        if !session.userSession!.chats!.isEmpty {
+                            AllChatsList()
+                        }
+                    } else {
+                        Spacer()
+                        Text("No Chats")
+                        Spacer()
                     }
-                } else {
-                    Spacer()
-                    Text("No Chats")
-                    Spacer()
                 }
                 
             }
@@ -47,7 +49,6 @@ struct ChatsView: View {
         }
         .onAppear {
             // Check if user has any chats before trying to load chat data.
-            session.refreshUserSession()
             
             if session.userSession!.chats != nil {
                 if !session.userSession!.chats!.isEmpty {

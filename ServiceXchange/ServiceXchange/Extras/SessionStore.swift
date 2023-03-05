@@ -16,6 +16,7 @@ class SessionStore: ObservableObject {
     
     @Published var isLoggedIn = false
     @Published var isLoadingLogin = false
+    @Published var isLoadingRefresh = false
     var userSession: User?
     
     var handle: AuthStateDidChangeListenerHandle?
@@ -87,6 +88,7 @@ class SessionStore: ObservableObject {
     }
     
     func refreshUserSession() {
+        self.isLoadingRefresh = true
         guard let userId = userSession?.userId else { return }
         let firestoreUserId = Ref.FIRESTORE_DOCUMENT_USERID(userId: userId)
         firestoreUserId.getDocument { (document, error) in
@@ -94,6 +96,7 @@ class SessionStore: ObservableObject {
                 guard let decoderUser = try? User.init(fromDictionary: dict) else { return }
                 self.userSession = decoderUser
                 print("User session refreshed!")
+                self.isLoadingRefresh = false
             }
         }
     }
