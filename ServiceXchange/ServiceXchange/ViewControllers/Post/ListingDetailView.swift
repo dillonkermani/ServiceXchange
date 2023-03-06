@@ -251,7 +251,7 @@ struct ListingDetailView : View {
                 .padding(15)
             }
             .simultaneousGesture(TapGesture().onEnded{
-                UIImpactFeedbackGenerator(style: .soft).impactOccurred()
+                UIImpactFeedbackGenerator(style: .medium).impactOccurred()
             })
         }
     }

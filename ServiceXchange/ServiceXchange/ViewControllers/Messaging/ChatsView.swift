@@ -139,6 +139,9 @@ struct ChatsView: View {
                     Divider()
                         .padding(.vertical, 8)
                 }.padding(.horizontal)
+                    .simultaneousGesture(TapGesture().onEnded{
+                        UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                    })
                 
             }.padding(.vertical)
             .padding(.bottom, 50)

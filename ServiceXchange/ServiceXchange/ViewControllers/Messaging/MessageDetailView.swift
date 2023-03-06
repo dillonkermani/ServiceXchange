@@ -92,12 +92,12 @@ struct MessageDetailView: View {
         HStack {
             // Custom text field created below
             CustomTextField(placeholder: Text("Enter your message here"), text: $message)
-                
 
             Button {
                 messagesVM.sendMessage(message: message)
                 message = ""
                 messagesVM.refreshChatParticipantData()
+                UIImpactFeedbackGenerator(style: .rigid).impactOccurred()
             } label: {
                 Image(systemName: "paperplane.fill")
                     .foregroundColor(.white)
@@ -157,6 +157,9 @@ struct CustomTextField: View {
                 .opacity(0.5)
             }
             TextField("", text: $text, onEditingChanged: editingChanged, onCommit: commit)
+                .onTapGesture {
+                    UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                }
             
         }.padding()
     }
