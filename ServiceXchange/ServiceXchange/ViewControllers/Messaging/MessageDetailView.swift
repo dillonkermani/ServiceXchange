@@ -55,7 +55,9 @@ struct MessageDetailView: View {
             messagesVM.getMessages()
         }
         .onDisappear {
-            session.refreshUserSession()
+            if UserDefaults.standard.object(forKey: "selectedTabIndex") as! Int == 0 {
+                session.refreshUserSession()
+            }
         }
         .navigationBarBackButtonHidden(true)
         .toolbar {
