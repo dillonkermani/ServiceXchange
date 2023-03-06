@@ -51,7 +51,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         // Messaging.messaging().appDidReceiveMessage(userInfo)
         // Print message ID.
         if let messageID = userInfo[gcmMessageIDKey] {
-        print("Message ID: \(messageID)")
+        print("1Message ID: \(messageID)")
         }
 
         // Print full message.
@@ -68,7 +68,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         // Messaging.messaging().appDidReceiveMessage(userInfo)
         // Print message ID.
         if let messageID = userInfo[gcmMessageIDKey] {
-        print("Message ID: \(messageID)")
+        print("2Message ID: \(messageID)")
         }
 
         // Print full message.
@@ -106,7 +106,7 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
         // Messaging.messaging().appDidReceiveMessage(userInfo)
         // Print message ID.
         if let messageID = userInfo[gcmMessageIDKey] {
-          print("Message ID: \(messageID)")
+          print("3Message ID: \(messageID)")
         }
 
         // Print full message.
@@ -123,8 +123,11 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
         let userInfo = response.notification.request.content.userInfo
         // Print message ID.
         if let messageID = userInfo[gcmMessageIDKey] {
-          print("Message ID: \(messageID)")
+          print("4Message ID: \(messageID)")
         }
+        
+        // Redirects to Chat tab if app is opened via Push Notification.
+        UserDefaults.standard.set(3, forKey: "selectedTabIndex")
 
         // Print full message.
         print(userInfo)
