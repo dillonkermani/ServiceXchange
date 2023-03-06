@@ -66,7 +66,7 @@ struct TabView: View {
                         NavigationView {
                             VStack {
                                 if session.isLoggedIn {
-                                    MessagesView()
+                                    ChatsView()
                                 }
                             }
                         }

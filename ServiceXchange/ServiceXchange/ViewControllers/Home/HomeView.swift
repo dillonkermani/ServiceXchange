@@ -143,7 +143,7 @@ struct HomeView: View {
                                 ListingCardView(listing: listing)
                             }
                             .simultaneousGesture(TapGesture().onEnded{
-                                UIImpactFeedbackGenerator(style: .soft).impactOccurred()
+                                UIImpactFeedbackGenerator(style: .light).impactOccurred()
                             })
                         }
                                 

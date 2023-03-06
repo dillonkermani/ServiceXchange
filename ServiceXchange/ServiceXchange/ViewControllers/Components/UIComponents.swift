@@ -85,3 +85,40 @@ func cardGradient() -> LinearGradient {
         endPoint: UnitPoint(x: 0.5, y: 0.0))
         //.rotationEffect(.degrees(180))
 }
+
+enum SwipeHVDirection: String {
+    case left, right, up, down, none
+}
+func detectDirection(value: DragGesture.Value) -> SwipeHVDirection {
+    if value.startLocation.x < value.location.x - 24 {
+            return .left
+          }
+          if value.startLocation.x > value.location.x + 24 {
+            return .right
+          }
+          if value.startLocation.y < value.location.y - 24 {
+            return .down
+          }
+          if value.startLocation.y > value.location.y + 24 {
+            return .up
+          }
+    return .none
+}
+
+// Extension for adding rounded corners to specific corners
+extension View {
+    func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
+        clipShape(RoundedCorner(radius: radius, corners: corners) )
+    }
+}
+
+// Custom RoundedCorner shape used for cornerRadius extension above
+struct RoundedCorner: Shape {
+    var radius: CGFloat = .infinity
+    var corners: UIRectCorner = .allCorners
+
+    func path(in rect: CGRect) -> Path {
+        let path = UIBezierPath(roundedRect: rect, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
+        return Path(path.cgPath)
+    }
+}
