@@ -17,32 +17,23 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     return true
   }
 }
-//
-//@main
-//struct ServiceXchangeApp: App {
-//  // register app delegate for Firebase setup
-//  @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-//    @StateObject var session = SessionStore()
-//
-//
-//  var body: some Scene {
-//    WindowGroup {
-//      NavigationView {
-//        ContentView() // Right Click -> "Jump to Definition" to go through viewcontroller flow.
-//            .environmentObject(session)
-//            .preferredColorScheme(.light)
-//      }
-//    }
-//  }
-//}
 
 @main
-struct app: App {
-    var body: some Scene {
-        WindowGroup {
-            CalendarView()
-        }
+struct ServiceXchangeApp: App {
+  // register app delegate for Firebase setup
+  @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+    @StateObject var session = SessionStore()
+
+
+  var body: some Scene {
+    WindowGroup {
+      NavigationView {
+        ContentView() // Right Click -> "Jump to Definition" to go through viewcontroller flow.
+            .environmentObject(session)
+            .preferredColorScheme(.light)
+      }
     }
+  }
 }
 
 struct CustomColor {

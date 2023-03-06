@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 import FirebaseCore
 
-struct Event: Encodable, Decodable {
+struct Event: Encodable, Decodable, Hashable {
     var start: Date
     var duration: TimeInterval
 }
@@ -20,7 +20,7 @@ fileprivate func weekStart(day: Date) -> Date? {
     return Calendar.init(identifier: .gregorian).dateComponents([.calendar, .yearForWeekOfYear, .weekOfYear], from: day).date
 }
 
-struct AlwaysEvent: Encodable, Decodable {
+struct AlwaysEvent: Encodable, Decodable, Hashable {
     var t: Date
     var duration: TimeInterval
     
@@ -49,7 +49,9 @@ class CalenderViewModel: ObservableObject {
             async let busyTimesRefFuture = userRef.collection("busyTimes")
                 .whereField("start", isGreaterThan: after).getDocuments()
             async let alwaysBusyTimesRefFuture = userRef.collection("alwaysBusyTimes").getDocuments()
+            
             let (busyTimes, alwaysBusyTimes) = try await (busyTimesRefFuture, alwaysBusyTimesRefFuture)
+            
             self.busyTimes = []
             self.alwaysBusyTimes = []
             for busyTime in busyTimes.documents {
