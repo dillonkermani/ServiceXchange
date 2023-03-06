@@ -48,10 +48,9 @@ struct ChatsView: View {
         }
         .onAppear {
             // Check if user has any chats before trying to load chat data.
-            
             if session.userSession!.chats != nil {
                 if !session.userSession!.chats!.isEmpty {
-                    chatVM.loadChatData(forUser: session.userSession!)
+                    chatVM.loadChatDataIfNeeded(forUser: session.userSession!)
                 }
             }
         }
@@ -107,9 +106,9 @@ struct ChatsView: View {
     
     private func AllChatsList() -> some View {
         ScrollView {
-            ForEach(Array(chatVM.chatUserDict), id: \.key) { (chat, user) in
+            ForEach(Array(chatVM.chatUserDict.sorted { $0.key.lastUpdated > $1.key.lastUpdated }), id: \.key) { (chat, user) in
                 VStack {
-                    NavigationLink(destination: MessageDetailView(messagesVM: MessagesViewModel(fromUser: session.userSession!, toUser: user))) {
+                    NavigationLink(destination: MessageDetailView(messagesVM: MessagesViewModel(fromUser: session.userSession!, toUser: user)).onDisappear{chatVM.loadChatDataIfNeeded(forUser: session.userSession!)}) {
                         
                         HStack(spacing: 16) {
                             UrlImage(url: user.profileImageUrl ?? "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png")
@@ -128,6 +127,7 @@ struct ChatsView: View {
                                 Text("\(chat.lastMessage)")
                                     .font(.system(size: 14))
                                     .foregroundColor(Color(.lightGray))
+                                    .multilineTextAlignment(.leading)
                             }
                             Spacer()
                             

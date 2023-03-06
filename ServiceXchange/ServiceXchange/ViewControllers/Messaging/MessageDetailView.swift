@@ -39,6 +39,9 @@ struct MessageDetailView: View {
                                 proxy.scrollTo(id, anchor: .bottom)
                             }
                         }
+                        .onAppear {
+                            proxy.scrollTo(messagesVM.lastMessageId, anchor: .bottom)
+                        }
                     }
                 } else {
                         Spacer()

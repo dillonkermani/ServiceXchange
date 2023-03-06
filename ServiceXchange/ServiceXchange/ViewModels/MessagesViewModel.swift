@@ -23,14 +23,11 @@ class MessagesViewModel: ObservableObject {
     }
     
     func sendMessage(message: String, toChat: String? = nil) {
-        print("\nsendMessage() called\n")
-        
         // If toChat is specified.
         if toChat != nil {
             // TODO: add message to chat commonChats[0] and update most recently sent message.
             // (Assumes that getMessages() has already been called.)
             self.addMessage(text: message, fromUser: self.fromUser.userId, toChat: toChat!, onSuccess: {message in
-                print("Successfully added message: \(message)")
                 // Add chatId to fromUser's array of chats.
                 Ref.FIRESTORE_COLLECTION_CHATS.document(toChat!).updateData([
                     "lastUpdated": Date().timeIntervalSince1970
@@ -44,13 +41,9 @@ class MessagesViewModel: ObservableObject {
         // If either user has never chatted before.
         if (fromUser.chats == nil || toUser.chats == nil) {
             self.createChat(fromUser: fromUser.userId, toUser: toUser.userId, onSuccess: {chat in // If users have never previously chatted: createChat
-                print("Successfully created chat: \(chat). Now about to addMessage()")
-                
                 self.addMessage(text: message, fromUser: self.fromUser.userId, toChat: chat.id, onSuccess: {message in
-                    print("Successfully added message: \(message)")
                     self.refreshChatParticipantData()
                     self.getMessages(fromChat: chat.id)
-                    
                 }, onError: {error in
                     print("Error adding message: \(error)")
                 })
@@ -62,14 +55,9 @@ class MessagesViewModel: ObservableObject {
                             
         // If users share a chat.
         let commonChats = fromUser.chats!.filter { toUser.chats!.contains($0) }
-        print("Overlap between chats: \(fromUser.chats!) and \(toUser.chats!) = \(commonChats)")
         if commonChats.count == 1 {
-            print("\(fromUser.firstName) and \(toUser.firstName) have previously chatted in chat: \(commonChats[0])")
-            // TODO: Pull/display previous messages, then add message to chat commonChats[0] and update most recently sent message.
             getMessages(fromChat: commonChats[0])
-            
             self.addMessage(text: message, fromUser: self.fromUser.userId, toChat: commonChats[0], onSuccess: {message in
-                print("Successfully added message: \(message)")
             }, onError: {error in
                 print("Error adding message: \(error)")
             })
@@ -77,10 +65,7 @@ class MessagesViewModel: ObservableObject {
                             
         } else { // Else if users don't share a chat
             self.createChat(fromUser: fromUser.userId, toUser: toUser.userId, onSuccess: {chat in // If users have never previously chatted: createChat
-                print("Successfully created chat: \(chat). Now about to addMessage()")
-                
                 self.addMessage(text: message, fromUser: self.fromUser.userId, toChat: chat.id, onSuccess: {message in
-                    print("Successfully added message: \(message)")
                     self.refreshChatParticipantData()
                     self.getMessages(fromChat: chat.id)
                     
@@ -98,13 +83,9 @@ class MessagesViewModel: ObservableObject {
     
     func getMessages(fromChat: String? = nil) {
         
-        
-        print("\ngetMessages() called.\n")
-        
         var chatId = fromChat
         
         if fromUser.chats == nil || toUser.chats == nil {
-            print("either user has no chat history")
             return
         }
         
@@ -113,7 +94,6 @@ class MessagesViewModel: ObservableObject {
             let commonChats = fromUser.chats!.filter { toUser.chats!.contains($0) }
             if commonChats.count != 1 {
                 // Users don't have a shared chat.
-                print("users don't have a shared chat")
                 return
             } else {
                 // Else, set chatId to shared chat
@@ -123,16 +103,12 @@ class MessagesViewModel: ObservableObject {
         
         if chatId != nil {
             Ref.FIRESTORE_COLLECTION_MESSAGES.document(chatId!).collection("messages").order(by: "timestamp", descending: false).addSnapshotListener { querySnapshot, error in
-                
                 // If we don't have documents, exit the function
                 guard let documents = querySnapshot?.documents else {
                     print("Error fetching documents: \(String(describing: error))")
                     return
                 }
                 
-                for doc in documents {
-                    print("\n\n\(doc.data())\n\n")
-                }
                 
                 // Mapping through the documents
                 self.messages = documents.compactMap { document -> Message? in
@@ -147,23 +123,18 @@ class MessagesViewModel: ObservableObject {
                         return nil
                     }
                 }
-                
-                // Sorting the messages by sent date
-                //self.messages.sort { $0.timestamp < $1.timestamp }
-                
-                print("Successfully loaded messages: \(self.messages)")
-                
+                                        
                 // Getting the ID of the last message so we automatically scroll to it in ContentView
                 if let id = self.messages.last?.id {
                     self.lastMessageId = id
                 }
+                
             }
         }
     }
     
     private func createChat(fromUser: String, toUser: String, onSuccess: @escaping(_ chat: Chat) -> Void, onError: @escaping(_ errorMessage: String) -> Void) {
         
-        print("\ncreateChat() called")
         // Create Firestore Chat reference.
         let chatDocumentRef = Ref.FIRESTORE_COLLECTION_CHATS.document()
         
@@ -177,7 +148,6 @@ class MessagesViewModel: ObservableObject {
             if let error = error {
                 onError(error.localizedDescription)
             } else {
-                print("Chat \(newChat.id) successfully created.")
                 onSuccess(newChat)
             }
         }
@@ -196,7 +166,6 @@ class MessagesViewModel: ObservableObject {
     }
     
     private func addMessage(text: String, fromUser: String, toChat: String, onSuccess: @escaping(_ message: Message) -> Void, onError: @escaping(_ errorMessage: String) -> Void) {
-        print("\naddMessage() called\n")
         
         let messageDocumentRef = Ref.FIRESTORE_COLLECTION_MESSAGES.document(toChat).collection("messages").document()
         
@@ -208,7 +177,6 @@ class MessagesViewModel: ObservableObject {
             if let error = error {
                 onError(error.localizedDescription)
             } else {
-                print("\"\(newMessage.text)\" was added to Chat: \(toChat).")
                 self.updateChatMetadata(forChat: toChat, message: newMessage)
                 self.sendPushNotification(to: self.toUser.fcmToken ?? "", title: "\(self.fromUser.firstName) \(self.fromUser.lastName)", body: newMessage.text)
                 onSuccess(newMessage)
@@ -243,7 +211,7 @@ class MessagesViewModel: ObservableObject {
             do {
                 if let jsonData = data {
                     if let jsonDataDict  = try JSONSerialization.jsonObject(with: jsonData, options: JSONSerialization.ReadingOptions.allowFragments) as? [String: AnyObject] {
-                        NSLog("Received data:\n\(jsonDataDict))")
+                        //NSLog("Send Notification Response:\n\(jsonDataDict))")
                     }
                 }
             } catch let err as NSError {

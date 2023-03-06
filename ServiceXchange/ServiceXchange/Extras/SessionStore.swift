@@ -95,7 +95,7 @@ class SessionStore: ObservableObject {
             if let dict = document?.data() {
                 guard let decoderUser = try? User.init(fromDictionary: dict) else { return }
                 self.userSession = decoderUser
-                print("User session refreshed!")
+                print("User session refreshed")
                 self.isLoadingRefresh = false
             }
         }

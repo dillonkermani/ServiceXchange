@@ -50,7 +50,7 @@ struct ListingDetailView : View {
                 
                 if session.isLoggedIn {
                     if session.userSession!.userId != listing.posterId {
-                        SendMessageButton()
+                        RequestServiceButton()
                     }
                 }
                 
@@ -104,13 +104,6 @@ struct ListingDetailView : View {
             .onAppear {
                 Task{
                     await listingVM.getListingPoster(posterId: listing.posterId)
-                }
-            }
-            .sheet(isPresented: $controls.sendMessagePressed) {
-                if session.isLoggedIn {
-                    MessageDetailView(messagesVM: MessagesViewModel(fromUser: session.userSession!, toUser: listingVM.poster))
-                } else {
-                    LoginView()
                 }
             }
     }
@@ -238,27 +231,29 @@ struct ListingDetailView : View {
         .padding(.horizontal, 25)
     }
     
-    private func SendMessageButton() -> some View {
-        Button {
-            controls.sendMessagePressed.toggle()
-        } label: {
-            HStack {
-                Spacer()
-                Text("+  Request Service")
-                    .font(.system(size: 16, weight: .bold))
-                    .padding(15)
-                Spacer()
+    private func RequestServiceButton() -> some View {
+        VStack {
+            NavigationLink(destination: MessageDetailView(messagesVM: MessagesViewModel(fromUser: session.userSession!, toUser: listingVM.poster))) {
+                HStack {
+                    Spacer()
+                    Text("+  Request Service")
+                        .font(.system(size: 16, weight: .bold))
+                        .padding(15)
+                    Spacer()
+                }
+                .background(CustomColor.sxcgreen)
+                .foregroundColor(.black)
+                .cornerRadius(17)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 17)
+                        .stroke(.black, lineWidth: 2)
+                )
+                .padding(15)
             }
-            .background(CustomColor.sxcgreen)
-            .foregroundColor(.black)
-            .cornerRadius(17)
-            .overlay(
-                RoundedRectangle(cornerRadius: 17)
-                    .stroke(.black, lineWidth: 2)
-            )
-            .padding(15)
+            .simultaneousGesture(TapGesture().onEnded{
+                UIImpactFeedbackGenerator(style: .soft).impactOccurred()
+            })
         }
-        
     }
 
 
