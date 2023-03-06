@@ -15,6 +15,9 @@ struct MessageDetailView: View {
     
     @State var message = ""
     
+    @State private var isKeyboardPresented = false
+    @State private var keyboardHeight = CGFloat()
+    
     var body: some View {
         VStack {
             
@@ -28,7 +31,7 @@ struct MessageDetailView: View {
                             ScrollView {
                                 ForEach(messagesVM.messages, id: \.id) { message in
                                     MessageBubble(message: message)
-                                }
+                                }.padding(.bottom, isKeyboardPresented ? keyboardHeight : 0)
                             }
                         }.padding(10)
                         .background(.white)
@@ -41,7 +44,27 @@ struct MessageDetailView: View {
                         }
                         .onAppear {
                             proxy.scrollTo(messagesVM.lastMessageId, anchor: .bottom)
+                            NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: .main) { notification in
+                                guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else {
+                                    return
+                                }
+                                keyboardHeight = keyboardFrame.height
+                                withAnimation {
+                                    isKeyboardPresented = true
+                                }
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                    withAnimation {
+                                        proxy.scrollTo(messagesVM.lastMessageId, anchor: .bottom)
+                                    }
+                                }
+                            }
+                            NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: .main) { notification in
+                                withAnimation {
+                                    isKeyboardPresented = false
+                                }
+                            }
                         }
+                        
                     }
                 } else {
                         Spacer()
