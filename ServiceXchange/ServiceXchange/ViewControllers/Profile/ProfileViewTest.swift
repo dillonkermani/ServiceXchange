@@ -7,14 +7,30 @@
 
 import SwiftUI
 
+enum ActiveAlert2 {
+    case deleteProfile
+}
 
+struct ProfileViewMultiTestControls {
+    var deleteClicked = false
+    var showAlert = false
+    var activeAlert2: ActiveAlert2 = .deleteProfile
+    var savePressed = false
+
+}
 
 
 struct ProfileViewTest: View {
     
+    //@EnvironmentObject var session: SessionStore
+    
+    @State var controls = ProfileViewMultiTestControls()
+    
+    @EnvironmentObject var userVM: UserViewModel
     @ObservedObject var loginVM = LoginViewModel()
     
     @State var thisUserProfile = false
+    @State var passwordInput: String = ""
    // var user: User
     
     
@@ -26,21 +42,48 @@ struct ProfileViewTest: View {
             signInFields()
 
         }
+        .alert(isPresented: $controls.showAlert) {
+
+            //case .deleteProfile:
+                return Alert(title: Text("Delete Account?"), message: Text("Warning: This action cannot be undone."), primaryButton: .destructive(Text("Delete")) {
+
+                    //delete the account
+                    userVM.reAuthUser(userProvidedPassword: passwordInput)
+
+                }, secondaryButton: .cancel())
+
+        }//.alert
+        
+        
     }
+
     
     
     private func signInFields() -> some View {
         return ZStack {
             VStack {
                 HStack {
-                    Text("Sign In")
+                    Text("Enter Password to delete account")
                         .font(.largeTitle)
                         .padding([.top, .bottom], 75)
                 }
-                underlinedTextField(title: "Email", text: $loginVM.email, width: 310, height: 40, color: loginVM.email.isEmpty ? .black : CustomColor.sxcgreen)
-                    .keyboardType(.emailAddress)
-                passwordTextField(title: "Password", text: $loginVM.password, width: 310, height: 40, color: loginVM.password.isEmpty ? .black : CustomColor.sxcgreen)
+                passwordTextField(title: "Password", text: $passwordInput, width: 310, height: 40, color: loginVM.password.isEmpty ? .black : CustomColor.sxcgreen)
                     .padding(.bottom, 40)
+                
+                //fix this button so that it can only be pressed when a password is provided
+                //then I need an alert if successfull or not successful
+                Button {
+                    controls.activeAlert2 = .deleteProfile
+                    controls.showAlert.toggle()
+                    //userVM.reAuthUser(userProvidedPassword: passwordInput)
+                } label: {
+                    Text("delete Account")
+                        .font(.system(size: 17))
+                        .foregroundColor(.black)
+                        .underline()
+                }
+                .padding(20)
+               
                 
                 Button {
                     print("Forgot Password Pressed")

@@ -5,24 +5,22 @@
 //  Created by colton jeffrey on 2/23/23.
 //
 
-
-
 //my todo ---> make loading image while images change --> maybe a state variable ---> clean up my code
 
 import SwiftUI
 import FirebaseAuth
 
-enum ActiveAlert2 {
-    case deleteProfile
-}
+//enum ActiveAlert2 {
+//    case deleteProfile
+//}
 
-struct ProfileViewMultiTestControls {
-    var deleteClicked = false
-    var showAlert = false
-    var activeAlert2: ActiveAlert2 = .deleteProfile
-    var savePressed = false
-
-}
+//struct ProfileViewMultiTestControls {
+//    var deleteClicked = false
+//    var showAlert = false
+//    var activeAlert2: ActiveAlert2 = .deleteProfile
+//    var savePressed = false
+//
+//}
 
 struct ProfileViewMultiTest: View {
     
@@ -30,7 +28,7 @@ struct ProfileViewMultiTest: View {
     @EnvironmentObject var userVM: UserViewModel
     
     
-    @State var controls = ProfileViewMultiTestControls()
+    //@State var controls = ProfileViewMultiTestControls()
     
     @Binding var user: User
     @Binding var thisUser: Bool
@@ -49,10 +47,10 @@ struct ProfileViewMultiTest: View {
      
      //
     
-    @State var navigateTo: AnyView?
+     @State var navigateTo: AnyView?
      @State private var isActive = false
     
-    @State var showSignIn: Bool = false
+    //@State var showSignIn: Bool = false
     
     var body: some View {
         
@@ -111,7 +109,7 @@ struct ProfileViewMultiTest: View {
             VStack {
                 
                 //sends user to sign in fields if they delete account
-                NavigationLink(destination: ProfileViewTest(), isActive: self.$showSignIn) { EmptyView() }
+                //NavigationLink(destination: ProfileViewTest(), isActive: self.$showSignIn) { EmptyView() }
                 
                 
                 imageOverlayTopMine(thisUserProfile: thisUser, user: user)
@@ -145,34 +143,16 @@ struct ProfileViewMultiTest: View {
             }.toolbar(.hidden)
             
             
-                .alert(isPresented: $controls.showAlert) {
-                    
-                    //case .deleteProfile:
-                        return Alert(title: Text("Delete Profile?"), message: Text("Warning: This action cannot be undone."), primaryButton: .destructive(Text("Delete")) {
-
-                            //listingVM.deleteListing(listing: listing)
-                            //presentationMode.wrappedValue.dismiss()
-                            let _ = print("the delete profile was pressed")
-
-                            
-                            //need to delete user and have them sign out ---> go to home page signed out
-                            //session.logout()
-                            //clear local user variables
-                            //userVM.clearLocalUserVariables()
-                            //signinFields()  //this just got skipped have to make some kind of link
-    
-                            //lets make a navigation link -> go to my own sign in view -> sign out or maybe not
-                            
-                            
-                            showSignIn = true
-                            
-                            //userVM.deleteUser()
-                            
-                            
-
-                        }, secondaryButton: .cancel())
-                    
-                }//.alert
+//                .alert(isPresented: $controls.showAlert) {
+//
+//                    //case .deleteProfile:
+//                        return Alert(title: Text("Delete Account?"), message: Text("Warning: This action cannot be undone."), primaryButton: .destructive(Text("Delete")) {
+//
+//                            showSignIn = true
+//
+//                        }, secondaryButton: .cancel())
+//
+//                }//.alert
             
         }
         
@@ -269,13 +249,18 @@ struct ProfileViewMultiTest: View {
                 }
                 
                 
-                Button(role: .none, action: {
-                    controls.activeAlert2 = .deleteProfile
-                    controls.showAlert.toggle()
-                }, label: {
-                    Label("Delete Profile", systemImage: "trash")
-                        .foregroundColor(.black)
-                })
+                Button("Delete Account2"){
+                    navigateTo = AnyView(ProfileViewTest())
+                    self.isActive = true
+                }
+                
+//                Button(role: .none, action: {
+//                    controls.activeAlert2 = .deleteProfile
+//                    controls.showAlert.toggle()
+//                }, label: {
+//                    Label("Delete Profile", systemImage: "trash")
+//                        .foregroundColor(.black)
+//                })
                 
                 
                 Button("History"){
@@ -339,8 +324,6 @@ func messageNavButton() -> some View {
 func showProfileImage(imageStr : String) -> some View {
     return VStack {
         
-        
-        
         if imageStr != "blankprofile"  && imageStr != ""{
             
             
@@ -394,44 +377,6 @@ func showDetailImage(imageStr : String) -> some View {
     }
 }//showDetailImage
 
-
-
-
-
-
-//ask about Dilon putting this in its own view?
-func signinFields() -> some View {
-    
-    @ObservedObject var loginVM = LoginViewModel()
-    
-    return ZStack {
-        VStack {
-            HStack {
-                Text("Sign In")
-                    .font(.largeTitle)
-                    .padding([.top, .bottom], 75)
-            }
-            underlinedTextField(title: "Email", text: $loginVM.email, width: 310, height: 40, color: loginVM.email.isEmpty ? .black : CustomColor.sxcgreen)
-                .keyboardType(.emailAddress)
-            passwordTextField(title: "Password", text: $loginVM.password, width: 310, height: 40, color: loginVM.password.isEmpty ? .black : CustomColor.sxcgreen)
-                .padding(.bottom, 40)
-            
-            Button {
-                print("Forgot Password Pressed")
-            } label: {
-                Text("Forgot Username or Password?")
-                    .font(.system(size: 17))
-                    .foregroundColor(.black)
-                    .underline()
-            }
-
-            
-            Spacer()
-            
-        }
-        
-    }
-}
 
 
 

@@ -62,9 +62,9 @@ struct EditProfileView: View {
     @State private var thisUser : Bool = true
     
     
-    @State var loadingStuff : Bool = false
-    @State var failureMessage : String = "you suck"
-    @State var successMessage : String = ""
+//    @State var loadingStuff : Bool = false
+//    @State var failureMessage : String = "you suck"
+//    @State var successMessage : String = ""
     
     var body: some View {
         ZStack {
@@ -132,63 +132,63 @@ struct EditProfileView: View {
                 
             }.toolbar(.hidden)
         
-            .overlay {
-                
-                ActivityIndicator(isShowing: $loadingStuff)
-                    .frame(width: 50, height: 50)
-                    .foregroundColor(CustomColor.sxcgreen)
-                
-                
-            }
+//            .overlay {
+//                
+//                ActivityIndicator(isShowing: $loadingStuff)
+//                    .frame(width: 50, height: 50)
+//                    .foregroundColor(CustomColor.sxcgreen)
+//                
+//                
+//            }
 
         
         } //view structure
     
     
     
-    
-    func myButton() -> some View {
-        return Button (action: {
-            UIImpactFeedbackGenerator(style: .rigid).impactOccurred()
-            loadingStuff = true
-            Task {
-                await userVM.editTest(  onSuccess: {  // We pass in posterId so we can associate post with who
-                    successMessage = "success!"
-                    loadingStuff = false
-                    let _ = "out of awaiting and getting success"
-
-                }, onError: { errorMessage in
-                    failureMessage = "fail"
-
-                    loadingStuff = false
-
-                })
-          
-
-            }
-        }, label: {
-            HStack {
-                Spacer()
-                Text("test balls")
-                    .font(.system(size: 17))
-                    .bold()
-                    .padding(15)
-                Spacer()
-                
-            }
-            .background(CustomColor.sxcgreen)
-            .foregroundColor(.black)
-            .cornerRadius(17)
-            .overlay(
-                RoundedRectangle(cornerRadius: 17)
-                    .stroke(.black, lineWidth: 1)
-            )
-            .padding(15)
-        }).disabled(loadingStuff)
-
-            
-
-    }
+//
+//    func myButton() -> some View {
+//        return Button (action: {
+//            UIImpactFeedbackGenerator(style: .rigid).impactOccurred()
+//            loadingStuff = true
+//            Task {
+//                await userVM.editTest(  onSuccess: {  // We pass in posterId so we can associate post with who
+//                    successMessage = "success!"
+//                    loadingStuff = false
+//                    let _ = "out of awaiting and getting success"
+//
+//                }, onError: { errorMessage in
+//                    failureMessage = "fail"
+//
+//                    loadingStuff = false
+//
+//                })
+//
+//
+//            }
+//        }, label: {
+//            HStack {
+//                Spacer()
+//                Text("test balls")
+//                    .font(.system(size: 17))
+//                    .bold()
+//                    .padding(15)
+//                Spacer()
+//
+//            }
+//            .background(CustomColor.sxcgreen)
+//            .foregroundColor(.black)
+//            .cornerRadius(17)
+//            .overlay(
+//                RoundedRectangle(cornerRadius: 17)
+//                    .stroke(.black, lineWidth: 1)
+//            )
+//            .padding(15)
+//        }).disabled(loadingStuff)
+//
+//
+//
+//    }
     
     
     func textEditFields() -> some View {
