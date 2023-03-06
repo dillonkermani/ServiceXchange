@@ -26,6 +26,8 @@ struct ChatsView: View {
     @EnvironmentObject var session: SessionStore // Contains currently signed in user's info.
     
     @ObservedObject var chatVM = ChatViewModel()
+    
+    @ObservedObject var dateFormatter = CustomDateFormatter()
 
     var body: some View {
         NavigationView {
@@ -105,7 +107,7 @@ struct ChatsView: View {
     
     private func AllChatsList() -> some View {
         ScrollView {
-            ForEach(chatVM.users, id: \.self) { user in
+            ForEach(Array(chatVM.chatUserDict), id: \.key) { (chat, user) in
                 VStack {
                     NavigationLink(destination: MessageDetailView(messagesVM: MessagesViewModel(fromUser: session.userSession!, toUser: user))) {
                         
@@ -123,13 +125,13 @@ struct ChatsView: View {
                             VStack(alignment: .leading) {
                                 Text("\(user.firstName) \(user.lastName)")
                                     .font(.system(size: 16, weight: .bold))
-                                Text("Most recent message")
+                                Text("\(chat.lastMessage)")
                                     .font(.system(size: 14))
                                     .foregroundColor(Color(.lightGray))
                             }
                             Spacer()
                             
-                            Text("2d")
+                            Text("\(dateFormatter.formatTimestampSince(chat.lastUpdated))")
                                 .font(.system(size: 14, weight: .semibold))
                         }
                         

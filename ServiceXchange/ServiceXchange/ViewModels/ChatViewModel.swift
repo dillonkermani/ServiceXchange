@@ -12,19 +12,16 @@ class ChatViewModel: ObservableObject {
     
     
         
-    @Published var users: [User] = []
-    @Published var chats: [Chat] = []
+    @Published var chatUserDict: [Chat : User] = [:]
 
     func loadChatData(forUser: User) {
-        
+        // For chatId in user's chats, decode and associate Chat model with recieipient User model.
         for chatId in forUser.chats ?? [] {
             Ref.FIRESTORE_COLLECTION_CHATS.document(chatId).getDocument { (document, err) in
                 if document != nil {
                     let dict = document!.data()
                     if dict != nil {
                         guard let decodedChat = try? Chat.init(fromDictionary: dict!) else { return }
-                        self.chats.append(decodedChat)
-                        
                         let recipientId = decodedChat.members.filter{ $0 == forUser.userId }
                         for userId in decodedChat.members {
                             if userId != forUser.userId {
@@ -32,7 +29,7 @@ class ChatViewModel: ObservableObject {
                                     if document != nil {
                                         let dict = document!.data()
                                         guard let decodedUser = try? User.init(fromDictionary: dict!) else { return }
-                                        self.users.append(decodedUser)
+                                        self.chatUserDict[decodedChat] = decodedUser
                                     }
                                 }
                             }

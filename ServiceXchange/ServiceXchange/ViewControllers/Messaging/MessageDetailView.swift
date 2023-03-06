@@ -164,6 +164,8 @@ struct MessageBubble: View {
 
     var message: Message
     @State private var showTime = false
+    @ObservedObject var dateFormatter = CustomDateFormatter()
+
     
     var body: some View {
         VStack(alignment: message.fromUser != session.userSession?.userId ? .leading : .trailing) {
@@ -179,7 +181,7 @@ struct MessageBubble: View {
             }
             
             if showTime {
-                Text("\(message.timestamp)")
+                Text("\(dateFormatter.formatTimestamp(message.timestamp, format: "h:mm a"))")
                     .font(.caption2)
                     .foregroundColor(.gray)
                     .padding(message.fromUser != session.userSession?.userId ? .leading : .trailing, 10)

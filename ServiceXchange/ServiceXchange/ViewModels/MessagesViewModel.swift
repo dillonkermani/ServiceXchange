@@ -167,7 +167,7 @@ class MessagesViewModel: ObservableObject {
         let chatDocumentRef = Ref.FIRESTORE_COLLECTION_CHATS.document()
         
         // Create Chat object.
-        let newChat = Chat(id: chatDocumentRef.documentID, createdAt: Date().timeIntervalSince1970, createdBy: fromUser, lastUpdated: Date().timeIntervalSince1970, members: [fromUser, toUser])
+        let newChat = Chat(id: chatDocumentRef.documentID, createdAt: Date().timeIntervalSince1970, createdBy: fromUser, lastUpdated: Date().timeIntervalSince1970, lastMessage: "", members: [fromUser, toUser])
         
         // Encode Chat object to dictionary
         guard let dict = try? newChat.toDictionary() else {return}
@@ -208,10 +208,21 @@ class MessagesViewModel: ObservableObject {
                 onError(error.localizedDescription)
             } else {
                 print("\"\(newMessage.text)\" was added to Chat: \(toChat).")
+                self.updateChatMetadata(forChat: toChat, message: newMessage)
                 self.sendPushNotification(to: self.toUser.fcmToken ?? "", title: "\(self.fromUser.firstName) \(self.fromUser.lastName)", body: newMessage.text)
                 onSuccess(newMessage)
             }
         }
+        
+    }
+    
+    private func updateChatMetadata(forChat: String, message: Message) {
+        let chatRef = Ref.FIRESTORE_DOCUMENT_CHATID(chatId: forChat)
+        
+        chatRef.updateData( [
+            "lastUpdated": message.timestamp,
+            "lastMessage": message.text
+        ] )
     }
     
     private func sendPushNotification(to token: String, title: String, body: String) {

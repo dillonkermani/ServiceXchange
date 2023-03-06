@@ -7,10 +7,11 @@
 
 import Foundation
 
-struct Chat: Identifiable, Codable {
+struct Chat: Identifiable, Codable, Hashable {
     var id: String
     var createdAt: Double
     var createdBy: String
     var lastUpdated: Double
+    var lastMessage: String
     var members: [String]
 }
