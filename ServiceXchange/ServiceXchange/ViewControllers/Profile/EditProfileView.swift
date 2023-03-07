@@ -67,6 +67,10 @@ struct EditProfileView: View {
 //    @State var successMessage : String = ""
     
     var body: some View {
+        
+        
+        //let _ = print(Editing.my_var)
+        
         ZStack {
             
             VStack {
@@ -87,8 +91,9 @@ struct EditProfileView: View {
                     .padding(.top, -200)
                     .padding(.bottom, 60)
 
-                NavigationLink(destination: ProfileViewMultiTest(user: $userToPass, thisUser: $thisUser), label: {
-                    Text("Save Changes")
+                //NavigationLink(destination: ProfileViewMultiTest(user: $userToPass, thisUser: $thisUser), label: {
+                NavigationLink(destination: ProfileUserView(), label: {
+                Text("Save Changes")
                         .fontWeight(.semibold)
                         .font(.title)
                         .padding()
@@ -219,7 +224,7 @@ struct EditProfileView: View {
                                  let _ = print("this should print")
                                  
                                  //if user does not have a profile picture yet
-                                 if userVM.localDescriptiveImageStr == "none" {
+                                 if userVM.localDescriptiveImageStr == "" {
                                      ZStack {
                                          Image("sunsetTest")
                                                .resizable()
@@ -321,7 +326,7 @@ struct EditProfileView: View {
                             if controls.pickedImage == Image("user-placeholder") {
                                 
                                 //if user does not have a profile picture yet
-                                if userVM.localProfileImageUrl == "none" {
+                                if userVM.localProfileImageUrl == "" {
                                     ZStack {
                                         Image("blankprofile")
                                             .resizable()

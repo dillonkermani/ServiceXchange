@@ -10,17 +10,7 @@
 import SwiftUI
 import FirebaseAuth
 
-//enum ActiveAlert2 {
-//    case deleteProfile
-//}
 
-//struct ProfileViewMultiTestControls {
-//    var deleteClicked = false
-//    var showAlert = false
-//    var activeAlert2: ActiveAlert2 = .deleteProfile
-//    var savePressed = false
-//
-//}
 
 struct ProfileViewMultiTest: View {
     
@@ -115,6 +105,8 @@ struct ProfileViewMultiTest: View {
                 imageOverlayTopMine(thisUserProfile: thisUser, user: user)
                 
                 
+                
+                
 
             }.onAppear {
                 
@@ -140,19 +132,39 @@ struct ProfileViewMultiTest: View {
                     background = user.descriptiveImageStr ?? "sunsetTest"
                 }
                 
-            }.toolbar(.hidden)
+                //}.toolbar(.hidden)
+            }.navigationBarBackButtonHidden(true)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button {
+                            presentationMode.wrappedValue.dismiss()
+                        } label: {
+                            HStack {
+                                Image(systemName: "arrow.left")
+                                    .font(.system(size: 17)).bold()
+                            }.foregroundColor(.black)
+                        }
+                    }
+                    
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Menu {
+                            NavigationLink(destination: MessagesView(), label: {
+                                Label("Send Message", systemImage: "paperplane")
+                            })
+                            
+
+                        }
+                        label: {
+                            Image(systemName: "ellipsis")
+                                .font(.system(size: 20))
+                                .foregroundColor(.black)
+                                .padding()
+                        }
+                    }
+                }//.toolbar
             
             
-//                .alert(isPresented: $controls.showAlert) {
-//
-//                    //case .deleteProfile:
-//                        return Alert(title: Text("Delete Account?"), message: Text("Warning: This action cannot be undone."), primaryButton: .destructive(Text("Delete")) {
-//
-//                            showSignIn = true
-//
-//                        }, secondaryButton: .cancel())
-//
-//                }//.alert
+            
             
         }
         
@@ -254,15 +266,6 @@ struct ProfileViewMultiTest: View {
                     self.isActive = true
                 }
                 
-//                Button(role: .none, action: {
-//                    controls.activeAlert2 = .deleteProfile
-//                    controls.showAlert.toggle()
-//                }, label: {
-//                    Label("Delete Profile", systemImage: "trash")
-//                        .foregroundColor(.black)
-//                })
-                
-                
                 Button("History"){
                     print("not implemented")
                 }
@@ -284,12 +287,16 @@ struct ProfileViewMultiTest: View {
                     .background(.white)
                     .cornerRadius(40)
             } //label
+            
+            
             .background(
                 //do we care if this is about to go away or something?
                 NavigationLink(destination: self.navigateTo , isActive: $isActive) {
                     EmptyView()
                 }
-                
+
+
+
             )//background
             
         }//VStack
@@ -334,7 +341,7 @@ func showProfileImage(imageStr : String) -> some View {
                     .frame(width: 125.0, height: 125.0, alignment: .center)
                     .clipShape(Circle())
             } placeholder: {
-                ShimmerPlaceholderView(width: 125, height: 125, cornerRadius: 0, animating: true)
+                ShimmerPlaceholderView(width: 125, height: 125, cornerRadius: 0, animating: false)
             }
             
         }

@@ -61,8 +61,8 @@ class UserViewModel: ObservableObject{
         self.localBio = user.bio ?? "none"
         self.localCompanyName = user.companyName ?? "none"
         self.localPrimaryLocationServed = user.primaryLocationServed ?? "none"
-        self.localProfileImageUrl = user.profileImageUrl ?? "none"
-        self.localDescriptiveImageStr = user.descriptiveImageStr ?? "none"
+        self.localProfileImageUrl = user.profileImageUrl ?? ""
+        self.localDescriptiveImageStr = user.descriptiveImageStr ?? ""
         
         
         //updateing the skeleton user

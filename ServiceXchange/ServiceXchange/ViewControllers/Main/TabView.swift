@@ -91,7 +91,8 @@ struct TabView: View {
                             VStack {
                                 if session.isLoggedIn {
     
-                                    ProfileViewMultiTest(user: $userToPass, thisUser : $thisUser)
+                                    //ProfileViewMultiTest(user: $userToPass, thisUser : $thisUser)
+                                    ProfileUserView()
                                 }
                                 
                             }.navigationTitle("Profile")
