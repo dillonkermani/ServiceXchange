@@ -228,6 +228,11 @@ class UserViewModel: ObservableObject{
     //need to reauth before we can delete a user before you delete their account
     func reAuthUser(userProvidedPassword: String){
        
+        //have to make this async so that it clears them before deletion
+        //weird bug where information form last account stays in local variables
+        //make an async clear yeah
+        //self.clearLocalUserVariables()
+        
         let user = Auth.auth().currentUser
 
         let credential = EmailAuthProvider.credential(withEmail: (user?.email!)!, password: userProvidedPassword)

@@ -27,8 +27,14 @@ struct ProfileUserView: View {
         let topPaddingBackground: CGFloat = -410
         let topPaddingProfile: CGFloat = -215
         let profileRadius: CGFloat = 125
+        let topPaddingGear: CGFloat = -330
+        let leadingPaddingGear: CGFloat  = 280
+        let gearSize: CGFloat = 35
+        let gearWidth: CGFloat = 47
         
+        NavigationStack {
         ZStack{
+            
             showBackGroundImage(imageStr: userVM.localDescriptiveImageStr)
                 .padding(.top , topPaddingBackground)
             
@@ -36,72 +42,34 @@ struct ProfileUserView: View {
                 .padding(.top, topPaddingProfile)
             
             
-            
+            //NavigationStack {
             NavigationLink(destination: ProfileSettingsView(), label: {
                 Image(systemName: "gearshape.fill")
-                    .font(.system(size: 35,
+                    .font(.system(size: gearSize,
                                   weight: .regular,
                                   design: .default))
                     .foregroundColor(.black)
-                    .frame(width: 47, height: 47)
+                    .frame(width: gearWidth, height: gearWidth)
                     .background(.white)
-                    .cornerRadius(40)
+                    .cornerRadius(gearWidth)
             })
-            
-
-           
-            
-//            settingMenu()
-//                .padding(.leading, 270)
-//                .padding(.top, -350)
-            
-        }.navigationBarHidden(true)
+            .padding(.top, topPaddingGear)
+            .padding(.leading, leadingPaddingGear)
+          
+        }
+    }//Navigation Stack
+        .navigationBarHidden(true)
             .onAppear{
+                //initialize local variables if they have not been initialized
+                //already
                 if (userVM.initialized == false && session.userSession != nil){
                     userVM.updateLocalUserVariables(user: session.userSession!)
-                }//if uninitailized (this can get moved if we want info in other pages (maybe tabview icon?)
+                }//if uninitailized
             }
         
     }
 }
 
-
-struct SheetView: View {
-    @Environment(\.dismiss) var dismiss
-
-    var body: some View {
-        Button("Press to dismiss") {
-            dismiss()
-        }
-        .font(.title)
-        .padding()
-        .background(.black)
-    }
-}
-
-
-private func settingMenu() -> some View{
-   
-    return VStack {
-        Menu {
-            NavigationLink("Edit Profile Nav", destination: EditProfileView())
-            Button("Edit Profile"){
-                print("edit profile")
-            }
-        } label: {
-            Image(systemName: "gearshape.fill")
-                .font(.system(size: 35,
-                              weight: .regular,
-                              design: .default))
-                .foregroundColor(.black)
-                .frame(width: 47, height: 47)
-                .background(.white)
-                .cornerRadius(40)
-        } //label
-        
-        
-    }//VStack
-} //setting Menu 3
 
 //params: image url string and the diameter of the circle
 //returns circular profile image (either default or user profile image)
@@ -170,5 +138,6 @@ struct ProfileUserView_Previews: PreviewProvider {
     static var previews: some View {
         ProfileUserView()
             .environmentObject(UserViewModel())
+            .environmentObject(SessionStore())
     }
 }

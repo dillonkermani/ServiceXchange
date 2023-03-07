@@ -37,6 +37,8 @@ struct EditProfileView: View {
     @State var controls = CreateProfileControls()
     @State var controlsDesc = CreateDescriptiveControls()
     
+    @Environment(\.presentationMode) var presentationMode
+    
     //state varibles
     @State private var username: String = ""
     @State private var locationServe: String = ""
@@ -91,32 +93,34 @@ struct EditProfileView: View {
                     .padding(.top, -200)
                     .padding(.bottom, 60)
 
-                //NavigationLink(destination: ProfileViewMultiTest(user: $userToPass, thisUser: $thisUser), label: {
-                NavigationLink(destination: ProfileUserView(), label: {
-                Text("Save Changes")
-                        .fontWeight(.semibold)
-                        .font(.title)
-                        .padding()
-                        .background(Color.white)
-                        .cornerRadius(40)
-                        .foregroundColor(.black)
-                        .padding(0)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 40)
-                                .stroke(Color.black, lineWidth: 3)
-                                .frame(width: 250, height: 70)
-                        )
-                }).simultaneousGesture(TapGesture().onEnded{
+
+
+                Button(action: {
                     let userId = userVM.localUserId
                     userVM.update_user_info(userId: userId, company_name: username, location_served: locationServe, bio: shortBio, profileImageData: ProfImageData, backgroundImageData: backgroundImageData, onError: { errorMessage in
                         print("Update user error: \(errorMessage)")
-                        sleep(1)
-                    })
-                    //print("hello")
+                        
+                    })//userVM.update_user_info
+                    
+                    //dismiss current view
+                    presentationMode.wrappedValue.dismiss()
+                    
+                }, label: {
+                    Text("Save Changes")
+                            .fontWeight(.semibold)
+                            .font(.title)
+                            .padding()
+                            .background(Color.white)
+                            .cornerRadius(40)
+                            .foregroundColor(.black)
+                            .padding(0)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 40)
+                                    .stroke(Color.black, lineWidth: 3)
+                                    .frame(width: 250, height: 70)
+                            )
                 })
                 .padding(.bottom, 30)
-
-                
 
                 
             }//VStack
@@ -392,3 +396,27 @@ struct EditProfileView_Previews: PreviewProvider {
 
 
 
+//NavigationLink(destination: ProfileViewMultiTest(user: $userToPass, thisUser: $thisUser), label: {
+//                NavigationLink(destination: ProfileUserView(), label: {
+//                Text("Save Changes")
+//                        .fontWeight(.semibold)
+//                        .font(.title)
+//                        .padding()
+//                        .background(Color.white)
+//                        .cornerRadius(40)
+//                        .foregroundColor(.black)
+//                        .padding(0)
+//                        .overlay(
+//                            RoundedRectangle(cornerRadius: 40)
+//                                .stroke(Color.black, lineWidth: 3)
+//                                .frame(width: 250, height: 70)
+//                        )
+//                }).simultaneousGesture(TapGesture().onEnded{
+//                    let userId = userVM.localUserId
+//                    userVM.update_user_info(userId: userId, company_name: username, location_served: locationServe, bio: shortBio, profileImageData: ProfImageData, backgroundImageData: backgroundImageData, onError: { errorMessage in
+//                        print("Update user error: \(errorMessage)")
+//
+//                    })
+//                    //print("hello")
+//                })
+//                .padding(.bottom, 30)

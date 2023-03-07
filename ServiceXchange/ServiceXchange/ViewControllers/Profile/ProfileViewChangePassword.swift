@@ -8,8 +8,25 @@
 import SwiftUI
 
 struct ProfileViewChangePassword: View {
+    
+    @Environment(\.presentationMode) var presentationMode
+    
     var body: some View {
-        Text("change Password View")
+        VStack{
+            Text("change Password View")
+        }.navigationBarBackButtonHidden(true)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        presentationMode.wrappedValue.dismiss()
+                    } label: {
+                        HStack {
+                            Image(systemName: "arrow.left")
+                                .font(.system(size: 17)).bold()
+                        }.foregroundColor(.black)
+                    }
+                }//ToolBarItem
+            }//toolbar
     }
 }
 

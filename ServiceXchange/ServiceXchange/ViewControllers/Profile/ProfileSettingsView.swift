@@ -12,18 +12,12 @@ struct ProfileSettingsView: View {
     @EnvironmentObject var session: SessionStore
     @EnvironmentObject var userVM: UserViewModel
     
+    @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
-        
-        ZStack{
-            
-//            Image(systemName: "gearshape.2")
-//                .padding(.top, 100)
-//                //.frame(width: 25, height: 25)
-//
             VStack {
-                //Image(systemName: "gearshape.2")
-                NavigationStack{
+                
+                //NavigationStack{
                     
                     Image(systemName: "wrench.and.screwdriver")
                         .font(.system(size: 90))
@@ -37,22 +31,14 @@ struct ProfileSettingsView: View {
                         Label("Edit Profile", systemImage: "pencil")
                             .frame(width: 300, height: 30)
                     })
-                    .padding()
-                    .fontWeight(.semibold)
-                    .background(.white)
-                    .foregroundColor(.black)
-                    .border(Color.black, width: 3)
-                    
+                    .buttonStyle(labelFormatt())
                     
                     //delete your account
                     NavigationLink(destination: ProfileViewTest(), label: {
                         Label("Delete Account", systemImage: "trash")
                             .frame(width: 300, height: 30)
                     })
-                    .padding()
-                    .background(.white)
-                    .foregroundColor(.black)
-                    .border(Color.black, width: 1)
+                    .buttonStyle(labelFormatt())
                     
                     //sign out
                     Button(action: {
@@ -65,22 +51,16 @@ struct ProfileSettingsView: View {
                             .frame(width: 300, height: 30)
                         
                     })
-                    .padding()
-                    .background(.white)
-                    .foregroundColor(.black)
-                    .border(Color.black, width: 1)
+                    .buttonStyle(labelFormatt())
                     
                     
                     //change password
                     //delete your account
-                    NavigationLink(destination: ProfileViewTest(), label: {
+                    NavigationLink(destination: ProfileViewChangePassword(), label: {
                         Label("Change Password", systemImage: "key.horizontal")
                             .frame(width: 300, height: 30)
                     })
-                    .padding()
-                    .background(.white)
-                    .foregroundColor(.black)
-                    .border(Color.black, width: 1)
+                    .buttonStyle(labelFormatt())
                     
                     
                     //Saved Listings
@@ -88,15 +68,43 @@ struct ProfileSettingsView: View {
                         Label("Saved Listings", systemImage: "bookmark")
                             .frame(width: 300, height: 30)
                     })
-                    .padding()
-                    .background(.white)
-                    .foregroundColor(.black)
-                    .border(Color.black, width: 1)
-                }//NavStack
+                    .buttonStyle(labelFormatt())
+
+               // }//NavStack
             } //VStack
-        }//ZStack
+            .navigationBarBackButtonHidden(true)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        presentationMode.wrappedValue.dismiss()
+                    } label: {
+                        HStack {
+                            Image(systemName: "arrow.left")
+                                .font(.system(size: 17)).bold()
+                        }.foregroundColor(.black)
+                    }
+                }//ToolBarItem
+            }//toolbar
     }
 }
+
+
+struct labelFormatt: ButtonStyle{
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+        .padding()
+        .fontWeight(.semibold)
+        .background(.white)
+        .foregroundColor(.black)
+        //.cornerRadius(10)
+        .overlay(
+                    RoundedRectangle(cornerRadius: 5)
+                        .stroke(Color.black, lineWidth: 2)
+                )
+    }
+
+}
+
 
 struct ProfileSettingsView_Previews: PreviewProvider {
     static var previews: some View {

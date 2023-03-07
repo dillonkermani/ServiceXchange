@@ -24,6 +24,8 @@ struct ProfileViewTest: View {
     
     //@EnvironmentObject var session: SessionStore
     
+    @Environment(\.presentationMode) var presentationMode
+    
     @State var controls = ProfileViewMultiTestControls()
     
     @EnvironmentObject var userVM: UserViewModel
@@ -42,14 +44,29 @@ struct ProfileViewTest: View {
             signInFields()
 
         }
+        .navigationBarBackButtonHidden(true)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        presentationMode.wrappedValue.dismiss()
+                    } label: {
+                        HStack {
+                            Image(systemName: "arrow.left")
+                                .font(.system(size: 17)).bold()
+                        }.foregroundColor(.black)
+                    }
+                }//ToolBarItem
+            }//toolbar
         .alert(isPresented: $controls.showAlert) {
 
             //case .deleteProfile:
                 return Alert(title: Text("Delete Account?"), message: Text("Warning: This action cannot be undone."), primaryButton: .destructive(Text("Delete")) {
 
+                    
                     //delete the account
                     userVM.reAuthUser(userProvidedPassword: passwordInput)
 
+                    //userVM.clearLocalUserVariables()
                 }, secondaryButton: .cancel())
 
         }//.alert
