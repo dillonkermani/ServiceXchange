@@ -16,21 +16,24 @@ struct ProfileCanvas: View {
                         .resizable()
                     //.aspectRatio(contentMode: .fit)
                         .cornerRadius(20)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 30)
                     
-                    Rectangle()
+                    
                 }
                 Spacer()
                 VStack{
-                    Rectangle()
-                        .foregroundColor(Color.black.opacity(0.0))
                     
                     Image("blankprofile")
                         .resizable()
-                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 200, height: 200)
                         .clipShape(Circle())
+                        .offset(y: UIScreen.main.bounds.height / 6)
                         
-                    Rectangle()
-                    
+                    //Rectangle()
+                      //  .foregroundColor(.green)
+                    Text("Dillon Kermani")
+                
                 }
             }
             
