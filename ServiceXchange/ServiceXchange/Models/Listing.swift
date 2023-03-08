@@ -7,12 +7,14 @@
 
 import Foundation
 
+//object that goes to firebase and is loaded from firebase
+// objects with default values or are optional are not required to be a listing
 struct Listing: Encodable, Decodable {
     var listingId: String = ""
     var posterId: String
-    var cardImageUrl: String = ""
+    var imageUrls: [String] = []
     var title: String
     var description: String
     var datePosted: Double
-    var rate: Double?
+    var categories: [String]?
 }

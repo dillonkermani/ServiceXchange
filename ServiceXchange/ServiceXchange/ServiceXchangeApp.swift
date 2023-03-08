@@ -6,17 +6,6 @@
 //
 
 import SwiftUI
-import FirebaseCore
-
-
-class AppDelegate: NSObject, UIApplicationDelegate {
-  func application(_ application: UIApplication,
-                   didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-    FirebaseApp.configure()
-
-    return true
-  }
-}
 
 @main
 struct ServiceXchangeApp: App {
@@ -30,6 +19,7 @@ struct ServiceXchangeApp: App {
       NavigationView {
         ContentView() // Right Click -> "Jump to Definition" to go through viewcontroller flow.
             .environmentObject(session)
+            .preferredColorScheme(.light)
       }
     }
   }
@@ -38,3 +28,8 @@ struct ServiceXchangeApp: App {
 struct CustomColor {
     static let sxcgreen = Color("sxcgreen")
 }
+
+
+
+
+
