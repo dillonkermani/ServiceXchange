@@ -43,37 +43,40 @@ class CalenderViewModel: ObservableObject {
     
     @MainActor
     func loadTimes(forUserId: String, after: Date) async {
-        let availabliltyRef = Ref.FIRESTORE_ROOT.collection("availability")
         do {
-            let userRef = availabliltyRef.document(forUserId)
+            print("\(after.timeIntervalSince1970)")
+            let userRef = Ref.FIRESTORE_DOCUMENT_USERID(userId: forUserId)
             async let busyTimesRefFuture = userRef.collection("busyTimes")
-                .whereField("start", isGreaterThan: after).getDocuments()
+                .getDocuments()
             async let alwaysBusyTimesRefFuture = userRef.collection("alwaysBusyTimes").getDocuments()
             
             let (busyTimes, alwaysBusyTimes) = try await (busyTimesRefFuture, alwaysBusyTimesRefFuture)
             
-            self.busyTimes = []
-            self.alwaysBusyTimes = []
+            var busyTimesArr: [(Event, String)] = []
+            var alwaysBusyTimesArr: [(AlwaysEvent, String)] = []
+            print("\(busyTimes.count)")
             for busyTime in busyTimes.documents {
                 let btDict = busyTime.data()
                 guard let event = try? Event.init(fromDictionary: btDict) else {
-                    print("check ureserldf")
+                    print("check firebase data")
                     continue
                 }
-                self.busyTimes.append( (event, busyTime.documentID) )
+                busyTimesArr.append( (event, busyTime.documentID) )
             }
             for alwaysBusyTime in alwaysBusyTimes.documents {
                 let abtDict = alwaysBusyTime.data()
                 guard let event = try? AlwaysEvent.init(fromDictionary: abtDict) else {
-                    print("check uirself")
+                    print("check firebase data")
                     continue
                 }
-                self.alwaysBusyTimes.append( (event, alwaysBusyTime.documentID) )
+                alwaysBusyTimesArr.append( (event, alwaysBusyTime.documentID) )
             }
+            self.busyTimes = busyTimesArr
+            self.alwaysBusyTimes = alwaysBusyTimesArr
         }
         catch {
             print("couldn't load \(forUserId)'s availability")
-            return
+            exit(1)
         }
     }
     

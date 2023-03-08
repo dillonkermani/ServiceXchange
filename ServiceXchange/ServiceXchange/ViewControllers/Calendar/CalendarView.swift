@@ -8,7 +8,7 @@
 import SwiftUI
 
 
-func clockHourToTime(hour: Int) -> String{
+fileprivate func clockHourToTime(hour: Int) -> String{
     let period = hour <= 11 ? "am" : "pm"
     var realHour = hour % 12
     if realHour == 0{
@@ -18,38 +18,16 @@ func clockHourToTime(hour: Int) -> String{
 }
 
 
-struct dayView: View {
+fileprivate struct dayView: View {
     var day: Date
-    var notAvailable: [(Event, String)]
-    var alwaysNotAvailable: [(AlwaysEvent, String)]
+    @Binding var notAvailable: [(Event, String)]
+    @Binding var alwaysNotAvailable: [(AlwaysEvent, String)]
     let quarterHourWidth = 15
-    var dayStart: Date
-    init(day: Date, notAvailable: [(Event, String)], alwaysNotAvailable: [(AlwaysEvent, String)]) {
-        self.day = day
-        self.notAvailable = notAvailable
-        self.alwaysNotAvailable = alwaysNotAvailable
-        self.dayStart = Calendar.current.startOfDay(for: day)
-    }
     private func isConflict(time: Date, event: Event?) -> Bool {
         guard let event = event else {
             return false
         }
         return time >= event.start && time <= event.start.advanced(by: event.duration)
-    }
-    private func isBusy(quarterNumber: Int) -> Bool{
-        // get begining of the day
-        let beginQuarter = self.dayStart.advanced(by: 15*60*TimeInterval(quarterNumber))
-        for (event, _) in self.notAvailable {
-            if isConflict(time: beginQuarter, event: event) {
-                return true
-            }
-        }
-        for (AlwaysEvent, _) in self.alwaysNotAvailable {
-            if isConflict(time: beginQuarter, event: AlwaysEvent.getFor(day: beginQuarter)) {
-                return true
-            }
-        }
-        return false
     }
     
     var body: some View {
@@ -77,11 +55,17 @@ struct dayView: View {
                         }
                     }.padding(10)
                     ZStack(alignment: .topLeading) {
+                        let dayStart = Calendar.current.startOfDay(for: self.day)
                         ForEach(self.notAvailable, id: \.self.0) { event , _  in
                             RoundedRectangle(cornerRadius: 10)
                                 .foregroundColor(Color(.red).opacity(0.4))
-                                .frame(height: CGFloat(7.5 *  event.duration / (15 * 60)))
-                                .offset(x: 0, y: 7.5*CGFloat(event.start.timeIntervalSince(self.dayStart) / (15*60) ))
+                                .frame(height: CGFloat(7.5 * event.duration / (15 * 60)))
+                                .offset(x: 0, y: 7.5*CGFloat(event.start.timeIntervalSince(dayStart) / (15*60) ))
+                                .onAppear() {
+                                    print(event.start)
+                                    let f = (7.5*CGFloat(event.start.timeIntervalSince(dayStart) / (15*60)))
+                                    print("\(f)")
+                                }
                         }.padding(.horizontal, 50)
                     }.padding(10)
                     
@@ -94,18 +78,18 @@ struct dayView: View {
     }
 }
 
-class DayObject: ObservableObject {
+fileprivate class DayObject: ObservableObject {
     @Published var day: Date = Date.now
 }
 
 // struct from https://gist.github.com/beader/e1312aa5b88af30407bde407235fbe67
-struct InfiniteTabPageView: View {
+fileprivate struct InfiniteTabPageView: View {
     let user: String
     @GestureState private var translation: CGFloat = .zero
     @State private var currentPage: Int = 0
     @State private var offset: CGFloat = .zero
     @ObservedObject var dayObject: DayObject
-    @ObservedObject var calendarVM = CalenderViewModel()
+    @StateObject var calendarVM = CalenderViewModel()
     private let width: CGFloat
     private let animationDuration: CGFloat = 0.25
     
@@ -155,26 +139,19 @@ struct InfiniteTabPageView: View {
     var body: some View {
         ZStack {
             if self.dayObject.day > Date.now.advanced(by: 23.9 * 3600) {
-                dayView(day: self.dayObject.day.advanced(by: -24 * 3600), notAvailable: calendarVM.busyTimes, alwaysNotAvailable: calendarVM.alwaysBusyTimes)
+                dayView(day: self.dayObject.day.advanced(by: -24 * 3600), notAvailable: $calendarVM.busyTimes, alwaysNotAvailable: $calendarVM.alwaysBusyTimes)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .offset(x: CGFloat(-width))
-                    .onAppear {
-                        print("-1")
-                    }
-            }
-            dayView(day: self.dayObject.day, notAvailable: calendarVM.busyTimes, alwaysNotAvailable: calendarVM.alwaysBusyTimes)
+                }
+            dayView(day: self.dayObject.day, notAvailable: $calendarVM.busyTimes, alwaysNotAvailable: $calendarVM.alwaysBusyTimes)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .offset(x: CGFloat(0))
-                .onAppear {
-                    print("0")
-                }
+                
 
-            dayView(day: self.dayObject.day.advanced(by: 24 * 3600), notAvailable: calendarVM.busyTimes, alwaysNotAvailable: calendarVM.alwaysBusyTimes)
+            dayView(day: self.dayObject.day.advanced(by: 24 * 3600), notAvailable: $calendarVM.busyTimes, alwaysNotAvailable: $calendarVM.alwaysBusyTimes)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .offset(x: CGFloat(width))
-                .onAppear {
-                    print("1")
-                }
+                
         }
         .contentShape(Rectangle())
         .offset(x: translation)
@@ -185,36 +162,24 @@ struct InfiniteTabPageView: View {
             await self.calendarVM.loadTimes(forUserId: user, after: Calendar.current.startOfDay(for: Date.now))
         }
     }
-    
-    private func pageIndex(_ x: Int) -> Int {
-
-        Int((CGFloat(x) / 3).rounded(.down)) * 3
-    }
-    
-    
-    private func offsetIndex(_ x: Int) -> Int {
-        if x >= 0 {
-            return x % 3
-        } else {
-            return (x + 1) % 3 + 2
-        }
-    }
 }
 
 struct CalendarView: View {
     let forUser: String
-    @ObservedObject var dayObject = DayObject()
+    @ObservedObject private var dayObject = DayObject()
     var body: some View {
         VStack {
             DatePicker( "Schedule for: ", selection: $dayObject.day, displayedComponents: [.date])
             InfiniteTabPageView(user: forUser, day: dayObject)
-            Rectangle()
         }
     }
 }
 
 struct CalendarView_Previews: PreviewProvider {
     static var previews: some View {
-        CalendarView(forUser: "1Q62TgR1GpWN2GwLFS84Jwgzson1" )
+        VStack{
+            CalendarView(forUser: "7syxwXFCwYh6HevOXCD9oTJJV7n1" )
+            Rectangle()
+        }
     }
 }
