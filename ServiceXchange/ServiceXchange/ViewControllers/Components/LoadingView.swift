@@ -15,13 +15,16 @@ struct LoadingView: View {
     var body: some View {
         ZStack {
             Rectangle()
-                .fill(self.color)
+                .fill(.white)
                 .opacity(self.opacity)
                 .animation(
                     Animation.easeIn(duration: self.cycleTime / 2)
                         .repeatForever(autoreverses: true),
                     value: opacity)
                 .onAppear(perform: {self.opacity = self.maxOpacity})
+                .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height / 2.3)
+                .cornerRadius(17)
+
             
         }
     }

@@ -12,12 +12,12 @@ enum ActiveAlert {
     case reportListing, deleteListing
 }
 
-struct listingDetailViewControls {
+struct ListingDetailViewControls {
     var deleteClicked = false
     var showAlert = false
     var activeAlert: ActiveAlert = .reportListing
     var savePressed = false
-
+    var sendMessagePressed = false
 }
 
 
@@ -34,9 +34,9 @@ struct ListingDetailView : View {
     
     @State private var report_clicked = false
     @State var rating = 0.0
-
-    @State var controls = listingDetailViewControls()
-
+    
+    @State var controls = ListingDetailViewControls()
+    
     @ObservedObject var listingVM = ListingDetailViewModel()
 
     //to be passed to the profile view
@@ -52,41 +52,29 @@ struct ListingDetailView : View {
     
     
     var listing: Listing
-
+    
     var body: some View {
         VStack {
             ScrollView {
                 URLCarouselView(urls: listing.imageUrls)
                     .frame(maxHeight: 400)
-                HStack {
-                    Text(listing.title)
-                        .font(.system(size: 36)).bold()
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding()
-                    Spacer()
-                    Button {
-                        UIImpactFeedbackGenerator(style: .rigid).impactOccurred()
-                        controls.savePressed.toggle()
-                    } label: {
-                        Image(systemName: controls.savePressed ? "bookmark.fill" : "bookmark")
-                            .font(.system(size: 27))
-                            .foregroundColor(controls.savePressed ? .blue : .black)
-                    }.padding(.trailing, 30)
-
-                    
-                }
                 
-
+                ListingTitleBar()
+                
                 PosterDataView()
                     .padding(.bottom, 25)
                 
                 DetailsView()
-                
                 Spacer()
                 
+                if session.isLoggedIn {
+                    if session.userSession!.userId != listing.posterId {
+                        RequestServiceButton()
+                    }
+                }
+                
+                Spacer()
                 ListingCategoriesView()
-                
-                
             }
         }.navigationBarBackButtonHidden(true)
             .toolbar {
@@ -102,74 +90,93 @@ struct ListingDetailView : View {
                 }
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Menu {
-                        NavigationLink(destination: MessagesView(), label: {
-                            Label("Send Message", systemImage: "paperplane")
-                        })
-                        Button(role: .none, action: {
-                            controls.activeAlert = .reportListing
-                            controls.showAlert.toggle()
-
-                        }, label: {
-                            Label("Report", systemImage: "flag.fill")
-                                .foregroundColor(.red)
-                        })
-                        if true {//session.userSession?.userId == listing.posterId { // If currently signed in user is the poster of the Listing
-                            Button(role: .none, action: {
-                                controls.activeAlert = .deleteListing
-                                controls.showAlert.toggle()
-                            }, label: {
-                                Label("Delete", systemImage: "trash")
-                                    .foregroundColor(.black)
-                            })
-
-                        }
-
-                    }
-                    label: {
-                        Image(systemName: "ellipsis")
-                            .font(.system(size: 20))
-                            .foregroundColor(.black)
-                            .padding()
-                    }
+                    ListingMenuButton()
                 }
             }
             .gesture(DragGesture()
-            .onEnded { value in
-              let direction = self.detectDirection(value: value)
-              if direction == .left {
-                  presentationMode.wrappedValue.dismiss()
-              }
+                .onEnded { value in
+                    let direction = detectDirection(value: value)
+                    if direction == .left {
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                }
+            )
+            .alert(isPresented: $controls.showAlert) {
+                switch controls.activeAlert {
+                    
+                case .reportListing:
+                    return Alert(title: Text("Report Listing?"),
+                                 message: Text("Not Implemented"),
+                                 dismissButton: Alert.Button.default(
+                                    Text("OK"), action: {
+                                    }
+                                 )
+                    )
+                case .deleteListing:
+                    return Alert(title: Text("Delete Listing?"), message: Text("Warning: This action cannot be undone."), primaryButton: .destructive(Text("Delete")) {
+                        listingVM.deleteListing(listing: listing)
+                        presentationMode.wrappedValue.dismiss()
+                    }, secondaryButton: .cancel())
+                }
+                
             }
-        )
-        .alert(isPresented: $controls.showAlert) {
-            switch controls.activeAlert {
-            case .reportListing:
-                return Alert(title: Text("Report Listing?"),
-                             message: Text("Not Implemented"),
-                             dismissButton: Alert.Button.default(
-                                 Text("OK"), action: {
-
-                                 }
-                             )
-                         )
-            case .deleteListing:
-                return Alert(title: Text("Delete Listing?"), message: Text("Warning: This action cannot be undone."), primaryButton: .destructive(Text("Delete")) {
-
-                    listingVM.deleteListing(listing: listing)
-                    presentationMode.wrappedValue.dismiss()
-
-
-                }, secondaryButton: .cancel())
-
+            .onAppear {
+                Task{
+                    await listingVM.getListingPoster(posterId: listing.posterId)
+                }
             }
-
+    }
+    
+    private func ListingTitleBar() -> some View {
+        HStack {
+            Text(listing.title)
+                .font(.system(size: 36)).bold()
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding()
+            Spacer()
+            Button {
+                UIImpactFeedbackGenerator(style: .rigid).impactOccurred()
+                controls.savePressed.toggle()
+            } label: {
+                Image(systemName: controls.savePressed ? "bookmark.fill" : "bookmark")
+                    .font(.system(size: 27))
+                    .foregroundColor(controls.savePressed ? .blue : .black)
+            }.padding(.trailing, 30)
         }
         .onAppear {
             Task{
                 await listingVM.getListingPoster(posterId: listing.posterId)
                 userToPass = listingVM.poster
+    }
+    
+    private func ListingMenuButton() -> some View {
+        Menu {
+            NavigationLink(destination: ChatsView(), label: {
+                Label("Send Message", systemImage: "paperplane")
+            })
+            Button(role: .none, action: {
+                controls.activeAlert = .reportListing
+                controls.showAlert.toggle()
+
+            }, label: {
+                Label("Report", systemImage: "flag.fill")
+                    .foregroundColor(.red)
+            })
+            if true {//session.userSession?.userId == listing.posterId { // If currently signed in user is the poster of the Listing
+                Button(role: .none, action: {
+                    controls.activeAlert = .deleteListing
+                    controls.showAlert.toggle()
+                }, label: {
+                    Label("Delete", systemImage: "trash")
+                        .foregroundColor(.black)
+                })
             }
+        }
+        label: {
+            Image(systemName: "ellipsis")
+                .font(.system(size: 20))
+                .foregroundColor(.black)
+                .padding()
         }
     }
     
@@ -212,24 +219,7 @@ struct ListingDetailView : View {
         
     }
 
-    enum SwipeHVDirection: String {
-        case left, right, up, down, none
-    }
-    private func detectDirection(value: DragGesture.Value) -> SwipeHVDirection {
-        if value.startLocation.x < value.location.x - 24 {
-                return .left
-              }
-              if value.startLocation.x > value.location.x + 24 {
-                return .right
-              }
-              if value.startLocation.y < value.location.y - 24 {
-                return .down
-              }
-              if value.startLocation.y > value.location.y + 24 {
-                return .up
-              }
-        return .none
-    }
+    
 
     func PosterDataView() -> some View {
         
@@ -268,6 +258,31 @@ struct ListingDetailView : View {
         }
         .frame(height: 50)
         .padding(.horizontal, 25)
+    }
+    
+    private func RequestServiceButton() -> some View {
+        VStack {
+            NavigationLink(destination: MessageDetailView(messagesVM: MessagesViewModel(fromUser: session.userSession!, toUser: listingVM.poster))) {
+                HStack {
+                    Spacer()
+                    Text("+  Request Service")
+                        .font(.system(size: 16, weight: .bold))
+                        .padding(15)
+                    Spacer()
+                }
+                .background(CustomColor.sxcgreen)
+                .foregroundColor(.black)
+                .cornerRadius(17)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 17)
+                        .stroke(.black, lineWidth: 2)
+                )
+                .padding(15)
+            }
+            .simultaneousGesture(TapGesture().onEnded{
+                UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+            })
+        }
     }
 
 

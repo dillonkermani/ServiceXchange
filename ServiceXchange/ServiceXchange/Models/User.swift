@@ -7,14 +7,13 @@
 
 import Foundation
 
-struct User: Encodable, Decodable {
+struct User: Encodable, Decodable, Hashable {
     var userId: String
     var firstName: String
     var lastName: String
     var email: String
     var isServiceProvider: Bool
     var listingIDs: [String]
-
     var phone: String?
     
     
@@ -23,5 +22,10 @@ struct User: Encodable, Decodable {
     var companyName: String?
     var bio: String?
     var primaryLocationServed: String?
+    
+    // Firebase Cloud Messaging Device ID
+    var fcmToken: String?
+    
+    var chats: [String]?
     
 }

@@ -1,5 +1,5 @@
 //
-//  MessagesView.swift
+//  ChatsView.swift
 //  ServiceXchange
 //
 //  Created by Dillon Kermani on 1/25/23.
@@ -20,22 +20,39 @@ struct MessagesControls {
 
 }
 
-struct MessagesView: View {
+struct ChatsView: View {
     
     @State var controls = MessagesControls()
     @EnvironmentObject var session: SessionStore // Contains currently signed in user's info.
-
     
+    @ObservedObject var chatVM = ChatViewModel()
+    
+    @ObservedObject var dateFormatter = CustomDateFormatter()
+
     var body: some View {
         NavigationView {
             
             VStack {
                 CustomNavBar()
-                MessagesList()
+                if session.userSession!.chats != nil {
+                    if !session.userSession!.chats!.isEmpty {
+                        AllChatsList()
+                    }
+                } else {
+                    Spacer()
+                    Text("No Chats")
+                    Spacer()
+                }
             }
-            .overlay(
-                newMessageButton(), alignment: .bottom)
             .navigationBarHidden(true)
+        }
+        .onAppear {
+            // Check if user has any chats before trying to load chat data.
+            if session.userSession!.chats != nil {
+                if !session.userSession!.chats!.isEmpty {
+                    chatVM.loadChatDataIfNeeded(forUser: session.userSession!)
+                }
+            }
         }
     }
     
@@ -82,36 +99,39 @@ struct MessagesView: View {
                 .destructive(Text("Sign Out"), action: {
                     print("handle sign out")
                 }),
-                    .cancel()
+                .cancel()
             ])
         }
     }
     
-    private func MessagesList() -> some View {
+    private func AllChatsList() -> some View {
         ScrollView {
-            ForEach(0..<10, id: \.self) { num in
+            ForEach(Array(chatVM.chatUserDict.sorted { $0.key.lastUpdated > $1.key.lastUpdated }), id: \.key) { (chat, user) in
                 VStack {
-                    NavigationLink(destination: EmptyView()) {
+                    NavigationLink(destination: MessageDetailView(messagesVM: MessagesViewModel(fromUser: session.userSession!, toUser: user)).onDisappear{chatVM.loadChatDataIfNeeded(forUser: session.userSession!)}) {
                         
                         HStack(spacing: 16) {
-                            Image(systemName: "person.fill")
-                                .font(.system(size: 32))
-                                .padding(8)
+                            UrlImage(url: user.profileImageUrl ?? "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png")
+                                .scaledToFill()
+                                .frame(width: 44, height: 44)
+                                .clipped()
+                                .cornerRadius(44)
                                 .overlay(RoundedRectangle(cornerRadius: 44)
                                     .stroke(Color(.label), lineWidth: 1)
                                 )
-                            
-                            
+                                .shadow(radius: 5)
+                                        
                             VStack(alignment: .leading) {
-                                Text("Username")
+                                Text("\(user.firstName) \(user.lastName)")
                                     .font(.system(size: 16, weight: .bold))
-                                Text("Message sent to user")
+                                Text("\(chat.lastMessage)")
                                     .font(.system(size: 14))
                                     .foregroundColor(Color(.lightGray))
+                                    .multilineTextAlignment(.leading)
                             }
                             Spacer()
                             
-                            Text("2d")
+                            Text("\(dateFormatter.formatTimestampSince(chat.lastUpdated))")
                                 .font(.system(size: 14, weight: .semibold))
                         }
                         
@@ -119,6 +139,9 @@ struct MessagesView: View {
                     Divider()
                         .padding(.vertical, 8)
                 }.padding(.horizontal)
+                    .simultaneousGesture(TapGesture().onEnded{
+                        UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                    })
                 
             }.padding(.vertical)
             .padding(.bottom, 50)
@@ -153,8 +176,8 @@ struct MessagesView: View {
     }
 }
 
-struct MessagesView_Previews: PreviewProvider {
+struct ChatsView_Previews: PreviewProvider {
     static var previews: some View {
-        MessagesView()
+        ChatsView()
     }
 }

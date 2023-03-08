@@ -9,6 +9,12 @@ import Foundation
 
 class Constants {
     
+    static var projectID = "servicexchange-5c2cb"
+    
+    // For FCM API
+    static var fcmServerKey: String = "AAAAoI4ZaYo:APA91bHgLoVzw2QoDWTLGqseYpQLZ0WTridvFPadtesrPizH7Y6l-Y-8-mIfqyr4_tiBBV8EOKVyfzYgVb4bmDoMcYoqkoJBSn62vcPQSok0Dp4nWpEsdk_Y_GJy_K2y36Z25eyWvTr3"
+    static var fcmEndpoint: String = "https://fcm.googleapis.com/v1/projects/\(Constants.projectID)/messages:send"
+    
     // Current pool of Categories. Might change to a Firestore collection in the future.
     static var categoryList = [CategoryCell(index: 0,title: "Handyman", imageName: "wrench.and.screwdriver"),
                                CategoryCell(index: 1,title: "Electrical", imageName: "bolt"),
