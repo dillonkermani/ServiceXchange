@@ -18,6 +18,7 @@ struct User: Encodable, Decodable, Hashable {
     
     
     var profileImageUrl: String?
+    var descriptiveImageStr: String?
     var companyName: String?
     var bio: String?
     var primaryLocationServed: String?
