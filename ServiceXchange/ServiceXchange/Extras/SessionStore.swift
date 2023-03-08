@@ -14,6 +14,8 @@ class SessionStore: ObservableObject {
     
     let db = Firestore.firestore()
     
+    
+    
     @Published var isLoggedIn = false
     @Published var isLoadingLogin = false
     @Published var isLoadingRefresh = false
@@ -29,7 +31,14 @@ class SessionStore: ObservableObject {
                 
                 // Decode user and set userSession
                 let firestoreUserId = Ref.FIRESTORE_DOCUMENT_USERID(userId: user.uid)
-                
+                firestoreUserId.getDocument { (document, error) in
+                    if let dict = document?.data() {
+                        guard let decoderUser = try? User.init(fromDictionary: dict) else {return}
+                        self.userSession = decoderUser
+                        
+                        //self.loadLocalUserVariables()
+                    }
+                }
                 // Update fcmToken
                 if let fcmToken = Messaging.messaging().fcmToken {
                     firestoreUserId.updateData( [
@@ -64,6 +73,22 @@ class SessionStore: ObservableObject {
         }
     }
     
+    func refreshUser() {
+            if isLoggedIn {
+                let firestoreUserId = Ref.FIRESTORE_DOCUMENT_USERID(userId: userSession!.userId)
+                  firestoreUserId.getDocument { (document, error) in
+                      if let dict = document?.data() {
+                          guard let decoderUser = try? User.init(fromDictionary: dict) else {return}
+                        self.userSession = decoderUser
+                        print("Successfully refreshed user session.")
+                      }
+                  }
+            } else {
+                print("User isn't logged in. Cannot refresh user session.")
+            }
+            
+        }
+    
     func deleteUser() {
         print("Deleting user account \(Auth.auth().currentUser!.uid)")
         db.collection("users").document(Auth.auth().currentUser!.uid).delete() { err in
@@ -87,6 +112,7 @@ class SessionStore: ObservableObject {
         unbind()
     }
     
+    
     func refreshUserSession() {
         self.isLoadingRefresh = true
         guard let userId = userSession?.userId else { return }
@@ -101,3 +127,5 @@ class SessionStore: ObservableObject {
         }
     }
 }
+
+

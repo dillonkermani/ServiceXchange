@@ -14,11 +14,15 @@ struct ServiceXchangeApp: App {
     @StateObject var session = SessionStore()
 
 
+  //user information is stored locally in userViewModel and can be accessed throughout the apps pages
+  @StateObject var userVM = UserViewModel()
+    
   var body: some Scene {
     WindowGroup {
       NavigationView {
         ContentView() // Right Click -> "Jump to Definition" to go through viewcontroller flow.
             .environmentObject(session)
+            .environmentObject(userVM)
             .preferredColorScheme(.light)
       }
     }

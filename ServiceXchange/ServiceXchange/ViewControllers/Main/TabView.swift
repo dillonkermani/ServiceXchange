@@ -15,6 +15,20 @@ struct TabView: View {
     @State var promptLogin = false
     @State var plusTabPressed = false
     @EnvironmentObject var session: SessionStore
+    
+    
+    @State private var userToPass : User = User(
+        userId: "",
+        firstName: "",
+        lastName: "",
+        email: "",
+        isServiceProvider: false,
+        listingIDs: []
+    )
+    @State private var thisUser : Bool = true
+    
+    
+    @EnvironmentObject var userVM : UserViewModel
 
     let icons = [
         "house",
@@ -71,13 +85,18 @@ struct TabView: View {
                             }
                         }
                     case 4:
+                        
                         NavigationView {
+                            
                             VStack {
                                 if session.isLoggedIn {
-                                    ProfileView()
+    
+                                    //ProfileViewMultiTest(user: $userToPass, thisUser : $thisUser)
+                                    ProfileUserView()
                                 }
                                 
                             }.navigationTitle("Profile")
+
                         }
                     default:
                         NavigationView {
