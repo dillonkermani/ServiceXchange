@@ -179,8 +179,6 @@ class UserViewModel: ObservableObject{
                       "profileImageUrl": downloadURL.absoluteString,
                   ] )
                 
-                 
-                    
                 }
                 else {
                     self.localDescriptiveImageStr = downloadURL.absoluteString
@@ -195,23 +193,27 @@ class UserViewModel: ObservableObject{
     }//updateImages2
     
     
+    //maybe this doesn't work need further testing
+    //not sure why this would make anything fault if they are local vars?
+    func asyncClear() async -> Void{
+        
+        self.initialized = false
+        
+//        self.localUserId = ""
+//        self.localBio = ""
+//        self.localCompanyName = ""
+//        self.localPrimaryLocationServed = ""
+        self.localProfileImageUrl = ""
+        self.localDescriptiveImageStr = ""
+    }
     
-    
-//    func editTest( onSuccess: @escaping() -> Void, onError: @escaping(_ errorMessage: String) -> Void) async {
-//
-//        let _ = "bouta sleep"
-//        sleep(3)
-//        let _ = "yo good nap"
-//        onSuccess()
-//    }
-//
     
     //delete a user account from the authentification storage
     func deleteUserAccount () {
         let user = Auth.auth().currentUser
 
         user?.delete { error in
-          if let error = error {
+            if error != nil {
               print("unable to delete account")
             // An error happened.
           } else {
@@ -227,11 +229,6 @@ class UserViewModel: ObservableObject{
     
     //need to reauth before we can delete a user before you delete their account
     func reAuthUser(userProvidedPassword: String){
-       
-        //have to make this async so that it clears them before deletion
-        //weird bug where information form last account stays in local variables
-        //make an async clear yeah
-        //self.clearLocalUserVariables()
         
         let user = Auth.auth().currentUser
 
@@ -261,30 +258,4 @@ class UserViewModel: ObservableObject{
 }//userViewModel
 
 
-
-
-
-
-
-
-
-
-
-
-
-//    func addListing(posterId: String, onSuccess: @escaping(_ listing: Listing) -> Void, onError: @escaping(_ errorMessage: String) -> Void) {
-//
-//
-//
-//        let listing = Listing(posterId: posterId, title: self.title, description: self.description, datePosted: Date().timeIntervalSince1970)
-//
-//        guard let dict = try? listing.toDictionary() else { return }
-//
-//        let listing_ref = Ref.FIRESTORE_COLLECTION_LISTINGS.addDocument(data: dict){ error in
-//            if let error = error {
-//                onError(error.localizedDescription)
-//                return
-//            }
-//        }
-//    }
 

@@ -64,14 +64,9 @@ struct EditProfileView: View {
     @State private var thisUser : Bool = true
     
     
-//    @State var loadingStuff : Bool = false
-//    @State var failureMessage : String = "you suck"
-//    @State var successMessage : String = ""
-    
     var body: some View {
         
         
-        //let _ = print(Editing.my_var)
         
         ZStack {
             
@@ -140,64 +135,11 @@ struct EditProfileView: View {
                 
                 
             }.toolbar(.hidden)
-        
-//            .overlay {
-//                
-//                ActivityIndicator(isShowing: $loadingStuff)
-//                    .frame(width: 50, height: 50)
-//                    .foregroundColor(CustomColor.sxcgreen)
-//                
-//                
-//            }
 
         
         } //view structure
     
-    
-    
-//
-//    func myButton() -> some View {
-//        return Button (action: {
-//            UIImpactFeedbackGenerator(style: .rigid).impactOccurred()
-//            loadingStuff = true
-//            Task {
-//                await userVM.editTest(  onSuccess: {  // We pass in posterId so we can associate post with who
-//                    successMessage = "success!"
-//                    loadingStuff = false
-//                    let _ = "out of awaiting and getting success"
-//
-//                }, onError: { errorMessage in
-//                    failureMessage = "fail"
-//
-//                    loadingStuff = false
-//
-//                })
-//
-//
-//            }
-//        }, label: {
-//            HStack {
-//                Spacer()
-//                Text("test balls")
-//                    .font(.system(size: 17))
-//                    .bold()
-//                    .padding(15)
-//                Spacer()
-//
-//            }
-//            .background(CustomColor.sxcgreen)
-//            .foregroundColor(.black)
-//            .cornerRadius(17)
-//            .overlay(
-//                RoundedRectangle(cornerRadius: 17)
-//                    .stroke(.black, lineWidth: 1)
-//            )
-//            .padding(15)
-//        }).disabled(loadingStuff)
-//
-//
-//
-//    }
+
     
     
     func textEditFields() -> some View {
@@ -243,7 +185,7 @@ struct EditProfileView: View {
                                      ZStack {
                                          
                                          
-                                         //images are fucked now haha will have to look into how to fix them later yay
+                                        
                                          
                                          AsyncImage(url: URL(string:  userVM.localDescriptiveImageStr)) { image in
                                              image
@@ -255,9 +197,7 @@ struct EditProfileView: View {
                                              ShimmerPlaceholderView(width: 400, height: 250, cornerRadius: 0, animating: false)
                                          }
                                          
-                                         //UrlImage(url: userVM.localDescriptiveImageStr)
-                                         //KFImage(URL(string: userVM.localDescriptiveImageStr))
-                                             //.resizable()
+
                                                  .aspectRatio(contentMode: .fill)
                                                  .frame(width: 400.0, height: 250.0, alignment: .top)
                                                  .clipShape(Rectangle())
@@ -395,28 +335,3 @@ struct EditProfileView_Previews: PreviewProvider {
 
 
 
-
-//NavigationLink(destination: ProfileViewMultiTest(user: $userToPass, thisUser: $thisUser), label: {
-//                NavigationLink(destination: ProfileUserView(), label: {
-//                Text("Save Changes")
-//                        .fontWeight(.semibold)
-//                        .font(.title)
-//                        .padding()
-//                        .background(Color.white)
-//                        .cornerRadius(40)
-//                        .foregroundColor(.black)
-//                        .padding(0)
-//                        .overlay(
-//                            RoundedRectangle(cornerRadius: 40)
-//                                .stroke(Color.black, lineWidth: 3)
-//                                .frame(width: 250, height: 70)
-//                        )
-//                }).simultaneousGesture(TapGesture().onEnded{
-//                    let userId = userVM.localUserId
-//                    userVM.update_user_info(userId: userId, company_name: username, location_served: locationServe, bio: shortBio, profileImageData: ProfImageData, backgroundImageData: backgroundImageData, onError: { errorMessage in
-//                        print("Update user error: \(errorMessage)")
-//
-//                    })
-//                    //print("hello")
-//                })
-//                .padding(.bottom, 30)

@@ -262,7 +262,7 @@ struct ProfileViewMultiTest: View {
                 
                 
                 Button("Delete Account2"){
-                    navigateTo = AnyView(ProfileViewTest())
+                    navigateTo = AnyView(ProfileViewDeleteAccount())
                     self.isActive = true
                 }
                 

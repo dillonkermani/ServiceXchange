@@ -34,7 +34,7 @@ struct ProfileSettingsView: View {
                     .buttonStyle(labelFormatt())
                     
                     //delete your account
-                    NavigationLink(destination: ProfileViewTest(), label: {
+                    NavigationLink(destination: ProfileViewDeleteAccount(), label: {
                         Label("Delete Account", systemImage: "trash")
                             .frame(width: 300, height: 30)
                     })
