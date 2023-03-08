@@ -128,7 +128,7 @@ struct ListingDetailView : View {
     }
     
     private func ListingTitleBar() -> some View {
-        HStack {
+        return HStack {
             Text(listing.title)
                 .font(.system(size: 36)).bold()
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -147,118 +147,120 @@ struct ListingDetailView : View {
             Task{
                 await listingVM.getListingPoster(posterId: listing.posterId)
                 userToPass = listingVM.poster
-    }
-    
-    private func ListingMenuButton() -> some View {
-        Menu {
-            NavigationLink(destination: ChatsView(), label: {
-                Label("Send Message", systemImage: "paperplane")
-            })
-            Button(role: .none, action: {
-                controls.activeAlert = .reportListing
-                controls.showAlert.toggle()
-
-            }, label: {
-                Label("Report", systemImage: "flag.fill")
-                    .foregroundColor(.red)
-            })
-            if true {//session.userSession?.userId == listing.posterId { // If currently signed in user is the poster of the Listing
-                Button(role: .none, action: {
-                    controls.activeAlert = .deleteListing
-                    controls.showAlert.toggle()
-                }, label: {
-                    Label("Delete", systemImage: "trash")
-                        .foregroundColor(.black)
-                })
             }
         }
-        label: {
-            Image(systemName: "ellipsis")
-                .font(.system(size: 20))
-                .foregroundColor(.black)
-                .padding()
-        }
-    }
+    }//listing Title bar
     
-    private func DetailsView() -> some View {
-        return VStack {
-            HStack {
-                Text("Details:")
-                    .font(.system(size: 18)).bold()
-                    .padding(.bottom, 1)
-                Spacer()
-            }
-            HStack {
-                Text(listing.description)
+            private func ListingMenuButton() -> some View {
+                Menu {
+                    NavigationLink(destination: ChatsView(), label: {
+                        Label("Send Message", systemImage: "paperplane")
+                    })
+                    Button(role: .none, action: {
+                        controls.activeAlert = .reportListing
+                        controls.showAlert.toggle()
+                        
+                    }, label: {
+                        Label("Report", systemImage: "flag.fill")
+                            .foregroundColor(.red)
+                    })
+                    if true {//session.userSession?.userId == listing.posterId { // If currently signed in user is the poster of the Listing
+                        Button(role: .none, action: {
+                            controls.activeAlert = .deleteListing
+                            controls.showAlert.toggle()
+                        }, label: {
+                            Label("Delete", systemImage: "trash")
+                                .foregroundColor(.black)
+                        })
+                    }
+                }
+            label: {
+                Image(systemName: "ellipsis")
                     .font(.system(size: 20))
-                Spacer()
+                    .foregroundColor(.black)
+                    .padding()
+            }
             }
             
-            Spacer()
-        }.padding(25)
-    }
-    
-    private func ListingCategoriesView() -> some View {
-        return
-            VStack {
-                if listing.categories != nil {
+            private func DetailsView() -> some View {
+                return VStack {
                     HStack {
-                        Text("Categories:")
-                            .font(.system(size: 17)).bold()
+                        Text("Details:")
+                            .font(.system(size: 18)).bold()
+                            .padding(.bottom, 1)
                         Spacer()
                     }
                     HStack {
-                        ForEach(listing.categories ?? [], id: \.self) { category in
-                            FilterTag(filterData: CategoryCell(title: category, imageName: "square.grid.2x2", isSelected: true))
-                                
-                        }
-                        Spacer()
-                    }
-                }
-            }.padding(25)
-        
-    }
-
-    
-
-    func PosterDataView() -> some View {
-        
-//        @State private var userToPass : User = listingVM.poster
-//        @State private var thisUser : Bool = false
-
-        return HStack {
-            //TODO: make Profile View take in a userid instead of nothing (profile view my be the wrong view to link)
-            //NavigationLink(destination: ProfileView()){
-            //NavigationLink(destination: ProfileViewMultiTest(user : $userToPass , thisUser : $thisUser)){
-                NavigationLink(destination: ProfileProviderView(user : $userToPass)){
-                HStack{
-                    UrlImage(url: listingVM.poster.profileImageUrl ?? "")
-                        .scaledToFill()
-                        .frame(width: 70, height: 70)
-                        .clipShape(Circle())
-                    VStack(alignment: .leading) {
-                        Text("\(listingVM.poster.firstName) \(listingVM.poster.lastName)")
-                            .padding(.horizontal, 5)
-                            .foregroundColor(.black)
+                        Text(listing.description)
                             .font(.system(size: 20))
-                        RatingView(rating: rating)
-                            .padding(.horizontal, 5)
-                            .task {
-                                self.rating = await getRating(userId: listing.posterId)
-                            }
-
+                        Spacer()
                     }
-                }.task {
-                    await self.listingVM.getListingPoster(posterId: listing.posterId)
-                    //await userToPass = listingVM.poster
-                }
+                    
+                    Spacer()
+                }.padding(25)
             }
-            Spacer()
             
-        }
-        .frame(height: 50)
-        .padding(.horizontal, 25)
-    }
+            private func ListingCategoriesView() -> some View {
+                return VStack {
+                    if listing.categories != nil {
+                        HStack {
+                            Text("Categories:")
+                                .font(.system(size: 17)).bold()
+                            Spacer()
+                        }
+                        HStack {
+                            ForEach(listing.categories ?? [], id: \.self) { category in
+                                FilterTag(filterData: CategoryCell(title: category, imageName: "square.grid.2x2", isSelected: true))
+                                
+                            }
+                            Spacer()
+                        }
+                    }
+                }.padding(25)
+                
+            }
+            
+            
+            
+            func PosterDataView() -> some View {
+                
+                //        @State private var userToPass : User = listingVM.poster
+                //        @State private var thisUser : Bool = false
+                
+                return HStack {
+                    //TODO: make Profile View take in a userid instead of nothing (profile view my be the wrong view to link)
+                    //NavigationLink(destination: ProfileView()){
+                    //NavigationLink(destination: ProfileViewMultiTest(user : $userToPass , thisUser : $thisUser)){
+                    NavigationLink(destination: ProfileProviderView(user : $userToPass)){
+                        HStack{
+                            UrlImage(url: listingVM.poster.profileImageUrl ?? "")
+                                .scaledToFill()
+                                .frame(width: 70, height: 70)
+                                .clipShape(Circle())
+                            VStack(alignment: .leading) {
+                                Text("\(listingVM.poster.firstName) \(listingVM.poster.lastName)")
+                                    .padding(.horizontal, 5)
+                                    .foregroundColor(.black)
+                                    .font(.system(size: 20))
+                                RatingView(rating: rating)
+                                    .padding(.horizontal, 5)
+                                    .task {
+                                        self.rating = await getRating(userId: listing.posterId)
+                                    }
+                                
+                            }
+                        }.task {
+                            await self.listingVM.getListingPoster(posterId: listing.posterId)
+                            //await userToPass = listingVM.poster
+                        }
+                    }
+                    Spacer()
+                    
+                }
+                .frame(height: 50)
+                .padding(.horizontal, 25)
+            }
+        
     
     private func RequestServiceButton() -> some View {
         VStack {

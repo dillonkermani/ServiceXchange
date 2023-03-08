@@ -76,7 +76,7 @@ struct ProfileUserView: View {
 func showProfileImage(imageStr : String, diameter: CGFloat) -> some View {
     return VStack {
         
-        if imageStr != "blankprofile"  && imageStr != ""{
+        if imageStr != "blankprofile"  && imageStr != "" {
             
             
             AsyncImage(url: URL(string:  imageStr)) { image in
@@ -86,7 +86,8 @@ func showProfileImage(imageStr : String, diameter: CGFloat) -> some View {
                     .frame(width: diameter, height: diameter , alignment: .center)
                     .clipShape(Circle())
             } placeholder: {
-                ShimmerPlaceholderView(width: diameter, height: diameter, cornerRadius: 0, animating: false)
+                //ShimmerPlaceholderView(width: diameter, height: diameter, cornerRadius: 0, animating: false)
+                LoadingView()
             }
             
         }
@@ -95,6 +96,7 @@ func showProfileImage(imageStr : String, diameter: CGFloat) -> some View {
             Image(defaultImage)
                 .resizable()
                 .aspectRatio(contentMode: .fill)
+            //UIScreen.main.bounds.width /1.2
                 .frame(width: diameter, height: diameter, alignment: .center)
                 .clipShape(Circle())
         }
@@ -125,7 +127,10 @@ func showBackGroundImage(imageStr : String) -> some View {
                     .frame(width: imWidth, height: imHeight )
                     .clipShape(Rectangle())
             } placeholder: {
-                ShimmerPlaceholderView(width: imWidth, height: imHeight, cornerRadius: 0, animating: true)
+                LoadingView()
+                    //.frame(width: imWidth, height: imHeight )
+                    
+                //ShimmerPlaceholderView(width: imWidth, height: imHeight, cornerRadius: 0, animating: false)
             }
             
 

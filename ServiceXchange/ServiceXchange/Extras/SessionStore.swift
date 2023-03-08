@@ -31,14 +31,14 @@ class SessionStore: ObservableObject {
                 
                 // Decode user and set userSession
                 let firestoreUserId = Ref.FIRESTORE_DOCUMENT_USERID(userId: user.uid)
-                  firestoreUserId.getDocument { (document, error) in
-                      if let dict = document?.data() {
+                firestoreUserId.getDocument { (document, error) in
+                    if let dict = document?.data() {
                         guard let decoderUser = try? User.init(fromDictionary: dict) else {return}
                         self.userSession = decoderUser
-    
-                          //self.loadLocalUserVariables()
-                      }
-                
+                        
+                        //self.loadLocalUserVariables()
+                    }
+                }
                 // Update fcmToken
                 if let fcmToken = Messaging.messaging().fcmToken {
                     firestoreUserId.updateData( [

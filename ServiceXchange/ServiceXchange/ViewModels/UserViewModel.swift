@@ -203,8 +203,8 @@ class UserViewModel: ObservableObject{
 //        self.localBio = ""
 //        self.localCompanyName = ""
 //        self.localPrimaryLocationServed = ""
-        self.localProfileImageUrl = ""
-        self.localDescriptiveImageStr = ""
+        //self.localProfileImageUrl = ""
+        //self.localDescriptiveImageStr = ""
     }
     
     
