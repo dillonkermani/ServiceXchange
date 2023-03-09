@@ -6,8 +6,12 @@
 //
 
 import Foundation
+import SwiftUI
 
 class Constants {
+    
+    static var screenHeight = UIScreen.main.bounds.height
+    static var screenWidth = UIScreen.main.bounds.width
     
     static var projectID = "servicexchange-5c2cb"
     

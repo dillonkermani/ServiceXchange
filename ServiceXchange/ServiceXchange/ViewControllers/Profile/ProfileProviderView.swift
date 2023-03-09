@@ -14,25 +14,17 @@ struct ProfileProviderView: View {
     @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
-        
-        //let topPaddingBackground: CGFloat = -430
-        //let topPaddingProfile: CGFloat = -240
+
         let profileRadius: CGFloat = 125
         let arrowSize: CGFloat = 17
         
-        let screenHeight = UIScreen.main.bounds.height
-        let screenWidth = UIScreen.main.bounds.width
-        
         ZStack{
             
-            showBackGroundImage(imageStr: user.descriptiveImageStr ?? "sunsetTest")
-                //.padding(.top , topPaddingBackground)
-                .offset( y: screenHeight * -0.30)
+            ProfileBackground(imageStr: user.descriptiveImageStr ?? "sunsetTest")
+                .offset( y: Constants.screenHeight * -0.30)
             
-            showProfileImage(imageStr: user.profileImageUrl ?? "blankprofile", diameter: profileRadius)
-                //.padding(.top, topPaddingProfile)
-                .offset(y: screenHeight * -0.175)
-            
+            ProfileImage(imageStr: user.profileImageUrl ?? "blankprofile", diameter: profileRadius)
+                .offset(y: Constants.screenHeight * -0.175)
             
             NavigationLink(destination: ChatsView(), label: {
                 Image(systemName: "paperplane")
@@ -40,20 +32,19 @@ struct ProfileProviderView: View {
                                   weight: .regular,
                                   design: .default))
                     .foregroundColor(.black)
-                    
             })
-            .padding(.bottom, screenHeight * 0.27)
-            .padding(.leading, screenWidth * 0.7)
+            .padding(.bottom, Constants.screenHeight * 0.27)
+            .padding(.leading, Constants.screenWidth * 0.7)
             
             if user.companyName == "" {
                 Text(user.firstName + " " + user.firstName)
                     .font(.title2)
-                    .offset(y: screenHeight * -0.06)
+                    .offset(y: Constants.screenHeight * -0.06)
             }
             else {
                 Text(user.companyName ?? "none")
                     .font(.title2)
-                    .offset(y: screenHeight * -0.06)
+                    .offset(y: Constants.screenHeight * -0.06)
             }
             
         }//ZStack
@@ -76,9 +67,3 @@ struct ProfileProviderView: View {
     }
 }
 
-//struct ProfileProviderView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        var my_user : User = init(userId: n, firstName: "cole", lastName: "j", email: "c@g", isServiceProvider: false, listingIDs: [], phone: "1234")
-//        ProfileProviderView(my_user)
-//    }
-//}

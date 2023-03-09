@@ -65,84 +65,38 @@ struct EditProfileView: View {
     
     
     var body: some View {
-        
-        let screenHeight = UIScreen.main.bounds.height
-        //let screenWidth = UIScreen.main.bounds.width
-        
         //testing my newButtons
         ZStack {
             changeBackgroundIm()
-                .offset(y: screenHeight * -0.27)
+                .offset(y: Constants.screenHeight * -0.27)
             
             changeProfileIm()
-                .offset(y: screenHeight * -0.15)
+                .offset(y: Constants.screenHeight * -0.15)
             
             VStack{
                 textEditFields()
-                    .offset(y: screenHeight * 0.15)
-                    //.padding(.top, -200)
-                    //.padding(.bottom, 60)
-                
+                    .offset(y: Constants.screenHeight * 0.15)
                 
                 saveChangesButton()
-                    .offset(y: screenHeight * 0.2)
+                    .offset(y: Constants.screenHeight * 0.2)
                 
             }//VStack
             
         }//ZStack
-        
-      
-        
-        
-        /*
-        ZStack{
-            
-            addDescriptiveImage()
-                .offset(y: screenHeight * -0.27)
-            //.padding(.top, -400)
-            
-            //add the profile image button thing
-            addProfilePhoto()
-                .offset(y: screenHeight * -0.15)
-      
-        
-        VStack{
-            textEditFields()
-                .offset(y: screenHeight * 0.15)
-                //.padding(.top, -200)
-                //.padding(.bottom, 60)
-            
-            
-            saveChangesButton()
-                .offset(y: screenHeight * 0.2)
-            
-        }//VStack
-    }//ZStack
-    
-        */
-        
-    .onAppear{
-        
-        if userVM.localCompanyName != "none" {
-            companyNameTitle = userVM.localCompanyName
-        }
-        if userVM.localBio != "none"{
-            shortBioTitle = userVM.localBio
-        }
-        if userVM.localPrimaryLocationServed != "none" {
-            locationServeTitle = userVM.localPrimaryLocationServed
-        }
-        
-        
-    }.toolbar(.hidden)
+        .onAppear{
+            if userVM.localCompanyName != "none" {
+                companyNameTitle = userVM.localCompanyName
+            }
+            if userVM.localBio != "none"{
+                shortBioTitle = userVM.localBio
+            }
+            if userVM.localPrimaryLocationServed != "none" {
+                locationServeTitle = userVM.localPrimaryLocationServed
+            }
+        }.toolbar(.hidden)
 
-        
-    } //view structure
-    
-    
-    
-    
-
+            
+        } //view structure
 
     func saveChangesButton() -> some View {
         return VStack {
@@ -198,11 +152,11 @@ struct EditProfileView: View {
                 
                 //if user does not have a profile picture yet
                 if userVM.localDescriptiveImageStr == "" {
-                    showBackGroundImage(imageStr: "")
+                    ProfileBackground(imageStr: "")
                 }
                 else { //they do have a profile image -> display it
                     
-                    showBackGroundImage(imageStr: userVM.localDescriptiveImageStr)
+                    ProfileBackground(imageStr: userVM.localDescriptiveImageStr)
                 }
                 
 
@@ -215,9 +169,7 @@ struct EditProfileView: View {
                         .frame(width: width, height: height, alignment: .top)
                         .clipShape(Rectangle())
                         .cornerRadius(20)
-            }//else
-            
-            
+            }
             Button(action: {
                 //want to flip the showing image picker so that the sheet is shown
                 print("button pressed")
@@ -258,11 +210,11 @@ struct EditProfileView: View {
                 
                 //if user does not have a profile picture yet
                 if userVM.localProfileImageUrl == "" {
-                    showProfileImage(imageStr: "", diameter: profileRad)
+                    ProfileImage(imageStr: "", diameter: profileRad)
                 }
                 
                 else { //they do have a profile image -> display it
-                    showProfileImage(imageStr: userVM.localProfileImageUrl, diameter: profileRad)
+                    ProfileImage(imageStr: userVM.localProfileImageUrl, diameter: profileRad)
                 }
 
             } //if the user has not picked image
@@ -277,9 +229,7 @@ struct EditProfileView: View {
                     .clipShape(Circle())
                 
             }
-
-            
-            
+ 
             //button that pulls up the image picker
             Button(action: {
                 //want to flip the showing image picker so that the sheet is shown
@@ -324,11 +274,11 @@ struct EditProfileView: View {
                                  
                                  //if user does not have a profile picture yet
                                  if userVM.localDescriptiveImageStr == "" {
-                                     showBackGroundImage(imageStr: "")
+                                     ProfileBackground(imageStr: "")
                                  }
                                  else { //they do have a profile image -> display it
                                      
-                                     showBackGroundImage(imageStr: userVM.localDescriptiveImageStr)
+                                     ProfileBackground(imageStr: userVM.localDescriptiveImageStr)
                                  }
                                  
 
@@ -343,9 +293,7 @@ struct EditProfileView: View {
                                          .cornerRadius(20)
                              }//else
                          }//label of the button I think
-                     
-               
-       
+    
          }.frame(maxWidth: .infinity, maxHeight: .infinity)
              .sheet(isPresented: $controlsDesc.showImagePicker, content: {
                  ImagePicker(showImagePicker: $controlsDesc.showImagePicker, pickedImage: $controlsDesc.pickedImage, imageData: $backgroundImageData, sourceType: .photoLibrary)
@@ -389,7 +337,6 @@ struct EditProfileView: View {
         let profileRad: CGFloat = screenWidth * 0.30
         
        return ZStack {
-         
                 VStack {
                         Button(action: {
                             UIImpactFeedbackGenerator(style: .light).impactOccurred()
@@ -397,47 +344,34 @@ struct EditProfileView: View {
                             controls.showImagePicker = true
                         }) {
                             if controls.pickedImage == Image("user-placeholder") {
-                                
                                 //if user does not have a profile picture yet
                                 if userVM.localProfileImageUrl == "" {
-                                    showProfileImage(imageStr: "", diameter: profileRad)
+                                    ProfileImage(imageStr: "", diameter: profileRad)
                                 }
-                                
                                 else { //they do have a profile image -> display it
-                                    showProfileImage(imageStr: userVM.localProfileImageUrl, diameter: profileRad)
+                                    ProfileImage(imageStr: userVM.localProfileImageUrl, diameter: profileRad)
                                 }
-                                
-
                             } //if the user has not picked image
                             
                             else { //user has picked a new image
-                               
-                                
                                 controls.pickedImage
                                     .resizable()
                                     .aspectRatio(contentMode: .fill)
                                     .frame(width: 125.0, height: 125.0, alignment: .center)
                                     .clipShape(Circle())
-                                
                             }
                         }
-                    
                 }
-      
         }.frame(maxWidth: .infinity, maxHeight: .infinity)
             .sheet(isPresented: $controls.showImagePicker, content: {
                 ImagePicker(showImagePicker: $controls.showImagePicker, pickedImage: $controls.pickedImage, imageData: $ProfImageData, sourceType: .photoLibrary)
                     
             })
-        
-    }
-    
+        }
 }
 
 struct EditProfileView_Previews: PreviewProvider {
     static var previews: some View {
-        
-        
         EditProfileView()
             .environmentObject(UserViewModel())
     }

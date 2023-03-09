@@ -13,7 +13,7 @@ struct ProfileViewChangePassword: View {
     
     var body: some View {
         VStack{
-            Text("change Password View")
+            Text("Change Password View")
         }.navigationBarBackButtonHidden(true)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
