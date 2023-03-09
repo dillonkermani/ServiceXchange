@@ -40,12 +40,15 @@ struct ProfileUserView: View {
             ZStack {
                 
                 showBackGroundImage(imageStr: userVM.localDescriptiveImageStr)
-                    .padding(.top, screenHeight * 0.02)
-                    .padding(.bottom, screenHeight * 0.60)
-                    .padding(.horizontal, 10)
+                    //.padding(.top, screenHeight * 0.1)
+                    //.padding(.bottom, screenHeight * 0.55)
+                    //.padding(.horizontal, 10)
+                    .offset( y: screenHeight * -0.27)
+                
                 
                 showProfileImage(imageStr: userVM.localProfileImageUrl, diameter: 125)
-                    .padding(.bottom, screenHeight * 0.43)
+                    .offset(y: screenHeight * -0.15)
+                //.padding(.bottom, screenHeight * 0.43)
                 
                 
                 NavigationLink(destination: ProfileSettingsView(), label: {
@@ -64,11 +67,14 @@ struct ProfileUserView: View {
                 
                 Text(userVM.localCompanyName)
                     .font(.title2)
-                    .padding(.trailing, screenWidth * 0.45)
-                    .padding(.bottom, screenHeight * 0.20)
+                    .offset(y: screenHeight * -0.05)
+                    //.offset(x: screenWidth * -0.35)
+                    //.padding(.trailing, screenWidth * 0.45)
+                    //.padding(.bottom, screenHeight * 0.20)
                 
                 Text("\" \(userVM.localBio) \"")
-                    .padding(.bottom, screenHeight * 0.05)
+                    //.padding(.bottom, screenHeight * 0.05)
+                
                 
             }
     
@@ -154,13 +160,16 @@ func showProfileImage(imageStr : String, diameter: CGFloat) -> some View {
 //returns a 400 x 250 image (either a default or a user image)
 func showBackGroundImage(imageStr : String) -> some View {
  
+    let screenHeight = UIScreen.main.bounds.height
+    let screenWidth = UIScreen.main.bounds.width
+    
     return VStack {
         
         if imageStr == "" || imageStr == "sunsetTest"{
             Image("sunsetTest")
                 .resizable()
                 //.aspectRatio(contentMode: .fill)
-                //.frame(width: imWidth, height: imHeight, alignment: .top)
+                .frame(width: screenWidth - 20, height: screenHeight * 0.25, alignment: .top)
                 .clipShape(Rectangle())
                 .cornerRadius(20)
             
@@ -171,6 +180,7 @@ func showBackGroundImage(imageStr : String) -> some View {
                 image
                     .resizable()
                     .aspectRatio(contentMode: .fill)
+                    .frame(width: screenWidth - 20, height: screenHeight * 0.25, alignment: .top)
                     //.frame(width: imWidth, height: imHeight )
                     .clipShape(Rectangle())
                     .cornerRadius(20)
