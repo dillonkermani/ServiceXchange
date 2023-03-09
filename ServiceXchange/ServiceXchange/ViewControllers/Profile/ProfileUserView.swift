@@ -58,8 +58,8 @@ struct ProfileUserView: View {
                         .background(.white)
                         .cornerRadius(gearWidth)
                 })
-                .padding(.bottom, screenHeight * 0.70)
-                .padding(.leading, screenWidth * 0.7)
+                .padding(.bottom, screenHeight * 0.69)
+                .padding(.leading, screenWidth * 0.73)
                 
                 
                 Text(userVM.localCompanyName)

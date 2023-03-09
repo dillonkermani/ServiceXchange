@@ -67,8 +67,34 @@ struct EditProfileView: View {
     var body: some View {
         
         let screenHeight = UIScreen.main.bounds.height
-        let screenWidth = UIScreen.main.bounds.width
+        //let screenWidth = UIScreen.main.bounds.width
         
+        //testing my newButtons
+        ZStack {
+            changeBackgroundIm()
+                .offset(y: screenHeight * -0.27)
+            
+            changeProfileIm()
+                .offset(y: screenHeight * -0.15)
+            
+            VStack{
+                textEditFields()
+                    .offset(y: screenHeight * 0.15)
+                    //.padding(.top, -200)
+                    //.padding(.bottom, 60)
+                
+                
+                saveChangesButton()
+                    .offset(y: screenHeight * 0.2)
+                
+            }//VStack
+            
+        }//ZStack
+        
+      
+        
+        
+        /*
         ZStack{
             
             addDescriptiveImage()
@@ -78,8 +104,7 @@ struct EditProfileView: View {
             //add the profile image button thing
             addProfilePhoto()
                 .offset(y: screenHeight * -0.15)
-            //.padding(.top, -154)
-       // }//Zstack
+      
         
         VStack{
             textEditFields()
@@ -93,6 +118,9 @@ struct EditProfileView: View {
             
         }//VStack
     }//ZStack
+    
+        */
+        
     .onAppear{
         
         if userVM.localCompanyName != "none" {
@@ -111,6 +139,10 @@ struct EditProfileView: View {
         
     } //view structure
     
+    
+    
+    
+
 
     func saveChangesButton() -> some View {
         return VStack {
@@ -153,6 +185,126 @@ struct EditProfileView: View {
     }//textFields function
     
 
+    func changeBackgroundIm() -> some View {
+        
+        let screenHeight = UIScreen.main.bounds.height
+        let screenWidth = UIScreen.main.bounds.width
+        let width = screenWidth - 20
+        let height = screenHeight * 0.25
+        
+        return ZStack {
+            
+            if controlsDesc.pickedImage == Image("user-placeholder") {
+                
+                //if user does not have a profile picture yet
+                if userVM.localDescriptiveImageStr == "" {
+                    showBackGroundImage(imageStr: "")
+                }
+                else { //they do have a profile image -> display it
+                    
+                    showBackGroundImage(imageStr: userVM.localDescriptiveImageStr)
+                }
+                
+
+            } //if the user has not picked image
+            
+            else { //user has picked a new image
+                controlsDesc.pickedImage
+                    .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: width, height: height, alignment: .top)
+                        .clipShape(Rectangle())
+                        .cornerRadius(20)
+            }//else
+            
+            
+            Button(action: {
+                //want to flip the showing image picker so that the sheet is shown
+                print("button pressed")
+                UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                controlsDesc.pickedImageType = "card"
+                controlsDesc.showImagePicker = true
+            }, label: {
+                Image(systemName: "plus.rectangle")
+                    .font(.system(size: 40,
+                                  weight: .regular,
+                                  design: .default))
+                    .foregroundColor(.black)
+                    .background(.white)
+                    .cornerRadius(5)
+            })
+            .offset(y: screenHeight * 0.12)
+            .offset(x: screenWidth * 0.35)
+            
+            
+        }
+        .sheet(isPresented: $controlsDesc.showImagePicker, content: {
+            ImagePicker(showImagePicker: $controlsDesc.showImagePicker, pickedImage: $controlsDesc.pickedImage, imageData: $backgroundImageData, sourceType: .photoLibrary)
+                
+        })//.sheet
+        
+        
+    }//changeProfileIm function
+    
+    
+    func changeProfileIm() -> some View {
+        let screenHeight = UIScreen.main.bounds.height
+        let screenWidth = UIScreen.main.bounds.width
+        let profileRad: CGFloat = screenWidth * 0.30
+        
+        return ZStack {
+            
+            if controls.pickedImage == Image("user-placeholder") {
+                
+                //if user does not have a profile picture yet
+                if userVM.localProfileImageUrl == "" {
+                    showProfileImage(imageStr: "", diameter: profileRad)
+                }
+                
+                else { //they do have a profile image -> display it
+                    showProfileImage(imageStr: userVM.localProfileImageUrl, diameter: profileRad)
+                }
+
+            } //if the user has not picked image
+            
+            else { //user has picked a new image
+               
+                
+                controls.pickedImage
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: 125.0, height: 125.0, alignment: .center)
+                    .clipShape(Circle())
+                
+            }
+
+            
+            
+            //button that pulls up the image picker
+            Button(action: {
+                //want to flip the showing image picker so that the sheet is shown
+                print("button pressed")
+                UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                controls.pickedImageType = "card"
+                controls.showImagePicker = true
+            }, label: {
+                Image(systemName: "plus.circle")
+                    .font(.system(size: 30,
+                                  weight: .regular,
+                                  design: .default))
+                    .foregroundColor(.black)
+                    .background(.white)
+                    .clipShape(Circle())
+            })
+            .offset(y: screenHeight * 0.06)
+            .offset(x: screenWidth * 0.09)
+        }
+        .sheet(isPresented: $controls.showImagePicker, content: {
+            ImagePicker(showImagePicker: $controls.showImagePicker, pickedImage: $controls.pickedImage, imageData: $ProfImageData, sourceType: .photoLibrary)
+                
+        })
+        
+    }
     
     //either make button able to be pressed or make a different button that pulls up the image picker
     func addDescriptiveImage() -> some View {
@@ -232,7 +384,7 @@ struct EditProfileView: View {
                                
     //create circular button that once tapped on prompts you to change user proflile image
     private func addProfilePhoto() -> some View {
-        let screenHeight = UIScreen.main.bounds.height
+        //let screenHeight = UIScreen.main.bounds.height
         let screenWidth = UIScreen.main.bounds.width
         let profileRad: CGFloat = screenWidth * 0.30
         
