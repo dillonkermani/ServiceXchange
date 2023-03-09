@@ -24,15 +24,60 @@ struct ProfileUserView: View {
         
         
         
-        let topPaddingBackground: CGFloat = -410
-        let topPaddingProfile: CGFloat = -215
-        let profileRadius: CGFloat = 125
-        let topPaddingGear: CGFloat = -330
-        let leadingPaddingGear: CGFloat  = 280
+//        let topPaddingBackground: CGFloat = -410
+//        let topPaddingProfile: CGFloat = -215
+//        let profileRadius: CGFloat = 125
+//        let topPaddingGear: CGFloat = -330
+//        let leadingPaddingGear: CGFloat  = 280
         let gearSize: CGFloat = 35
         let gearWidth: CGFloat = 47
+//
+        let screenHeight = UIScreen.main.bounds.height
+        let screenWidth = UIScreen.main.bounds.width
         
         NavigationStack {
+            
+            ZStack {
+                
+                showBackGroundImage(imageStr: userVM.localDescriptiveImageStr)
+                    .padding(.top, screenHeight * 0.02)
+                    .padding(.bottom, screenHeight * 0.60)
+                    .padding(.horizontal, 10)
+                
+                showProfileImage(imageStr: userVM.localProfileImageUrl, diameter: 125)
+                    .padding(.bottom, screenHeight * 0.43)
+                
+                
+                NavigationLink(destination: ProfileSettingsView(), label: {
+                    Image(systemName: "gearshape.fill")
+                        .font(.system(size: gearSize,
+                                      weight: .regular,
+                                      design: .default))
+                        .foregroundColor(.black)
+                        .frame(width: gearWidth, height: gearWidth)
+                        .background(.white)
+                        .cornerRadius(gearWidth)
+                })
+                .padding(.bottom, screenHeight * 0.70)
+                .padding(.leading, screenWidth * 0.7)
+                
+                
+                Text(userVM.localCompanyName)
+                    .font(.title2)
+                    .padding(.trailing, screenWidth * 0.45)
+                    .padding(.bottom, screenHeight * 0.20)
+                
+                Text("\" \(userVM.localBio) \"")
+                    .padding(.bottom, screenHeight * 0.05)
+                
+            }
+    
+            //Text("company Name")
+                
+           
+            
+            
+           /*
         ZStack{
             
             showBackGroundImage(imageStr: userVM.localDescriptiveImageStr)
@@ -42,7 +87,7 @@ struct ProfileUserView: View {
                 .padding(.top, topPaddingProfile)
             
             
-            //NavigationStack {
+            
             NavigationLink(destination: ProfileSettingsView(), label: {
                 Image(systemName: "gearshape.fill")
                     .font(.system(size: gearSize,
@@ -57,6 +102,8 @@ struct ProfileUserView: View {
             .padding(.leading, leadingPaddingGear)
           
         }
+          */
+            
     }//Navigation Stack
         .navigationBarHidden(true)
             .onAppear{
@@ -106,17 +153,17 @@ func showProfileImage(imageStr : String, diameter: CGFloat) -> some View {
 //takes in an image string
 //returns a 400 x 250 image (either a default or a user image)
 func showBackGroundImage(imageStr : String) -> some View {
-    let imHeight: CGFloat = 250
-    let imWidth: CGFloat = 400
-    
+ 
     return VStack {
         
         if imageStr == "" || imageStr == "sunsetTest"{
             Image("sunsetTest")
                 .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: imWidth, height: imHeight, alignment: .top)
+                //.aspectRatio(contentMode: .fill)
+                //.frame(width: imWidth, height: imHeight, alignment: .top)
                 .clipShape(Rectangle())
+                .cornerRadius(20)
+            
         }
         else {
             
@@ -124,8 +171,9 @@ func showBackGroundImage(imageStr : String) -> some View {
                 image
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-                    .frame(width: imWidth, height: imHeight )
+                    //.frame(width: imWidth, height: imHeight )
                     .clipShape(Rectangle())
+                    .cornerRadius(20)
             } placeholder: {
                 LoadingView()
                     //.frame(width: imWidth, height: imHeight )
