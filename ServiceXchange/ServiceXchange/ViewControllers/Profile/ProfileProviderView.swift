@@ -15,18 +15,46 @@ struct ProfileProviderView: View {
     
     var body: some View {
         
-        let topPaddingBackground: CGFloat = -430
-        let topPaddingProfile: CGFloat = -240
+        //let topPaddingBackground: CGFloat = -430
+        //let topPaddingProfile: CGFloat = -240
         let profileRadius: CGFloat = 125
         let arrowSize: CGFloat = 17
+        
+        let screenHeight = UIScreen.main.bounds.height
+        let screenWidth = UIScreen.main.bounds.width
         
         ZStack{
             
             showBackGroundImage(imageStr: user.descriptiveImageStr ?? "sunsetTest")
-                .padding(.top , topPaddingBackground)
+                //.padding(.top , topPaddingBackground)
+                .offset( y: screenHeight * -0.30)
             
             showProfileImage(imageStr: user.profileImageUrl ?? "blankprofile", diameter: profileRadius)
-                .padding(.top, topPaddingProfile)
+                //.padding(.top, topPaddingProfile)
+                .offset(y: screenHeight * -0.175)
+            
+            
+            NavigationLink(destination: ChatsView(), label: {
+                Image(systemName: "paperplane")
+                    .font(.system(size: 35,
+                                  weight: .regular,
+                                  design: .default))
+                    .foregroundColor(.black)
+                    
+            })
+            .padding(.bottom, screenHeight * 0.27)
+            .padding(.leading, screenWidth * 0.7)
+            
+            if user.companyName == "" {
+                Text(user.firstName + " " + user.firstName)
+                    .font(.title2)
+                    .offset(y: screenHeight * -0.06)
+            }
+            else {
+                Text(user.companyName ?? "none")
+                    .font(.title2)
+                    .offset(y: screenHeight * -0.06)
+            }
             
         }//ZStack
         .navigationBarBackButtonHidden(true)
@@ -41,6 +69,8 @@ struct ProfileProviderView: View {
                         }.foregroundColor(.black)
                     }
                 }//ToolBarItem
+                
+                
             }//toolbar
         
     }

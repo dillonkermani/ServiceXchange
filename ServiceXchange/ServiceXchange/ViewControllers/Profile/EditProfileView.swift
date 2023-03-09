@@ -66,90 +66,89 @@ struct EditProfileView: View {
     
     var body: some View {
         
+        let screenHeight = UIScreen.main.bounds.height
+        let screenWidth = UIScreen.main.bounds.width
         
-        
-        ZStack {
+        ZStack{
             
-            VStack {
-                
-                ZStack{
-                    
-                    addDescriptiveImage()
-                        .padding(.top, -400)
-                    
-                    //add the profile image button thing
-                    addProfilePhoto()
-                        .padding(.top, -154)
-                }//Zstack
-                
-                //myButton()
-      
-                textEditFields()
-                    .padding(.top, -200)
-                    .padding(.bottom, 60)
-
-
-
-                Button(action: {
-                    let userId = userVM.localUserId
-                    userVM.update_user_info(userId: userId, company_name: username, location_served: locationServe, bio: shortBio, profileImageData: ProfImageData, backgroundImageData: backgroundImageData, onError: { errorMessage in
-                        print("Update user error: \(errorMessage)")
-                        
-                    })//userVM.update_user_info
-                    
-                    //dismiss current view
-                    presentationMode.wrappedValue.dismiss()
-                    
-                }, label: {
-                    Text("Save Changes")
-                            .fontWeight(.semibold)
-                            .font(.title)
-                            .padding()
-                            .background(Color.white)
-                            .cornerRadius(40)
-                            .foregroundColor(.black)
-                            .padding(0)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 40)
-                                    .stroke(Color.black, lineWidth: 3)
-                                    .frame(width: 250, height: 70)
-                            )
-                })
-                .padding(.bottom, 30)
-
-                
-            }//VStack
-                
-                
-            }.onAppear{
-                
-                if userVM.localCompanyName != "none" {
-                    companyNameTitle = userVM.localCompanyName
-                }
-                if userVM.localBio != "none"{
-                    shortBioTitle = userVM.localBio
-                }
-                if userVM.localPrimaryLocationServed != "none" {
-                    locationServeTitle = userVM.localPrimaryLocationServed
-                }
-                
-                
-            }.toolbar(.hidden)
+            addDescriptiveImage()
+                .offset(y: screenHeight * -0.27)
+            //.padding(.top, -400)
+            
+            //add the profile image button thing
+            addProfilePhoto()
+                .offset(y: screenHeight * -0.15)
+            //.padding(.top, -154)
+       // }//Zstack
+        
+        VStack{
+            textEditFields()
+                .offset(y: screenHeight * 0.15)
+                //.padding(.top, -200)
+                //.padding(.bottom, 60)
+            
+            
+            saveChangesButton()
+                .offset(y: screenHeight * 0.2)
+            
+        }//VStack
+    }//ZStack
+    .onAppear{
+        
+        if userVM.localCompanyName != "none" {
+            companyNameTitle = userVM.localCompanyName
+        }
+        if userVM.localBio != "none"{
+            shortBioTitle = userVM.localBio
+        }
+        if userVM.localPrimaryLocationServed != "none" {
+            locationServeTitle = userVM.localPrimaryLocationServed
+        }
+        
+        
+    }.toolbar(.hidden)
 
         
-        } //view structure
+    } //view structure
     
 
-    
+    func saveChangesButton() -> some View {
+        return VStack {
+            Button(action: {
+                let userId = userVM.localUserId
+                userVM.update_user_info(userId: userId, company_name: username, location_served: locationServe, bio: shortBio, profileImageData: ProfImageData, backgroundImageData: backgroundImageData, onError: { errorMessage in
+                    print("Update user error: \(errorMessage)")
+                    
+                })//userVM.update_user_info
+                
+                //dismiss current view
+                presentationMode.wrappedValue.dismiss()
+                
+            }, label: {
+                Text("Save Changes")
+                    .fontWeight(.semibold)
+                    .font(.title)
+                    .padding()
+                    .background(Color.white)
+                    .cornerRadius(40)
+                    .foregroundColor(.black)
+                    .padding(0)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 40)
+                            .stroke(Color.black, lineWidth: 3)
+                            .frame(width: 250, height: 70)
+                    )
+            })//button
+        }//VStack
+    }
     
     func textEditFields() -> some View {
         return VStack {
             underlinedTextField(title: "company name: " + companyNameTitle, text: $username, width: 310, height: 20, color: .black)
-                //.padding(.top, -270)
+                
             underlinedTextField(title: "location Served: " + locationServeTitle, text: $locationServe, width: 310, height: 40, color: .black)
-                //.padding(.top, -220)
+                
             underlinedTextField(title: "short bio: " + shortBioTitle, text: $shortBio, width: 310, height: 40, color: .black)
-                //.padding(.top, -150)
         }
     }//textFields function
     
@@ -157,8 +156,11 @@ struct EditProfileView: View {
     
     //either make button able to be pressed or make a different button that pulls up the image picker
     func addDescriptiveImage() -> some View {
+        let screenHeight = UIScreen.main.bounds.height
+        let screenWidth = UIScreen.main.bounds.width
+        let width = screenWidth - 20
+        let height = screenHeight * 0.25
         
-          
               return VStack {
                          Button(action: {
                              print("button pressed")
@@ -167,57 +169,28 @@ struct EditProfileView: View {
                              controlsDesc.showImagePicker = true
                          }) {
                              if controlsDesc.pickedImage == Image("user-placeholder") {
-                                 let _ = print("this should print")
                                  
                                  //if user does not have a profile picture yet
                                  if userVM.localDescriptiveImageStr == "" {
-                                     ZStack {
-                                         Image("sunsetTest")
-                                               .resizable()
-                                                   .aspectRatio(contentMode: .fill)
-                                                   .frame(width: 400.0, height: 250.0, alignment: .top)
-                                                   .clipShape(Rectangle())
-                                     }
-                                     
+                                     showBackGroundImage(imageStr: "")
                                  }
-                                 
                                  else { //they do have a profile image -> display it
-                                     ZStack {
-                                         
-                                         
-                                        
-                                         
-                                         AsyncImage(url: URL(string:  userVM.localDescriptiveImageStr)) { image in
-                                             image
-                                                 .resizable()
-                                                 .aspectRatio(contentMode: .fill)
-                                                 .frame(width: 400.0, height: 250.0, alignment: .top)
-                                                 .clipShape(Rectangle())
-                                         } placeholder: {
-                                             ShimmerPlaceholderView(width: 400, height: 250, cornerRadius: 0, animating: false)
-                                         }
-                                         
-
-                                                 .aspectRatio(contentMode: .fill)
-                                                 .frame(width: 400.0, height: 250.0, alignment: .top)
-                                                 .clipShape(Rectangle())
-                                     }//ZStack
+                                     
+                                     showBackGroundImage(imageStr: userVM.localDescriptiveImageStr)
                                  }
                                  
 
                              } //if the user has not picked image
                              
                              else { //user has picked a new image
-                                
-                                 
                                  controlsDesc.pickedImage
                                      .resizable()
                                          .aspectRatio(contentMode: .fill)
-                                         .frame(width: 400.0, height: 250.0, alignment: .top)
+                                         .frame(width: width, height: height, alignment: .top)
                                          .clipShape(Rectangle())
-                                 
-                             }
-                         }
+                                         .cornerRadius(20)
+                             }//else
+                         }//label of the button I think
                      
                
        
@@ -259,6 +232,10 @@ struct EditProfileView: View {
                                
     //create circular button that once tapped on prompts you to change user proflile image
     private func addProfilePhoto() -> some View {
+        let screenHeight = UIScreen.main.bounds.height
+        let screenWidth = UIScreen.main.bounds.width
+        let profileRad: CGFloat = screenWidth * 0.30
+        
        return ZStack {
          
                 VStack {
@@ -271,30 +248,11 @@ struct EditProfileView: View {
                                 
                                 //if user does not have a profile picture yet
                                 if userVM.localProfileImageUrl == "" {
-                                    ZStack {
-                                        Image("blankprofile")
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fill)
-                                            .frame(width: 125.0, height: 125.0, alignment: .center)
-                                            .clipShape(Circle())
-                                    }
-                                    
+                                    showProfileImage(imageStr: "", diameter: profileRad)
                                 }
                                 
                                 else { //they do have a profile image -> display it
-                                    ZStack {
-                                        
-                                        AsyncImage(url: URL(string:  userVM.localProfileImageUrl)) { image in
-                                            image
-                                                .resizable()
-                                                .aspectRatio(contentMode: .fill)
-                                                .frame(width: 125.0, height: 125.0, alignment: .center)
-                                                .clipShape(Circle())
-                                        } placeholder: {
-                                            ShimmerPlaceholderView(width: 125, height: 125, cornerRadius: 125, animating: false)
-                                        }
-                                        
-                                    }//ZStack
+                                    showProfileImage(imageStr: userVM.localProfileImageUrl, diameter: profileRad)
                                 }
                                 
 

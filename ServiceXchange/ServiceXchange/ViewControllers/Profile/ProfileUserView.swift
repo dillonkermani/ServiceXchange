@@ -40,9 +40,6 @@ struct ProfileUserView: View {
             ZStack {
                 
                 showBackGroundImage(imageStr: userVM.localDescriptiveImageStr)
-                    //.padding(.top, screenHeight * 0.1)
-                    //.padding(.bottom, screenHeight * 0.55)
-                    //.padding(.horizontal, 10)
                     .offset( y: screenHeight * -0.27)
                 
                 
@@ -68,47 +65,14 @@ struct ProfileUserView: View {
                 Text(userVM.localCompanyName)
                     .font(.title2)
                     .offset(y: screenHeight * -0.05)
-                    //.offset(x: screenWidth * -0.35)
-                    //.padding(.trailing, screenWidth * 0.45)
-                    //.padding(.bottom, screenHeight * 0.20)
+                    
                 
                 Text("\" \(userVM.localBio) \"")
-                    //.padding(.bottom, screenHeight * 0.05)
                 
                 
             }
     
-            //Text("company Name")
-                
-           
-            
-            
-           /*
-        ZStack{
-            
-            showBackGroundImage(imageStr: userVM.localDescriptiveImageStr)
-                .padding(.top , topPaddingBackground)
-            
-            showProfileImage(imageStr: userVM.localProfileImageUrl, diameter: profileRadius)
-                .padding(.top, topPaddingProfile)
-            
-            
-            
-            NavigationLink(destination: ProfileSettingsView(), label: {
-                Image(systemName: "gearshape.fill")
-                    .font(.system(size: gearSize,
-                                  weight: .regular,
-                                  design: .default))
-                    .foregroundColor(.black)
-                    .frame(width: gearWidth, height: gearWidth)
-                    .background(.white)
-                    .cornerRadius(gearWidth)
-            })
-            .padding(.top, topPaddingGear)
-            .padding(.leading, leadingPaddingGear)
-          
-        }
-          */
+        
             
     }//Navigation Stack
         .navigationBarHidden(true)
