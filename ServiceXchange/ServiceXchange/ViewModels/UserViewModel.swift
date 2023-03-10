@@ -19,7 +19,7 @@ let mySkeletonUser = User(
     lastName: "",
     email: "",
     isServiceProvider: false,
-    listingIDs: [],
+    listings: [],
     
     profileImageUrl: "",
     descriptiveImageStr: "",
@@ -38,10 +38,12 @@ class UserViewModel: ObservableObject{
     @Published var localUserId: String = "" //maybe we want this so that we dont have to use
                                             //   session store exect for at sign in
     
-    @Published var skUser : User = mySkeletonUser
+    @Published var user : User = mySkeletonUser
     
     @Published var initialized: Bool = false
     @Published var localProfileImageUrl: String = ""
+    @Published var firstName: String = ""
+    @Published var lastName: String = ""
     @Published var localCompanyName: String = ""
     @Published var localBio: String = ""
     @Published var localPrimaryLocationServed: String = ""
@@ -56,7 +58,8 @@ class UserViewModel: ObservableObject{
     func updateLocalUserVariables(user : User) {
         
         self.initialized = true
-        
+        self.firstName = user.firstName
+        self.lastName = user.lastName
         self.localUserId = user.userId
         self.localBio = user.bio ?? "none"
         self.localCompanyName = user.companyName ?? "none"
@@ -64,13 +67,15 @@ class UserViewModel: ObservableObject{
         self.localProfileImageUrl = user.profileImageUrl ?? ""
         self.localDescriptiveImageStr = user.descriptiveImageStr ?? ""
         
+        self.user = user
+        
         
         //updateing the skeleton user
-        skUser.bio = user.bio ?? "none"
-        skUser.companyName = user.companyName ?? "none"
-        skUser.primaryLocationServed = user.primaryLocationServed ?? "none"
-        skUser.profileImageUrl = user.profileImageUrl ?? "none"
-        skUser.descriptiveImageStr = user.descriptiveImageStr ?? "none"
+        self.user.bio = user.bio ?? "none"
+        self.user.companyName = user.companyName ?? "none"
+        self.user.primaryLocationServed = user.primaryLocationServed ?? "none"
+        self.user.profileImageUrl = user.profileImageUrl ?? "none"
+        self.user.descriptiveImageStr = user.descriptiveImageStr ?? "none"
         
     }//update local user variables fucntion
     
@@ -104,10 +109,10 @@ class UserViewModel: ObservableObject{
         if company_name != "" { self.localCompanyName = company_name }
         
         
-        //for skUser structure
-        if bio != "" { self.skUser.bio  = bio }
-        if location_served != "" { self.skUser.primaryLocationServed = location_served }
-        if company_name != "" { self.skUser.companyName = company_name }
+        //for user structure
+        if bio != "" { self.user.bio  = bio }
+        if location_served != "" { self.user.primaryLocationServed = location_served }
+        if company_name != "" { self.user.companyName = company_name }
         
         
         
@@ -173,7 +178,7 @@ class UserViewModel: ObservableObject{
                     
                     //now comvert downloadURL back to string and store into the local variable
                     self.localProfileImageUrl = downloadURL.absoluteString
-                    self.skUser.profileImageUrl = downloadURL.absoluteString
+                    self.user.profileImageUrl = downloadURL.absoluteString
                   //store the url of the image to firebase
                   user_ref.updateData( [
                       "profileImageUrl": downloadURL.absoluteString,
@@ -182,7 +187,7 @@ class UserViewModel: ObservableObject{
                 }
                 else {
                     self.localDescriptiveImageStr = downloadURL.absoluteString
-                    self.skUser.descriptiveImageStr = downloadURL.absoluteString
+                    self.user.descriptiveImageStr = downloadURL.absoluteString
                     user_ref.updateData(["descriptiveImageStr": downloadURL.absoluteString])
                    
                 }

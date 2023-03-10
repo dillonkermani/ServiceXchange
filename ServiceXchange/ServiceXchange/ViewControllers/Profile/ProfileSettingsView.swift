@@ -29,14 +29,25 @@ struct ProfileSettingsView: View {
                         .frame(width: 300, height: 30)
                 })
                 .buttonStyle(labelFormatt())
-                
+                //Saved Listings
+                NavigationLink(destination: EmptyView(), label: {
+                    Label("Saved Listings", systemImage: "bookmark")
+                        .frame(width: 300, height: 30)
+                })
+                .buttonStyle(labelFormatt())
+                //change password
+                //delete your account
+                NavigationLink(destination: ProfileViewChangePassword(), label: {
+                    Label("Change Password", systemImage: "key.horizontal")
+                        .frame(width: 300, height: 30)
+                })
+                .buttonStyle(labelFormatt())
                 //delete your account
                 NavigationLink(destination: ProfileViewDeleteAccount(), label: {
                     Label("Delete Account", systemImage: "trash")
                         .frame(width: 300, height: 30)
                 })
                 .buttonStyle(labelFormatt())
-                
                 //sign out
                 Button(action: {
                     session.isLoggedIn = false
@@ -47,19 +58,6 @@ struct ProfileSettingsView: View {
                     Label("Sign Out", systemImage: "figure.walk.motion")
                         .frame(width: 300, height: 30)
                     
-                })
-                .buttonStyle(labelFormatt())
-                //change password
-                //delete your account
-                NavigationLink(destination: ProfileViewChangePassword(), label: {
-                    Label("Change Password", systemImage: "key.horizontal")
-                        .frame(width: 300, height: 30)
-                })
-                .buttonStyle(labelFormatt())
-                //Saved Listings
-                NavigationLink(destination: EmptyView(), label: {
-                    Label("Saved Listings", systemImage: "bookmark")
-                        .frame(width: 300, height: 30)
                 })
                 .buttonStyle(labelFormatt())
             } //VStack
@@ -88,7 +86,7 @@ struct labelFormatt: ButtonStyle{
         .background(.white)
         .foregroundColor(.black)
         .overlay(
-            RoundedRectangle(cornerRadius: 5)
+            RoundedRectangle(cornerRadius: 17)
                 .stroke(Color.black, lineWidth: 2)
         )
     }

@@ -59,7 +59,7 @@ struct EditProfileView: View {
         lastName: "",
         email: "",
         isServiceProvider: false,
-        listingIDs: []
+        listings: []
     )
     @State private var thisUser : Bool = true
     
@@ -93,10 +93,18 @@ struct EditProfileView: View {
             if userVM.localPrimaryLocationServed != "none" {
                 locationServeTitle = userVM.localPrimaryLocationServed
             }
-        }.toolbar(.hidden)
+        }
+        .gesture(DragGesture()
+            .onEnded { value in
+                let direction = detectDirection(value: value)
+                if direction == .left {
+                    presentationMode.wrappedValue.dismiss()
+                }
+            }
+        )
 
             
-        } //view structure
+    } //view structure
 
     func saveChangesButton() -> some View {
         return VStack {
@@ -111,19 +119,22 @@ struct EditProfileView: View {
                 presentationMode.wrappedValue.dismiss()
                 
             }, label: {
-                Text("Save Changes")
-                    .fontWeight(.semibold)
-                    .font(.title)
-                    .padding()
-                    .background(Color.white)
-                    .cornerRadius(40)
-                    .foregroundColor(.black)
-                    .padding(0)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 40)
-                            .stroke(Color.black, lineWidth: 3)
-                            .frame(width: 250, height: 70)
-                    )
+                HStack {
+                    Spacer()
+                    Text("Save Changes")
+                        .font(.system(size: 17))
+                        .padding(15)
+                    Spacer()
+                    
+                }
+                .background(.white)
+                .foregroundColor(.black)
+                .cornerRadius(17)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 17)
+                        .stroke(.black, lineWidth: 2)
+                )
+                .padding(15)
             })//button
         }//VStack
     }
@@ -177,16 +188,16 @@ struct EditProfileView: View {
                 controlsDesc.pickedImageType = "card"
                 controlsDesc.showImagePicker = true
             }, label: {
-                Image(systemName: "plus.rectangle")
-                    .font(.system(size: 40,
+                Image(systemName: "plus.circle")
+                    .font(.system(size: 30,
                                   weight: .regular,
                                   design: .default))
                     .foregroundColor(.black)
                     .background(.white)
-                    .cornerRadius(5)
+                    .clipShape(Circle())
             })
-            .offset(y: screenHeight * 0.12)
-            .offset(x: screenWidth * 0.35)
+            .offset(y: screenHeight * 0.10)
+            .offset(x: screenWidth * 0.40)
             
             
         }

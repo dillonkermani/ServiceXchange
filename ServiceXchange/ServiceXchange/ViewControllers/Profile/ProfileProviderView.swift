@@ -12,42 +12,39 @@ struct ProfileProviderView: View {
     @Binding var user: User
     
     @Environment(\.presentationMode) var presentationMode
+    @EnvironmentObject var session: SessionStore
+
     
     var body: some View {
 
         let profileRadius: CGFloat = 125
         let arrowSize: CGFloat = 17
         
-        ZStack{
-            
-            ProfileBackground(imageStr: user.descriptiveImageStr ?? "sunsetTest")
-                .offset( y: Constants.screenHeight * -0.30)
-            
-            ProfileImage(imageStr: user.profileImageUrl ?? "blankprofile", diameter: profileRadius)
-                .offset(y: Constants.screenHeight * -0.175)
-            
-            NavigationLink(destination: ChatsView(), label: {
-                Image(systemName: "paperplane")
-                    .font(.system(size: 35,
-                                  weight: .regular,
-                                  design: .default))
-                    .foregroundColor(.black)
-            })
-            .padding(.bottom, Constants.screenHeight * 0.27)
-            .padding(.leading, Constants.screenWidth * 0.7)
-            
-            if user.companyName == "" {
-                Text(user.firstName + " " + user.firstName)
-                    .font(.title2)
-                    .offset(y: Constants.screenHeight * -0.06)
+        ZStack {
+            ScrollView {
+                
+                VStack(spacing: 60) {
+                    ProfileHeader()
+                        .padding(.bottom, 20)
+                    
+                    Text(user.companyName?.isEmpty ?? true ? "No Company Name" : "\(user.companyName!)")
+                        .font(.system(size: 30)).bold()
+                    
+                    Text(user.bio?.isEmpty ?? true ? "No Company Description" : user.bio!)
+                        .font(.system(size: 20))
+                    
+                    Text(user.primaryLocationServed?.isEmpty ?? true ? "No Primary Location Specified" : "Location: \(user.primaryLocationServed!)")
+                        .font(.system(size: 17))
+                    
+                    if session.userSession != nil {
+                        if user.userId != session.userSession!.userId {
+                            RequestServiceButton(fromUser: session.userSession!, toUser: user)
+                        }
+                    }
+                }
+                
             }
-            else {
-                Text(user.companyName ?? "none")
-                    .font(.title2)
-                    .offset(y: Constants.screenHeight * -0.06)
-            }
-            
-        }//ZStack
+        }
         .navigationBarBackButtonHidden(true)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -63,7 +60,24 @@ struct ProfileProviderView: View {
                 
                 
             }//toolbar
-        
+            .gesture(DragGesture()
+                .onEnded { value in
+                    let direction = detectDirection(value: value)
+                    if direction == .left {
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                }
+            )
+    }
+    
+    private func ProfileHeader() -> some View {
+        return ZStack {
+            ProfileBackground(imageStr: user.descriptiveImageStr ?? "sunsetTest")
+            
+            ProfileImage(imageStr: user.profileImageUrl ?? "blankprofile", diameter: 125)
+                .offset(y: 80)
+            
+        }
     }
 }
 

@@ -15,7 +15,7 @@ let skeletonUser = User(
     lastName: "",
     email: "",
     isServiceProvider: false,
-    listingIDs: []
+    listings: []
 )
 
 class ListingDetailViewModel: ObservableObject {

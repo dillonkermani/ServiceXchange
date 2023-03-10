@@ -223,6 +223,6 @@ struct MessageBubble: View {
 
 struct MessageDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        MessageDetailView(messagesVM: MessagesViewModel(fromUser: User(userId: "", firstName: "Sending", lastName: "User", email: "", isServiceProvider: false, listingIDs: []), toUser: User(userId: "", firstName: "Recipient", lastName: "User", email: "", isServiceProvider: false, listingIDs: [])))
+        MessageDetailView(messagesVM: MessagesViewModel(fromUser: User(userId: "", firstName: "Sending", lastName: "User", email: "", isServiceProvider: false, listings: []), toUser: User(userId: "", firstName: "Recipient", lastName: "User", email: "", isServiceProvider: false, listings: [])))
     }
 }

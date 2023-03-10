@@ -13,7 +13,7 @@ struct User: Encodable, Decodable, Hashable {
     var lastName: String
     var email: String
     var isServiceProvider: Bool
-    var listingIDs: [String]
+    var listings: [String]?
     var phone: String?
     
     
