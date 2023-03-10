@@ -41,6 +41,7 @@ struct CalendarEditView: View {
     }
     var body: some View {
         VStack {
+            Text("I'm Busy...")
             DatePicker("Starting", selection: $dateSelected,                        in: Date.now...Date.distantFuture)
             DatePicker("Ending", selection: $endingDate, in: dateSelected...Date.distantFuture)
             Toggle("Weekly", isOn: $isWeekly)
@@ -73,10 +74,9 @@ struct CalendarEditView: View {
                     Rectangle().frame(height: 2).opacity(0.5)
                 }
             }
-            Spacer()
             Text("Weekly Events")
+                .underline()
             ScrollView {
-                Rectangle().frame(height: 2).opacity(0.5)
                 ForEach(calendarVM.alwaysBusyTimes.compactMap({(e, id) in
                     return (e.getFor(day: Date.now), id)
                 }), id: \.self.0) { event, id in

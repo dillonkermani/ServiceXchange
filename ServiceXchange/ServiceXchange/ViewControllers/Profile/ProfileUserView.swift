@@ -24,9 +24,9 @@ struct ProfileUserView: View {
             
             ScrollView {
                 
-                VStack(spacing: 60) {
+                VStack(spacing: 10) {
                     ProfileHeader()
-                        .padding(.bottom, 20)
+                        .padding(.bottom, 50)
                     
                     Text(userVM.localCompanyName.isEmpty ? "No Company Name" : "\(userVM.localCompanyName)")
                         .font(.system(size: 30)).bold()
@@ -35,7 +35,11 @@ struct ProfileUserView: View {
                         .font(.system(size: 20))
                     
                     Text(userVM.localPrimaryLocationServed.isEmpty ? "No Primary Location Specified" : "Location: \(userVM.localPrimaryLocationServed)")
-                        .font(.system(size: 17))
+                        .font(.system(size: 15))
+                    Rectangle()
+                        .frame(height: 2)
+                        .padding()
+                    CalendarEditView(forUser: userVM.localUserId)
                 }
                 
             }

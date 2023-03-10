@@ -49,6 +49,9 @@ class CalenderViewModel: ObservableObject {
     @MainActor
     func loadTimes(forUserId: String, after: Date) async {
         do {
+            if forUserId == "" {
+                return
+            }
             let userRef = Ref.FIRESTORE_DOCUMENT_USERID(userId: forUserId)
             async let busyTimesRefFuture = userRef.collection("busyTimes")
                 .whereField("start", isGreaterThan: Calendar.current.startOfDay(for: after).timeIntervalSince1970)
@@ -90,11 +93,17 @@ class CalenderViewModel: ObservableObject {
         }
     }
     
+    @MainActor
     func addBusyTime(forUserId: String, when: Event ) async -> Bool {
+        if forUserId == "" {
+            return false
+        }
         do {
             let userRef = Ref.FIRESTORE_DOCUMENT_USERID(userId: forUserId)
             let dataDict = try when.toDictionary()
-            let _ = try await userRef.collection("busyTimes").addDocument(data: dataDict)
+            let res = try await userRef.collection("busyTimes").addDocument(data: dataDict)
+            self.busyTimes.append( (when, res.documentID) )
+
             return true
         }
         catch {
@@ -102,11 +111,17 @@ class CalenderViewModel: ObservableObject {
             return false
         }
     }
+    
+    @MainActor
     func addAlwaysBusyTime(forUserId: String, when: AlwaysEvent) async -> Bool {
+        if forUserId == "" {
+            return false
+        }
         do {
             let userRef = Ref.FIRESTORE_DOCUMENT_USERID(userId: forUserId)
             let dataDict = try when.toDictionary()
-            let _ = try await userRef.collection("alwaysBusyTimes").addDocument(data: dataDict)
+            let res = try await userRef.collection("alwaysBusyTimes").addDocument(data: dataDict)
+            self.alwaysBusyTimes.append( (when, res.documentID) )
             return true
         }
         catch {
@@ -114,7 +129,12 @@ class CalenderViewModel: ObservableObject {
             return false
         }
     }
+    
+    @MainActor
     func deleteEvent(forUserId: String, id: String) async {
+        if forUserId == "" || id == ""{
+            return
+        }
         let userRef = Ref.FIRESTORE_DOCUMENT_USERID(userId: forUserId)
         do {
             try await userRef.collection("busyTimes").document(id).delete()
@@ -123,7 +143,12 @@ class CalenderViewModel: ObservableObject {
             print("error deleteing \(id) for \(forUserId)")
         }
     }
+    
+    @MainActor
     func deleteAlwaysEvent(forUserId: String, id: String) async {
+        if forUserId == "" || id == ""{
+            return
+        }
         let userRef = Ref.FIRESTORE_DOCUMENT_USERID(userId: forUserId)
         do {
             try await userRef.collection("alwaysBusyTimes").document(id).delete()

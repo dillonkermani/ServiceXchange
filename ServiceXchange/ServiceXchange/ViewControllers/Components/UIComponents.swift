@@ -44,7 +44,7 @@ func ProfileImage(imageStr : String, diameter: CGFloat) -> some View {
                 )
                 .shadow(radius: 5)
         } placeholder: {
-            ShimmerPlaceholderView(width: diameter, height: diameter, cornerRadius: diameter/2, animating: false)
+            ShimmerPlaceholderView(width: diameter, height: diameter, cornerRadius: diameter/2, animating: true)
         }
     }
 }
@@ -65,7 +65,7 @@ func ProfileBackground(imageStr : String) -> some View {
                 )
                 .shadow(radius: 5)
         } placeholder: {
-            ShimmerPlaceholderView(width: Constants.screenWidth - 20, height: Constants.screenHeight * 0.20, cornerRadius: 17, animating: false)
+            ShimmerPlaceholderView(width: Constants.screenWidth - 20, height: Constants.screenHeight * 0.20, cornerRadius: 17, animating: true)
         }
     }
 }//showDetailImage
