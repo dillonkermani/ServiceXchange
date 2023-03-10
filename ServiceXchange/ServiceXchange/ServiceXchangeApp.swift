@@ -20,7 +20,7 @@ struct ServiceXchangeApp: App {
   var body: some Scene {
     WindowGroup {
       NavigationView {
-        CalendarView(forUser: "7syxwXFCwYh6HevOXCD9oTJJV7n1")//ContentView() // Right Click -> "Jump to Definition" to go through viewcontroller flow.
+        ContentView() // Right Click -> "Jump to Definition" to go through viewcontroller flow.
             .environmentObject(session)
             .environmentObject(userVM)
             .preferredColorScheme(.light)

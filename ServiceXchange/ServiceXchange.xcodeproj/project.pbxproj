@@ -60,6 +60,7 @@
 		DF0F902D299ABF1D000D9AD1 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF0F902C299ABF1D000D9AD1 /* LoadingView.swift */; };
 		DF3A463B29AD2CE800A40FE2 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3A463A29AD2CE800A40FE2 /* CalendarView.swift */; };
 		DF6E81CD29B5609B00807BD3 /* CalenderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF6E81CC29B5609B00807BD3 /* CalenderViewModel.swift */; };
+		DF6E81CF29B9389000807BD3 /* CalendarEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF6E81CE29B9389000807BD3 /* CalendarEditView.swift */; };
 		DF96D063298C22C4009C80BB /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = DF96D062298C22C4009C80BB /* FirebaseStorage */; };
 		DF99564F299C3CB800977D21 /* Rating.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF99564E299C3CB800977D21 /* Rating.swift */; };
 		DF995651299EB29500977D21 /* RatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF995650299EB29500977D21 /* RatingView.swift */; };
@@ -121,6 +122,7 @@
 		DF0F902C299ABF1D000D9AD1 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		DF3A463A29AD2CE800A40FE2 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		DF6E81CC29B5609B00807BD3 /* CalenderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalenderViewModel.swift; sourceTree = "<group>"; };
+		DF6E81CE29B9389000807BD3 /* CalendarEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarEditView.swift; sourceTree = "<group>"; };
 		DF99564E299C3CB800977D21 /* Rating.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rating.swift; sourceTree = "<group>"; };
 		DF995650299EB29500977D21 /* RatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingView.swift; sourceTree = "<group>"; };
 		DFBF8BD829A005F30084FF0B /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
@@ -344,6 +346,7 @@
 			isa = PBXGroup;
 			children = (
 				DF3A463A29AD2CE800A40FE2 /* CalendarView.swift */,
+				DF6E81CE29B9389000807BD3 /* CalendarEditView.swift */,
 			);
 			path = Calendar;
 			sourceTree = "<group>";
@@ -459,6 +462,7 @@
 				65CD36CD29AE7B4900C99253 /* Chat.swift in Sources */,
 				9C24DD1429B90DF2005B6BDB /* ProfileCanvas.swift in Sources */,
 				65022E3929A2D852003A3DAA /* SearchBar.swift in Sources */,
+				DF6E81CF29B9389000807BD3 /* CalendarEditView.swift in Sources */,
 				6DCDAE392999F597006CECA0 /* ServiceProfileView.swift in Sources */,
 				DF0F902B299ABDAF000D9AD1 /* UrlImage.swift in Sources */,
 				DFED901529982B1A004E7177 /* URLCarouselView.swift in Sources */,
@@ -629,7 +633,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ServiceXchange/Preview Content\"";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = GYVU2SNZW9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ServiceXchange/Info.plist;
@@ -665,7 +669,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ServiceXchange/Preview Content\"";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = GYVU2SNZW9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ServiceXchange/Info.plist;

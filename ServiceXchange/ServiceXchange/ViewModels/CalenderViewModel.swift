@@ -14,10 +14,12 @@ struct Event: Encodable, Decodable, Hashable {
     var duration: TimeInterval
 }
 
-fileprivate let primordialDate = Date.ReferenceType(timeIntervalSinceReferenceDate: 0) as Date
+public let PRIMORDIAL_DATE = Date.ReferenceType(timeIntervalSinceReferenceDate: 0) as Date
+
+fileprivate let CALENDAR = Calendar.init(identifier: .gregorian)
 
 fileprivate func weekStart(day: Date) -> Date? {
-    return Calendar.init(identifier: .gregorian).dateComponents([.calendar, .yearForWeekOfYear, .weekOfYear], from: day).date
+    return CALENDAR.dateComponents([.calendar, .yearForWeekOfYear, .weekOfYear], from: day).date
 }
 
 struct AlwaysEvent: Encodable, Decodable, Hashable {
@@ -25,14 +27,17 @@ struct AlwaysEvent: Encodable, Decodable, Hashable {
     var duration: TimeInterval
     
     init(day: Date, duration: TimeInterval) {
-        self.t = primordialDate.advanced(by: day.timeIntervalSince( weekStart(day: day)! ))
+        self.t = PRIMORDIAL_DATE.advanced(by: day.timeIntervalSince( weekStart(day: day)! )) //TODO: fix? idk how
         self.duration = duration
     }
     
-    func getFor(day: Date) -> Event? {
-        guard let nextInstance = weekStart(day: day)?.advanced(by: self.t.timeIntervalSince(primordialDate)) else {
-            return nil
-        }
+    func getFor(day: Date) -> Event {
+        let weekStartDay = weekStart(day: day) ?? day
+        var nextInstance = weekStartDay.advanced(by: self.t.timeIntervalSince(PRIMORDIAL_DATE))
+        let tz = TimeZone.current
+        let currentOffset = tz.daylightSavingTimeOffset(for: day)
+        let weekStartOffset = tz.daylightSavingTimeOffset(for: weekStartDay)
+        nextInstance.addTimeInterval( weekStartOffset - currentOffset)
         return Event(start: nextInstance, duration: self.duration)
     }
 }
@@ -44,9 +49,9 @@ class CalenderViewModel: ObservableObject {
     @MainActor
     func loadTimes(forUserId: String, after: Date) async {
         do {
-            print("\(after.timeIntervalSince1970)")
             let userRef = Ref.FIRESTORE_DOCUMENT_USERID(userId: forUserId)
             async let busyTimesRefFuture = userRef.collection("busyTimes")
+                .whereField("start", isGreaterThan: Calendar.current.startOfDay(for: after).timeIntervalSince1970)
                 .getDocuments()
             async let alwaysBusyTimesRefFuture = userRef.collection("alwaysBusyTimes").getDocuments()
             
@@ -54,7 +59,6 @@ class CalenderViewModel: ObservableObject {
             
             var busyTimesArr: [(Event, String)] = []
             var alwaysBusyTimesArr: [(AlwaysEvent, String)] = []
-            print("\(busyTimes.count)")
             for busyTime in busyTimes.documents {
                 let btDict = busyTime.data()
                 guard let event = try? Event.init(fromDictionary: btDict) else {
@@ -71,6 +75,12 @@ class CalenderViewModel: ObservableObject {
                 }
                 alwaysBusyTimesArr.append( (event, alwaysBusyTime.documentID) )
             }
+            self.busyTimes.sort(by: {t1, t2 in
+                return t1.0.start < t1.0.start
+            })
+            alwaysBusyTimesArr.sort(by: {t1, t2 in
+                return t1.0.t < t1.0.t
+            })
             self.busyTimes = busyTimesArr
             self.alwaysBusyTimes = alwaysBusyTimesArr
         }
@@ -80,12 +90,48 @@ class CalenderViewModel: ObservableObject {
         }
     }
     
-    func addBusyTime(when: Event ) async {
-        
+    func addBusyTime(forUserId: String, when: Event ) async -> Bool {
+        do {
+            let userRef = Ref.FIRESTORE_DOCUMENT_USERID(userId: forUserId)
+            let dataDict = try when.toDictionary()
+            let _ = try await userRef.collection("busyTimes").addDocument(data: dataDict)
+            return true
+        }
+        catch {
+            print("error adding busy time")
+            return false
+        }
     }
-    func addAlwaysBusyTime() async {
-        
+    func addAlwaysBusyTime(forUserId: String, when: AlwaysEvent) async -> Bool {
+        do {
+            let userRef = Ref.FIRESTORE_DOCUMENT_USERID(userId: forUserId)
+            let dataDict = try when.toDictionary()
+            let _ = try await userRef.collection("alwaysBusyTimes").addDocument(data: dataDict)
+            return true
+        }
+        catch {
+            print("error adding always busy time")
+            return false
+        }
     }
-    
+    func deleteEvent(forUserId: String, id: String) async {
+        let userRef = Ref.FIRESTORE_DOCUMENT_USERID(userId: forUserId)
+        do {
+            try await userRef.collection("busyTimes").document(id).delete()
+            self.busyTimes.removeAll(where: {t in t.1 == id})
+        } catch {
+            print("error deleteing \(id) for \(forUserId)")
+        }
+    }
+    func deleteAlwaysEvent(forUserId: String, id: String) async {
+        let userRef = Ref.FIRESTORE_DOCUMENT_USERID(userId: forUserId)
+        do {
+            try await userRef.collection("alwaysBusyTimes").document(id).delete()
+            self.alwaysBusyTimes.removeAll(where: {t in t.1 == id})
+
+        } catch {
+            print("error deleteing always \(id) for \(forUserId)")
+        }
+    }
     
 }
