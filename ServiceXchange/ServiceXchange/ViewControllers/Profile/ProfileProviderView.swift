@@ -12,23 +12,39 @@ struct ProfileProviderView: View {
     @Binding var user: User
     
     @Environment(\.presentationMode) var presentationMode
+    @EnvironmentObject var session: SessionStore
+
     
     var body: some View {
-        
-        let topPaddingBackground: CGFloat = -430
-        let topPaddingProfile: CGFloat = -240
+
         let profileRadius: CGFloat = 125
         let arrowSize: CGFloat = 17
         
-        ZStack{
-            
-            showBackGroundImage(imageStr: user.descriptiveImageStr ?? "sunsetTest")
-                .padding(.top , topPaddingBackground)
-            
-            showProfileImage(imageStr: user.profileImageUrl ?? "blankprofile", diameter: profileRadius)
-                .padding(.top, topPaddingProfile)
-            
-        }//ZStack
+        ZStack {
+            ScrollView {
+                
+                VStack(spacing: 60) {
+                    ProfileHeader()
+                        .padding(.bottom, 20)
+                    
+                    Text(user.companyName?.isEmpty ?? true ? "No Company Name" : "\(user.companyName!)")
+                        .font(.system(size: 30)).bold()
+                    
+                    Text(user.bio?.isEmpty ?? true ? "No Company Description" : user.bio!)
+                        .font(.system(size: 20))
+                    
+                    Text(user.primaryLocationServed?.isEmpty ?? true ? "No Primary Location Specified" : "Location: \(user.primaryLocationServed!)")
+                        .font(.system(size: 17))
+                    
+                    if session.userSession != nil {
+                        if user.userId != session.userSession!.userId {
+                            RequestServiceButton(fromUser: session.userSession!, toUser: user)
+                        }
+                    }
+                }
+                
+            }
+        }
         .navigationBarBackButtonHidden(true)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -41,14 +57,27 @@ struct ProfileProviderView: View {
                         }.foregroundColor(.black)
                     }
                 }//ToolBarItem
+                
+                
             }//toolbar
-        
+            .gesture(DragGesture()
+                .onEnded { value in
+                    let direction = detectDirection(value: value)
+                    if direction == .left {
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                }
+            )
+    }
+    
+    private func ProfileHeader() -> some View {
+        return ZStack {
+            ProfileBackground(imageStr: user.descriptiveImageStr ?? "sunsetTest")
+            
+            ProfileImage(imageStr: user.profileImageUrl ?? "blankprofile", diameter: 125)
+                .offset(y: 80)
+            
+        }
     }
 }
 
-//struct ProfileProviderView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        var my_user : User = init(userId: n, firstName: "cole", lastName: "j", email: "c@g", isServiceProvider: false, listingIDs: [], phone: "1234")
-//        ProfileProviderView(my_user)
-//    }
-//}

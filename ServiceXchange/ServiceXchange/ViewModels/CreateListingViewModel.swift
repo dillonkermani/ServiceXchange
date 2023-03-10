@@ -62,17 +62,23 @@ class CreateListingViewModel : ObservableObject {
         
         let url_array = await uploadImages(listing_ref: listing_ref)
         
-        do{
+        do {
             try await listing_ref.updateData( [
                 "imageUrls": url_array,
                 "listingId": listing_ref.documentID,
             ] )
             self.listingId = listing_ref.documentID
+            
+            // Add listingId to poster's firebase user doc
+            try await Ref.FIRESTORE_DOCUMENT_USERID(userId: posterId).updateData( [
+                "listings": FieldValue.arrayUnion([self.listingId])
+            ] )
         }
         catch {
             onError("listing update error, hanging images")
             return
         }
+
         onSuccess(listing)
     }
     

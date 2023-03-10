@@ -117,14 +117,6 @@ struct CreateListingView: View {
                             }
                         }
                         
-                        /*
-                        LazyVGrid(columns: controls.gridItems, alignment: .center, spacing: 40) {
-                         ForEach(listingVM.categories, id: \.self) { category in
-                             
-                             FilterTag(filterData: category)
-                         }
-                        }
-                         */
                     }
                     Spacer()
                     

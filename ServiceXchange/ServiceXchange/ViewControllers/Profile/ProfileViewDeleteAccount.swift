@@ -16,10 +16,7 @@ struct ProfileViewMultiTestControls {
     var showAlert = false
     var activeAlert2: ActiveAlert2 = .deleteProfile
     var savePressed = false
-
 }
-
-
 
 struct ProfileViewDeleteAccount: View {
     
@@ -32,16 +29,11 @@ struct ProfileViewDeleteAccount: View {
     
     @State var thisUserProfile = false
     @State var passwordInput: String = ""
-   // var user: User
-    
-    
+ 
     var body: some View {
         
         VStack {
-            
-            //imageOverlayTop(thisUserProfile: thisUserProfile)
             signInFields()
-
         }
         .navigationBarBackButtonHidden(true)
             .toolbar {
@@ -57,28 +49,21 @@ struct ProfileViewDeleteAccount: View {
                 }//ToolBarItem
             }//toolbar
         .alert(isPresented: $controls.showAlert) {
-
-            
                 return Alert(title: Text("Delete Account?"), message: Text("Warning: This action cannot be undone."), primaryButton: .destructive(Text("Delete")) {
 
                     //clear the local variables
                     Task {
                         await userVM.asyncClear()
                     }
-                    
                     //delete the account
                     userVM.reAuthUser(userProvidedPassword: passwordInput)
-
-                   
+                    
                 }, secondaryButton: .cancel())
 
         }//.alert
-        
-        
+
     }
 
-    
-    
     private func signInFields() -> some View {
         return VStack {
                 HStack {
@@ -110,17 +95,11 @@ struct ProfileViewDeleteAccount: View {
                         .foregroundColor(.black)
                         .underline()
                 }
-
-                
                 Spacer()
                 
             }
-            
-       
     } //some view
-    
-
-    
+ 
 }
 
 struct ProfileViewDeleteAccount_Previews: PreviewProvider {

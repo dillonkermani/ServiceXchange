@@ -50,7 +50,6 @@
 		9C24DD1429B90DF2005B6BDB /* ProfileCanvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C24DD1329B90DF2005B6BDB /* ProfileCanvas.swift */; };
 		9C3C4DC029B6D3A600036808 /* ProfileUserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C3C4DBF29B6D3A600036808 /* ProfileUserView.swift */; };
 		9C5F611F299D6DBE00139265 /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C5F611E299D6DBE00139265 /* EditProfileView.swift */; };
-		9C5F6123299D766F00139265 /* SavedListingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C5F6122299D766F00139265 /* SavedListingsView.swift */; };
 		9C85B87129B7A04E005BCA4A /* ProfileSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C85B87029B7A04E005BCA4A /* ProfileSettingsView.swift */; };
 		9C85B87329B7A56E005BCA4A /* ProfileViewChangePassword.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C85B87229B7A56E005BCA4A /* ProfileViewChangePassword.swift */; };
 		9C85B87529B7C66E005BCA4A /* ProfileProviderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C85B87429B7C66E005BCA4A /* ProfileProviderView.swift */; };
@@ -112,7 +111,6 @@
 		9C24DD1329B90DF2005B6BDB /* ProfileCanvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCanvas.swift; sourceTree = "<group>"; };
 		9C3C4DBF29B6D3A600036808 /* ProfileUserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileUserView.swift; sourceTree = "<group>"; };
 		9C5F611E299D6DBE00139265 /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
-		9C5F6122299D766F00139265 /* SavedListingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedListingsView.swift; sourceTree = "<group>"; };
 		9C85B87029B7A04E005BCA4A /* ProfileSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSettingsView.swift; sourceTree = "<group>"; };
 		9C85B87229B7A56E005BCA4A /* ProfileViewChangePassword.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewChangePassword.swift; sourceTree = "<group>"; };
 		9C85B87429B7C66E005BCA4A /* ProfileProviderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileProviderView.swift; sourceTree = "<group>"; };
@@ -284,7 +282,6 @@
 			children = (
 				9C85B87429B7C66E005BCA4A /* ProfileProviderView.swift */,
 				9C85B87029B7A04E005BCA4A /* ProfileSettingsView.swift */,
-				9C5F6122299D766F00139265 /* SavedListingsView.swift */,
 				9C3C4DBF29B6D3A600036808 /* ProfileUserView.swift */,
 				9C85B87229B7A56E005BCA4A /* ProfileViewChangePassword.swift */,
 				9C85B87629B85982005BCA4A /* ProfileViewDeleteAccount.swift */,
@@ -492,7 +489,6 @@
 				658D1CC1298855050026DC5B /* User.swift in Sources */,
 				658D1CC8298893B30026DC5B /* ContentView.swift in Sources */,
 				65C3EBA02981DC4F00766659 /* ChatsView.swift in Sources */,
-				9C5F6123299D766F00139265 /* SavedListingsView.swift in Sources */,
 				9C5F611F299D6DBE00139265 /* EditProfileView.swift in Sources */,
 				65C3EBA02981DC4F00766659 /* ChatsView.swift in Sources */,
 				659758EA29B56D310038EB60 /* CustomDateFormatter.swift in Sources */,

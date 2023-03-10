@@ -16,61 +16,50 @@ struct ProfileSettingsView: View {
     
     var body: some View {
             VStack {
+                Image(systemName: "wrench.and.screwdriver")
+                    .font(.system(size: 90))
+                    .fontWeight(.light)
+                    .padding(.top, -100)
+                    .padding(.bottom, 60)
+                    //.frame(width: 50, height: 50)
                 
-                //NavigationStack{
+                //edit your profile
+                NavigationLink(destination: EditProfileView(), label: {
+                    Label("Edit Profile", systemImage: "pencil")
+                        .frame(width: 300, height: 30)
+                })
+                .buttonStyle(labelFormatt())
+                //Saved Listings
+                NavigationLink(destination: EmptyView(), label: {
+                    Label("Saved Listings", systemImage: "bookmark")
+                        .frame(width: 300, height: 30)
+                })
+                .buttonStyle(labelFormatt())
+                //change password
+                //delete your account
+                NavigationLink(destination: ProfileViewChangePassword(), label: {
+                    Label("Change Password", systemImage: "key.horizontal")
+                        .frame(width: 300, height: 30)
+                })
+                .buttonStyle(labelFormatt())
+                //delete your account
+                NavigationLink(destination: ProfileViewDeleteAccount(), label: {
+                    Label("Delete Account", systemImage: "trash")
+                        .frame(width: 300, height: 30)
+                })
+                .buttonStyle(labelFormatt())
+                //sign out
+                Button(action: {
+                    session.isLoggedIn = false
+                    session.logout()
+                    //clear local user variables
+                    userVM.clearLocalUserVariables()
+                }, label: {
+                    Label("Sign Out", systemImage: "figure.walk.motion")
+                        .frame(width: 300, height: 30)
                     
-                    Image(systemName: "wrench.and.screwdriver")
-                        .font(.system(size: 90))
-                        .fontWeight(.light)
-                        .padding(.top, -100)
-                        .padding(.bottom, 60)
-                        //.frame(width: 50, height: 50)
-                    
-                    //edit your profile
-                    NavigationLink(destination: EditProfileView(), label: {
-                        Label("Edit Profile", systemImage: "pencil")
-                            .frame(width: 300, height: 30)
-                    })
-                    .buttonStyle(labelFormatt())
-                    
-                    //delete your account
-                    NavigationLink(destination: ProfileViewDeleteAccount(), label: {
-                        Label("Delete Account", systemImage: "trash")
-                            .frame(width: 300, height: 30)
-                    })
-                    .buttonStyle(labelFormatt())
-                    
-                    //sign out
-                    Button(action: {
-                        session.isLoggedIn = false
-                        session.logout()
-                        //clear local user variables
-                        userVM.clearLocalUserVariables()
-                    }, label: {
-                        Label("Sign Out", systemImage: "figure.walk.motion")
-                            .frame(width: 300, height: 30)
-                        
-                    })
-                    .buttonStyle(labelFormatt())
-                    
-                    
-                    //change password
-                    //delete your account
-                    NavigationLink(destination: ProfileViewChangePassword(), label: {
-                        Label("Change Password", systemImage: "key.horizontal")
-                            .frame(width: 300, height: 30)
-                    })
-                    .buttonStyle(labelFormatt())
-                    
-                    
-                    //Saved Listings
-                    NavigationLink(destination: SavedListingsView(), label: {
-                        Label("Saved Listings", systemImage: "bookmark")
-                            .frame(width: 300, height: 30)
-                    })
-                    .buttonStyle(labelFormatt())
-
-               // }//NavStack
+                })
+                .buttonStyle(labelFormatt())
             } //VStack
             .navigationBarBackButtonHidden(true)
             .toolbar {
@@ -96,11 +85,10 @@ struct labelFormatt: ButtonStyle{
         .fontWeight(.semibold)
         .background(.white)
         .foregroundColor(.black)
-        //.cornerRadius(10)
         .overlay(
-                    RoundedRectangle(cornerRadius: 5)
-                        .stroke(Color.black, lineWidth: 2)
-                )
+            RoundedRectangle(cornerRadius: 17)
+                .stroke(Color.black, lineWidth: 2)
+        )
     }
 
 }

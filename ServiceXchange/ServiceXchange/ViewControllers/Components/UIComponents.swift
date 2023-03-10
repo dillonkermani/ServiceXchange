@@ -4,6 +4,73 @@ import SwiftUI
 
 var controls = HomeViewControls()
 
+func RequestServiceButton(fromUser: User, toUser: User) -> some View {
+    VStack {
+        NavigationLink(destination: MessageDetailView(messagesVM: MessagesViewModel(fromUser: fromUser, toUser: toUser))) {
+            HStack {
+                Spacer()
+                Text("+  Request Service")
+                    .font(.system(size: 16, weight: .bold))
+                    .padding(15)
+                Spacer()
+            }
+            .background(CustomColor.sxcgreen)
+            .foregroundColor(.black)
+            .cornerRadius(17)
+            .overlay(
+                RoundedRectangle(cornerRadius: 17)
+                    .stroke(.black, lineWidth: 2)
+            )
+            .padding(15)
+        }
+        .simultaneousGesture(TapGesture().onEnded{
+            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+        })
+    }
+}
+
+//params: image url string and the diameter of the circle
+//returns circular profile image (either default or user profile image)
+func ProfileImage(imageStr : String, diameter: CGFloat) -> some View {
+    return VStack {
+        AsyncImage(url: URL(string:  imageStr.isEmpty ? "blankprofile" : imageStr)) { image in
+            image
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .frame(width: diameter, height: diameter , alignment: .center)
+                .clipShape(Circle())
+                .overlay(RoundedRectangle(cornerRadius: diameter/2)
+                    .stroke(Color(.label), lineWidth: 1)
+                )
+                .shadow(radius: 5)
+        } placeholder: {
+            ShimmerPlaceholderView(width: diameter, height: diameter, cornerRadius: diameter/2, animating: false)
+        }
+    }
+}
+
+//takes in an image string
+//returns a 400 x 250 image (either a default or a user image)
+func ProfileBackground(imageStr : String) -> some View {
+    return VStack {
+        AsyncImage(url: URL(string:  imageStr.isEmpty ? "sunsetTest" : imageStr)) { image in
+            image
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .frame(width: Constants.screenWidth - 20, height: Constants.screenHeight * 0.20, alignment: .top)
+                .clipShape(Rectangle())
+                .cornerRadius(17)
+                .overlay(RoundedRectangle(cornerRadius: 17)
+                    .stroke(Color(.label), lineWidth: 1)
+                )
+                .shadow(radius: 5)
+        } placeholder: {
+            ShimmerPlaceholderView(width: Constants.screenWidth - 20, height: Constants.screenHeight * 0.20, cornerRadius: 17, animating: false)
+        }
+    }
+}//showDetailImage
+
+
 func ListingCardView(listing: Listing) -> some View {
     let image_url = listing.imageUrls.first ?? ""
     return ZStack(alignment: .bottom) {

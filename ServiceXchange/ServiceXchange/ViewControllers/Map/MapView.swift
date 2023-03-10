@@ -9,7 +9,13 @@ import SwiftUI
 
 struct MapView: View {
     var body: some View {
-        Text("MapView")
+        VStack(spacing: 15) {
+            Text("Find Providers in Your Area")
+                .font(.system(size: 20))
+            Text("(Coming Soon!)")
+                .font(.system(size: 15)).bold()
+        }
+        
     }
 }
 

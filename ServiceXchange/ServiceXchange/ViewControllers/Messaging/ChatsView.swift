@@ -34,9 +34,11 @@ struct ChatsView: View {
             
             VStack {
                 CustomNavBar()
-                if session.userSession!.chats != nil {
-                    if !session.userSession!.chats!.isEmpty {
-                        AllChatsList()
+                if session.userSession != nil {
+                    if session.userSession!.chats != nil {
+                        if !session.userSession!.chats!.isEmpty {
+                            AllChatsList()
+                        }
                     }
                 } else {
                     Spacer()

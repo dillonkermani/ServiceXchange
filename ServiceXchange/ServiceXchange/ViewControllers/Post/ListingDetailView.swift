@@ -46,7 +46,7 @@ struct ListingDetailView : View {
         lastName: "",
         email: "",
         isServiceProvider: false,
-        listingIDs: []
+        listings: []
     )
     @State private var thisUser : Bool = false
     
@@ -69,7 +69,7 @@ struct ListingDetailView : View {
                 
                 if session.isLoggedIn {
                     if session.userSession!.userId != listing.posterId {
-                        RequestServiceButton()
+                        RequestServiceButton(fromUser: session.userSession!, toUser: listingVM.poster)
                     }
                 }
                 
@@ -260,34 +260,6 @@ struct ListingDetailView : View {
                 .frame(height: 50)
                 .padding(.horizontal, 25)
             }
-        
-    
-    private func RequestServiceButton() -> some View {
-        VStack {
-            NavigationLink(destination: MessageDetailView(messagesVM: MessagesViewModel(fromUser: session.userSession!, toUser: listingVM.poster))) {
-                HStack {
-                    Spacer()
-                    Text("+  Request Service")
-                        .font(.system(size: 16, weight: .bold))
-                        .padding(15)
-                    Spacer()
-                }
-                .background(CustomColor.sxcgreen)
-                .foregroundColor(.black)
-                .cornerRadius(17)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 17)
-                        .stroke(.black, lineWidth: 2)
-                )
-                .padding(15)
-            }
-            .simultaneousGesture(TapGesture().onEnded{
-                UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-            })
-        }
-    }
-
-
 }
 
 

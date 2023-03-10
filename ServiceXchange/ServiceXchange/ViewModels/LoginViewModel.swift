@@ -74,7 +74,7 @@ class LoginViewModel: ObservableObject {
                                          lastName: self.lastName,
                                          email: self.email,
                                          isServiceProvider: false,
-                                         listingIDs: [])
+                                         listings: [])
                                                             
                     guard let dict = try? user.toDictionary() else {return}
 

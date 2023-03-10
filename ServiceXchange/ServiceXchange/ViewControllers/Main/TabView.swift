@@ -23,7 +23,7 @@ struct TabView: View {
         lastName: "",
         email: "",
         isServiceProvider: false,
-        listingIDs: []
+        listings: []
     )
     @State private var thisUser : Bool = true
     
