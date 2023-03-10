@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ProfileProviderView: View {
     
-    @Binding var user: User
+    var user: User
     
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var session: SessionStore
@@ -42,7 +42,6 @@ struct ProfileProviderView: View {
                         }
                     }
                 }
-                
             }
         }
         .navigationBarBackButtonHidden(true)
@@ -81,3 +80,9 @@ struct ProfileProviderView: View {
     }
 }
 
+struct ProfileProvider_Previews: PreviewProvider {
+    static var previews: some View {
+        ProfileProviderView(user: skeletonUser)
+            .environmentObject(SessionStore())
+    }
+}

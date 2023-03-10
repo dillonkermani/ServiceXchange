@@ -231,7 +231,7 @@ struct ListingDetailView : View {
                     //TODO: make Profile View take in a userid instead of nothing (profile view my be the wrong view to link)
                     //NavigationLink(destination: ProfileView()){
                     //NavigationLink(destination: ProfileViewMultiTest(user : $userToPass , thisUser : $thisUser)){
-                    NavigationLink(destination: ProfileProviderView(user : $userToPass)){
+                    NavigationLink(destination: ProfileProviderView(user : userToPass)){
                         HStack{
                             UrlImage(url: listingVM.poster.profileImageUrl ?? "")
                                 .scaledToFill()
