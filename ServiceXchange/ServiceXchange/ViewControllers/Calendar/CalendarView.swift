@@ -22,7 +22,13 @@ fileprivate struct dayView: View {
     var day: Date
     @Binding var notAvailable: [(Event, String)]
     @Binding var alwaysNotAvailable: [(AlwaysEvent, String)]
-    let quarterHourWidth = 15
+    private let quarterHourHeight = CGFloat(7.5)
+    private let halfHourHeight = CGFloat(15)
+    private let seperatorHeight = CGFloat(2)
+    private let busyColor = Color(red: 0.95, green: 0.3, blue: 0.3)
+    private let busyInset = CGFloat(50)
+    private let quarterHour = CGFloat(15*60)
+    private let backgroundColor = Color(hue: 0.0, saturation: 0.0, brightness: 0.9)
     private func isConflict(time: Date, event: Event?) -> Bool {
         guard let event = event else {
             return false
@@ -32,32 +38,25 @@ fileprivate struct dayView: View {
     
     private func busyOverlayView() -> some View {
         let dayStart = Calendar.current.startOfDay(for: self.day)
-
         return ZStack(alignment: .topLeading) {
             ForEach(self.notAvailable, id: \.self.0) { event , _  in
+                let rectangleHeight = CGFloat( quarterHourHeight * event.duration / quarterHour)
+                let rectangleOffset = quarterHourHeight * CGFloat(event.start.timeIntervalSince(dayStart)) / quarterHour
                 RoundedRectangle(cornerRadius: 10)
-                    .foregroundColor(Color(red: 0.95, green: 0.3, blue: 0.3))
-                    .frame(height: CGFloat(7.5 * event.duration / (15 * 60)))
-                    .offset(x: 0, y: 7.5*CGFloat(event.start.timeIntervalSince(dayStart) / (15*60) ))
-                    .onAppear() {
-                        print(event.start)
-                        let f = (7.5*CGFloat(event.start.timeIntervalSince(dayStart) / (15*60)))
-                        print("\(f)")
-                    }
-            }.padding(.horizontal, 50)
+                    .foregroundColor( busyColor )
+                    .frame(height: rectangleHeight )
+                    .offset(x: 0, y:  rectangleOffset  )
+            }.padding(.horizontal, busyInset)
             ForEach(self.alwaysNotAvailable.compactMap({(e, id) in
                 return e.getFor(day: day)
             }), id: \.self) { event in
+                let rectangleHeight = CGFloat( quarterHourHeight * event.duration / quarterHour)
+                let rectangleOffset = CGFloat( quarterHourHeight * event.start.timeIntervalSince(dayStart) / quarterHour)
                 RoundedRectangle(cornerRadius: 10)
-                    .foregroundColor( Color(red: 0.95, green: 0.3, blue: 0.3) )
-                    .frame(height: CGFloat(7.5 * event.duration / (15 * 60)))
-                    .offset(x: 0, y: 7.5*CGFloat(event.start.timeIntervalSince(dayStart) / (15*60) ))
-                    .onAppear() {
-                        print(event.start)
-                        let f = (7.5*CGFloat(event.start.timeIntervalSince(dayStart) / (15*60)))
-                        print("\(f)")
-                    }
-            }.padding(.horizontal, 50)
+                    .foregroundColor( busyColor )
+                    .frame(height: rectangleHeight)
+                    .offset(x: 0, y: rectangleOffset)
+            }.padding(.horizontal, busyInset)
         }.padding(10)
     }
     
@@ -66,32 +65,33 @@ fileprivate struct dayView: View {
             ScrollView(.vertical) {
                 ZStack(alignment: .top) {
                     Rectangle()
-                        .opacity(0.2)
+                        .foregroundColor( backgroundColor )
                     VStack(spacing: 0){
-                        Spacer(minLength: 13)
+                        Spacer(minLength: halfHourHeight - 2)
                         ForEach(1..<25, id: \.self ){ hour in
                             Rectangle()
-                                .frame(height: 2)
+                                .frame(height: seperatorHeight)
                                 .opacity(0.3)
-                            Spacer(minLength: 13)
+                            Spacer(minLength: halfHourHeight - seperatorHeight)
                             HStack(spacing: 0) {
                                 Text(clockHourToTime(hour: hour))
                                     .fontWidth(.condensed)
                                 Rectangle()
-                                    .frame(height: 2)
-                            }.frame(height: 2).padding(0)
+                                    .frame(height: seperatorHeight)
+                            }.frame(height: seperatorHeight).padding(0)
                             if(hour != 24){
-                                Spacer(minLength: 13)
+                                Spacer(minLength: halfHourHeight - seperatorHeight)
                             }
                         }
                     }.padding(10)
                     
                     busyOverlayView()
                     
-                }
-                .clipShape(RoundedRectangle(cornerRadius: 20))
+                }.clipShape(RoundedRectangle(cornerRadius: 20))
+                    .clipped()
+                
+            }.clipShape(RoundedRectangle(cornerRadius: 20))
                 .clipped()
-            }
         
         }
     }
@@ -111,7 +111,7 @@ fileprivate struct InfiniteTabPageView: View {
     @StateObject var calendarVM = CalenderViewModel()
     @State private var width: CGFloat = UIScreen.main.bounds.width
     private let animationDuration: CGFloat = 0.25
-    
+    private let dayinSeconds = TimeInterval(24*3600)
     init(user: String, day: DayObject) {
         self.dayObject = day
         self.user = user
@@ -144,10 +144,10 @@ fileprivate struct InfiniteTabPageView: View {
                 }
                 DispatchQueue.main.asyncAfter(deadline: .now() + animationDuration) {
                     if offset < 0 {
-                        self.dayObject.day.addTimeInterval(24 * 60 * 60)
+                        self.dayObject.day.addTimeInterval(dayinSeconds)
 
                     } else if offset > 0 {
-                        self.dayObject.day.addTimeInterval(-24 * 60 * 60)
+                        self.dayObject.day.addTimeInterval(-dayinSeconds)
                     }
                     offset = 0
                 }
@@ -157,15 +157,15 @@ fileprivate struct InfiniteTabPageView: View {
     var body: some View {
         GeometryReader { reader in
             ZStack {
-                if self.dayObject.day > Date.now.advanced(by: 23.9 * 3600) {
-                    dayView(day: self.dayObject.day.advanced(by: -24 * 3600), notAvailable: $calendarVM.busyTimes, alwaysNotAvailable: $calendarVM.alwaysBusyTimes)
+                if self.dayObject.day > Date.now.advanced(by: dayinSeconds - 1.0) {
+                    dayView(day: self.dayObject.day.advanced(by: -dayinSeconds), notAvailable: $calendarVM.busyTimes, alwaysNotAvailable: $calendarVM.alwaysBusyTimes)
                         .offset(x: CGFloat(-width))
                 }
                 dayView(day: self.dayObject.day, notAvailable: $calendarVM.busyTimes, alwaysNotAvailable: $calendarVM.alwaysBusyTimes)
                     .offset(x: CGFloat(0))
                 
                 
-                dayView(day: self.dayObject.day.advanced(by: 24 * 3600), notAvailable: $calendarVM.busyTimes, alwaysNotAvailable: $calendarVM.alwaysBusyTimes)
+                dayView(day: self.dayObject.day.advanced(by: dayinSeconds), notAvailable: $calendarVM.busyTimes, alwaysNotAvailable: $calendarVM.alwaysBusyTimes)
                     .offset(x: CGFloat(width))
                 
             }

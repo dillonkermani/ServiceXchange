@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 import FirebaseCore
 
-let skeletonUser = User(
+fileprivate let skeletonUser = User(
     userId: "",
     firstName: "",
     lastName: "",

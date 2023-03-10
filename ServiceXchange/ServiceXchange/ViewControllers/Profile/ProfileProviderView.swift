@@ -10,37 +10,39 @@ import SwiftUI
 struct ProfileProviderView: View {
     
     var user: User
-    
+    let rating: Double
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var session: SessionStore
 
     
     var body: some View {
 
-        let profileRadius: CGFloat = 125
         let arrowSize: CGFloat = 17
         
         ZStack {
             ScrollView {
                 
-                VStack(spacing: 60) {
+                VStack(spacing: 10) {
                     ProfileHeader()
-                        .padding(.bottom, 20)
+                        .padding(.bottom, 50)
                     
                     Text(user.companyName?.isEmpty ?? true ? "No Company Name" : "\(user.companyName!)")
                         .font(.system(size: 30)).bold()
-                    
+                    RatingView(rating: rating)
                     Text(user.bio?.isEmpty ?? true ? "No Company Description" : user.bio!)
                         .font(.system(size: 20))
                     
                     Text(user.primaryLocationServed?.isEmpty ?? true ? "No Primary Location Specified" : "Location: \(user.primaryLocationServed!)")
                         .font(.system(size: 17))
-                    
+
                     if session.userSession != nil {
                         if user.userId != session.userSession!.userId {
                             RequestServiceButton(fromUser: session.userSession!, toUser: user)
                         }
                     }
+                    CalendarView(forUser: user.userId)
+                        .frame(minHeight: 300)
+                        .padding()
                 }
             }
         }
@@ -82,7 +84,7 @@ struct ProfileProviderView: View {
 
 struct ProfileProvider_Previews: PreviewProvider {
     static var previews: some View {
-        ProfileProviderView(user: skeletonUser)
+        ProfileProviderView(user: User(userId: "7syxwXFCwYh6HevOXCD9oTJJV7n1", firstName: "Sam", lastName: "W", email: "fake@email.com", isServiceProvider: true), rating: 3.6)
             .environmentObject(SessionStore())
     }
 }

@@ -72,7 +72,6 @@ struct EditProfileView: View {
             
             changeProfileIm()
                 .offset(y: Constants.screenHeight * -0.15)
-            
             VStack{
                 textEditFields()
                     .offset(y: Constants.screenHeight * 0.15)
