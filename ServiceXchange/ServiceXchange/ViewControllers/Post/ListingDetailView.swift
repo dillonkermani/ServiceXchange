@@ -228,9 +228,6 @@ struct ListingDetailView : View {
                 //        @State private var thisUser : Bool = false
                 
                 return HStack {
-                    //TODO: make Profile View take in a userid instead of nothing (profile view my be the wrong view to link)
-                    //NavigationLink(destination: ProfileView()){
-                    //NavigationLink(destination: ProfileViewMultiTest(user : $userToPass , thisUser : $thisUser)){
                     NavigationLink(destination: ProfileProviderView(user : userToPass, rating: rating)){
                         HStack{
                             UrlImage(url: listingVM.poster.profileImageUrl ?? "")
@@ -267,5 +264,6 @@ struct ListingDetailView_Previews: PreviewProvider {
 
     static var previews: some View {
         ListingDetailView(listing: Listing(listingId: "", posterId: "7syxwXFCwYh6HevOXCD9oTJJV7n1", imageUrls: [""], title: "title", description: "description", datePosted: 0, categories: []))
+            .environmentObject(SessionStore())
     }
 }

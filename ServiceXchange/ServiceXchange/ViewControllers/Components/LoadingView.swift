@@ -8,25 +8,25 @@
 import SwiftUI
 
 struct LoadingView: View {
-    @State var opacity = 0.3
+    @State var isLowOpacity = true
     let cycleTime = 3.0
+    let minOpacity = 0.3
     let maxOpacity = 0.6
     let color = Color(hue: 308, saturation: 0.05, brightness: 0.3)
     var body: some View {
-        ZStack {
-            Rectangle()
-               
-                .opacity(self.opacity)
-                .animation(
-                    Animation.easeIn(duration: self.cycleTime / 2)
-                        .repeatForever(autoreverses: true),
-                    value: opacity)
-                .onAppear(perform: {self.opacity = self.maxOpacity})
-               // .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height / 2.3)
-                //.cornerRadius(17)
-
+        Rectangle()
+            .foregroundColor(.black)
+            .opacity(isLowOpacity ? minOpacity : maxOpacity)
+            .animation(
+                Animation.easeIn(duration: self.cycleTime / 2)
+                    .repeatForever(autoreverses: true),
+                value: isLowOpacity)
+            .onAppear {
+                withAnimation(Animation.easeIn(duration: self.cycleTime / 2).repeatForever(autoreverses: true)) {
+                        isLowOpacity.toggle()
+                    }
+                }
             
-        }.scaledToFit()
     }
 }
 
@@ -43,6 +43,8 @@ struct LoadingViewParent<V: View>: View {
 struct LoadingView_Previews: PreviewProvider {
     static var previews: some View {
         VStack{
+            UrlImage(url: "")
+                .frame(width: 400, height: 300)
             LoadingView()
                 .cornerRadius(20)
                 .padding()

@@ -72,6 +72,8 @@ struct URLCarouselView: View {
             SwiftUI.TabView(selection: $index, content: {
                 ForEach(0..<urls.count, id: \.self) { idx in
                     UrlImage(url: self.urls[idx])
+                        .resizable()
+                        .scaledToFit()
                 }.disabled(dragging)
                 
             })
@@ -115,6 +117,8 @@ struct URLCarouselView: View {
         }
         else if urls.count == 1 {
             UrlImage(url: urls[0])
+                .resizable()
+                .scaledToFit()
         }
         else {
             

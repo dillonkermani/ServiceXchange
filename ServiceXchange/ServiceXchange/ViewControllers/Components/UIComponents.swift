@@ -74,15 +74,14 @@ func ProfileBackground(imageStr : String) -> some View {
 func ListingCardView(listing: Listing) -> some View {
     let image_url = listing.imageUrls.first ?? ""
     return ZStack(alignment: .bottom) {
-        AsyncImage(url: URL(string:  image_url)) { image in
-            image
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: controls.width, height: controls.height)
-                .clipped()
-        } placeholder: {
-            ShimmerPlaceholderView(width: controls.width, height: controls.height, cornerRadius: 0, animating: true)
-        }
+        UrlImage(url: image_url)
+            .resizable()
+            .aspectRatio(contentMode: .fill)
+            .frame(width: controls.width, height: controls.height)
+            .clipped()
+//         placeholder: {
+//            ShimmerPlaceholderView(width: controls.width, height: controls.height, cornerRadius: 0, animating: true)
+//        }
         
         cardGradient()
             .rotationEffect(.degrees(180))

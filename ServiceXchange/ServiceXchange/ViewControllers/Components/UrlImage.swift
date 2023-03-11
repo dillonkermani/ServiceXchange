@@ -6,19 +6,13 @@
 //
 
 import SwiftUI
+import Kingfisher
 
-struct UrlImage: View {
-    var url: String
-    var body: some View {
-        AsyncImage(url: URL(string: url)) { image in
-            image
-                .resizable()
-                .scaledToFit()
-        } placeholder: {
+func UrlImage(url: String) -> KFImage {
+    return KFImage(URL(string: url))
+        .placeholder({
             LoadingView()
-        }
-            
-    }
+        })
 }
 
 struct UrlImage_Previews: PreviewProvider {
@@ -29,6 +23,7 @@ struct UrlImage_Previews: PreviewProvider {
                 .padding(40)
             UrlImage(url: "")
                 .cornerRadius(.infinity)
+                .frame(width: 500, height: 500)
                 .padding(20)
         }
     }

@@ -131,7 +131,9 @@ struct HomeView: View {
                 LazyVGrid(columns: controls.gridItems, alignment: .center, spacing: 15) {
                     if homeVM.allListings.isEmpty || homeVM.isLoading {
                         ForEach(0..<10) { _ in
-                            ShimmerPlaceholderView(width: controls.width, height: controls.height, cornerRadius: 17, animating: true)
+                            LoadingView()
+                                .cornerRadius(17)
+                                .frame(width:controls.width, height: controls.height)
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 17)
                                         .stroke(.black, lineWidth: 1)
