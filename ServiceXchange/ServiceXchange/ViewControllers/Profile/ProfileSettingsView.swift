@@ -78,7 +78,7 @@ struct ProfileSettingsView: View {
                 }//ToolBarItem
             }//toolbar
             .alert(isPresented: $controls.signoutPressed) {
-                return Alert(title: Text("Sign Out?"), message: Text("Are you sure you want to sign out?"), primaryButton: .destructive(Text("Sign Out")) {
+                return Alert(title: Text("Sign Out?"), message: Text("Sign out of \(userVM.user.email)"), primaryButton: .destructive(Text("Sign Out")) {
                     session.isLoggedIn = false
                     session.logout()
                     //clear local user variables
