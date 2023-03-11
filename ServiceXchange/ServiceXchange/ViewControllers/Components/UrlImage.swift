@@ -13,6 +13,10 @@ func UrlImage(url: String) -> KFImage {
         .placeholder({
             LoadingView()
         })
+        .scaleFactor(UIScreen.main.scale)
+        .cacheOriginalImage(true)
+        .renderingMode(.original)
+        .resizable()
 }
 
 struct UrlImage_Previews: PreviewProvider {

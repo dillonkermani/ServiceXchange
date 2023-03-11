@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import Kingfisher
 
 extension Encodable {
     func toDictionary() throws -> [String: Any] {
@@ -27,4 +28,17 @@ extension Decodable {
         decoder.dateDecodingStrategy = JSONDecoder.DateDecodingStrategy.secondsSince1970
         self = try decoder.decode(Self.self, from: data)
     }
+}
+
+extension KFImage {
+    func basicKFModifiers(cgSize: CGSize) -> AnyView {
+        return AnyView(
+          self
+            .setProcessor(DownsamplingImageProcessor(size: cgSize))
+            .scaleFactor(UIScreen.main.scale)
+            .cacheOriginalImage()
+            .renderingMode(.original)
+            .resizable()
+        )
+      }
 }

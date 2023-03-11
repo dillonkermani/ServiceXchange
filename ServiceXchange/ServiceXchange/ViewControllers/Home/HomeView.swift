@@ -39,11 +39,8 @@ struct HomeView: View {
                                 .padding(.horizontal, 5)
                         }
                         
-                        
                         Section(header:
-                                    CategoryPicker()
-                                
-                        
+                            CategoryPicker()
                         ) {
                             ListingsGrid()
                         }
