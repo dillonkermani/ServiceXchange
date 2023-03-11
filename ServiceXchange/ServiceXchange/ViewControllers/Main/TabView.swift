@@ -29,6 +29,9 @@ struct TabView: View {
     
     
     @EnvironmentObject var userVM : UserViewModel
+    
+    @StateObject var homeVM = HomeViewModel()
+    var homeState = HomeViewControls()
 
     let icons = [
         "house",
@@ -51,7 +54,7 @@ struct TabView: View {
                 if !session.isLoggedIn {
                     NavigationView {
                         VStack {
-                            HomeView()
+                            HomeView(homeVM: homeVM, controls: homeState)
                         }.onAppear {
                             self.selectedTabIndex = 0
                         }
@@ -61,7 +64,7 @@ struct TabView: View {
                     case 0:
                         NavigationView {
                             VStack {
-                                HomeView()
+                                HomeView(homeVM: homeVM, controls: homeState)
                             }
                         }
                     case 1:
@@ -178,6 +181,6 @@ struct TabView: View {
 
 struct TabView_Previews: PreviewProvider {
     static var previews: some View {
-        TabView()
+        TabView().environmentObject(SessionStore()).environmentObject(UserViewModel())
     }
 }

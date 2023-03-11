@@ -36,6 +36,38 @@ class HomeViewModel: ObservableObject {
         }
     }
     
+    private func searchMatch(listing: Listing, search: String) -> Bool {
+        if search.isEmpty {
+            return true
+        }
+        if listing.title.isEmpty {
+            return false
+        }
+        return listing.title.lowercased().contains(search.lowercased())
+    }
+    
+    func applyFilters() {
+        let catagoryNames = self.selectedCategories.map({c in return c.title})
+        self.listings = self.allListings.filter({listing in
+            let matchesCategories = {
+                if catagoryNames.isEmpty {
+                    return true
+                }
+                for c in catagoryNames {
+                    guard let listingCatagories = listing.categories else {
+                        return catagoryNames.isEmpty
+                    }
+                    if listingCatagories.contains(c) {
+                        return true
+                    }
+                }
+                return false
+            }() // imidiadly call closure to get result
+            let matchesSearch = searchMatch(listing: listing, search: self.searchText)
+            return matchesCategories && matchesSearch
+        })
+    }
+    
     func searchTextDidChange() {
         if searchText.isEmpty {
             self.listings = allListings
@@ -70,7 +102,7 @@ class HomeViewModel: ObservableObject {
         self.isLoading = true
         getListingsFromDB(onSuccess: {listings in
             self.allListings = listings
-            self.listings = listings
+            self.applyFilters()
             self.isLoading = false
         }, onError: {errorMessage in
             self.loadErrorMsg = errorMessage

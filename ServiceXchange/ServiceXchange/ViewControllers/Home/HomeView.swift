@@ -18,14 +18,10 @@ struct HomeViewControls {
 
 struct HomeView: View {
     
-    @ObservedObject var homeVM = HomeViewModel()
+    @ObservedObject var homeVM: HomeViewModel
     
-    @State var controls = HomeViewControls()
+    @State var controls: HomeViewControls
     
-
-    init() {
-        homeVM.loadListings()
-    }
     
     var body: some View {
         VStack {
@@ -52,10 +48,17 @@ struct HomeView: View {
                             ListingsGrid()
                         }
                     }
+                    
                         
+                }.refreshable {
+                    homeVM.loadListings()
                 }
                 .padding(.top, 0.1)
             }.toolbar(.hidden)
+        }.task {
+            if homeVM.allListings.isEmpty {
+                homeVM.loadListings()
+            }
         }
     }
     
@@ -111,11 +114,13 @@ struct HomeView: View {
                 }
             }
         }
+        
         .padding(.vertical, 10)
         .padding(.horizontal, 3)
         .padding(.trailing, 15)
             .background(Color.white)
             .offset(x: 15)
+        
     }
     
     private func ListingsGrid() -> some View {
@@ -151,12 +156,13 @@ struct HomeView: View {
                                 
                     }
                 }.padding(.horizontal, 10)
+                
             }
     }
 }
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView()
+        HomeView(homeVM: HomeViewModel(), controls: HomeViewControls())
     }
 }
