@@ -7,12 +7,18 @@
 
 import SwiftUI
 
+struct ProfileSettingsControls {
+    var signoutPressed = false
+}
+
 struct ProfileSettingsView: View {
     
     @EnvironmentObject var session: SessionStore
     @EnvironmentObject var userVM: UserViewModel
     
     @Environment(\.presentationMode) var presentationMode
+    
+    @State var controls = ProfileSettingsControls()
     
     var body: some View {
             VStack {
@@ -50,10 +56,7 @@ struct ProfileSettingsView: View {
                 .buttonStyle(labelFormatt())
                 //sign out
                 Button(action: {
-                    session.isLoggedIn = false
-                    session.logout()
-                    //clear local user variables
-                    userVM.clearLocalUserVariables()
+                    controls.signoutPressed.toggle()
                 }, label: {
                     Label("Sign Out", systemImage: "figure.walk.motion")
                         .frame(width: 300, height: 30)
@@ -74,6 +77,14 @@ struct ProfileSettingsView: View {
                     }
                 }//ToolBarItem
             }//toolbar
+            .alert(isPresented: $controls.signoutPressed) {
+                return Alert(title: Text("Sign Out?"), message: Text("Are you sure you want to sign out?"), primaryButton: .destructive(Text("Sign Out")) {
+                    session.isLoggedIn = false
+                    session.logout()
+                    //clear local user variables
+                    userVM.clearLocalUserVariables()
+                }, secondaryButton: .cancel())
+            }
     }
 }
 

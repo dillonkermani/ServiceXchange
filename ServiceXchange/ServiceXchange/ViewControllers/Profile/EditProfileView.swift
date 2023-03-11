@@ -101,6 +101,22 @@ struct EditProfileView: View {
                 }
             }
         )
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                HStack {
+                    Button {
+                        presentationMode.wrappedValue.dismiss()
+                    } label: {
+                        HStack {
+                            Image(systemName: "arrow.left")
+                                .font(.system(size: 17)).bold()
+                        }.foregroundColor(.black)
+                    }
+                    
+                }
+            }
+        }
 
             
     } //view structure
