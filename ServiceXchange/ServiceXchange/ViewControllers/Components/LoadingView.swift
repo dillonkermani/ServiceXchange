@@ -1,5 +1,5 @@
 //
-//  ShimmerPlaceHolder2.swift
+//  LoadingView.swift
 //  ServiceXchange
 //
 //  Created by Sam Wortzman on 2/13/23.
