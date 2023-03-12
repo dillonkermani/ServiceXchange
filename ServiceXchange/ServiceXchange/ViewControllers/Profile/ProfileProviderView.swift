@@ -23,6 +23,8 @@ struct RateProfile: View {
     @State var currentUserRating: Int = 0
     var body: some View{
         VStack{
+            Text("How did I do?")
+                .font(.system(.title)).bold()
             HStack {
                 ForEach(1..<6) { i in
                     Button( action: {
@@ -31,14 +33,30 @@ struct RateProfile: View {
                                 showAlert = true
                                 return
                             }
+                            currentUserRating = i
                             await rateUser(userIdToRate: forUser, raterId: currentUser, rating: i)
                         }
                     }, label: {
-                        Image(systemName: "star")
+                        if i > currentUserRating {
+                            Image(systemName: "star")
+                                .resizable()
+                                .scaledToFit()
+                                .foregroundColor(CustomColor.sxcgreen)
+
+                        }
+                        else {
+                            Image(systemName: "star.fill")
+                                .resizable()
+                                .scaledToFit()
+                                .foregroundColor(CustomColor.sxcgreen)
+                        }
                     })
                     
                 }
-            }.alert(isPresented: $showAlert, content: {
+            } //hstack
+            .padding(.horizontal, 70)
+            .padding(.vertical, 10)
+            .alert(isPresented: $showAlert, content: {
                 Alert(title: Text("You must be logged in to rate this account"))
             })
         }
@@ -71,13 +89,15 @@ struct ProfileProviderView: View {
                     Text(user.companyName?.isEmpty ?? true ? "No Company Name" : "\(user.companyName!)")
                         .font(.system(size: 30)).bold()
                     RatingView(rating: rating)
-                    Button("rate") {
+                    Button( action: {
                         if session.isLoggedIn {
                             controls.showRatingSheet = true
                         } else {
                             controls.promptLogin = true
                         }
-                    }.popover(isPresented: $controls.showRatingSheet, content: {
+                    },label:{
+                        Text("Rate").underline()
+                    }).popover(isPresented: $controls.showRatingSheet, content: {
                         RateProfile(forUser: user.userId, byUser: session.userSession?.userId)
                     })
                     .presentationDetents([.fraction(0.2)])

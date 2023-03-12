@@ -25,7 +25,7 @@ struct ProfileViewDeleteAccount: View {
     @State var controls = ProfileViewMultiTestControls()
     
     @EnvironmentObject var userVM: UserViewModel
-    @ObservedObject var loginVM = LoginViewModel()
+    @StateObject var loginVM = LoginViewModel()
     
     @State var thisUserProfile = false
     @State var passwordInput: String = ""
