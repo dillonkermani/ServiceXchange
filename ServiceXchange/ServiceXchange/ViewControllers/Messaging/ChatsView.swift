@@ -61,8 +61,9 @@ struct ChatsView: View {
     
     private func CustomNavBar() -> some View {
         HStack(spacing: 16) {
-            if ((session.userSession!.profileImageUrl?.isEmpty) != nil) {
+            if session.userSession!.profileImageUrl == nil {
                 Image("blankprofile")
+                    .resizable()
                     .scaledToFill()
                     .frame(width: 44, height: 44)
                     .clipped()
@@ -72,7 +73,7 @@ struct ChatsView: View {
                     )
                     .shadow(radius: 5)
             } else {
-                UrlImage(url: session.userSession?.profileImageUrl ?? "")
+                UrlImage(url: session.userSession!.profileImageUrl!)
                     .scaledToFill()
                     .frame(width: 44, height: 44)
                     .clipped()
