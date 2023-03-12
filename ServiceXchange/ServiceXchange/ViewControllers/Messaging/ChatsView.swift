@@ -178,9 +178,6 @@ struct ChatsView: View {
             )
             .padding(15)
         }
-        .sheet(isPresented: $controls.showNewMessageScreen) {
-            CreateNewMessageView()
-        }
     }
 }
 
