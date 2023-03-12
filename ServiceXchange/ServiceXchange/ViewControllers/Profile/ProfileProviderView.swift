@@ -85,7 +85,7 @@ struct ProfileProviderView: View {
                         LoginView()
                     }
                     Text(user.bio?.isEmpty ?? true ? "No Company Description" : user.bio!)
-                        .font(.system(size: 20))
+                        .font(.system(size: 20)).multilineTextAlignment(.center)
                     
                     Text(user.primaryLocationServed?.isEmpty ?? true ? "No Primary Location Specified" : "Location: \(user.primaryLocationServed!)")
                         .font(.system(size: 17))

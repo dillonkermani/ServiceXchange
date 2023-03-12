@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		65022E3929A2D852003A3DAA /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65022E3829A2D852003A3DAA /* SearchBar.swift */; };
+		6506CFD929BE8A3400127984 /* SavedListingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6506CFD829BE8A3400127984 /* SavedListingsView.swift */; };
 		6525B9EC29AC35A6003C0A99 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6525B9EB29AC35A6003C0A99 /* AppDelegate.swift */; };
 		6525B9F129AC5092003C0A99 /* MessageDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6525B9F029AC5092003C0A99 /* MessageDetailView.swift */; };
 		6525B9F529AC51AB003C0A99 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6525B9F429AC51AB003C0A99 /* Message.swift */; };
@@ -49,9 +50,9 @@
 		9C3C4DC029B6D3A600036808 /* ProfileUserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C3C4DBF29B6D3A600036808 /* ProfileUserView.swift */; };
 		9C5F611F299D6DBE00139265 /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C5F611E299D6DBE00139265 /* EditProfileView.swift */; };
 		9C85B87129B7A04E005BCA4A /* ProfileSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C85B87029B7A04E005BCA4A /* ProfileSettingsView.swift */; };
-		9C85B87329B7A56E005BCA4A /* ProfileViewChangePassword.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C85B87229B7A56E005BCA4A /* ProfileViewChangePassword.swift */; };
+		9C85B87329B7A56E005BCA4A /* ChangePasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C85B87229B7A56E005BCA4A /* ChangePasswordView.swift */; };
 		9C85B87529B7C66E005BCA4A /* ProfileProviderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C85B87429B7C66E005BCA4A /* ProfileProviderView.swift */; };
-		9C85B87729B85982005BCA4A /* ProfileViewDeleteAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C85B87629B85982005BCA4A /* ProfileViewDeleteAccount.swift */; };
+		9C85B87729B85982005BCA4A /* DeleteAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C85B87629B85982005BCA4A /* DeleteAccountView.swift */; };
 		9CF3A2742994318F006E3E5D /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CF3A2732994318F006E3E5D /* UserViewModel.swift */; };
 		DF0F902B299ABDAF000D9AD1 /* UrlImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF0F902A299ABDAF000D9AD1 /* UrlImage.swift */; };
 		DF0F902D299ABF1D000D9AD1 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF0F902C299ABF1D000D9AD1 /* LoadingView.swift */; };
@@ -70,6 +71,7 @@
 
 /* Begin PBXFileReference section */
 		65022E3829A2D852003A3DAA /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
+		6506CFD829BE8A3400127984 /* SavedListingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedListingsView.swift; sourceTree = "<group>"; };
 		651E5494298B6D93009AEEFD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		6525B9EB29AC35A6003C0A99 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6525B9ED29AC44C4003C0A99 /* ServiceXchange.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ServiceXchange.entitlements; sourceTree = "<group>"; };
@@ -108,9 +110,9 @@
 		9C3C4DBF29B6D3A600036808 /* ProfileUserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileUserView.swift; sourceTree = "<group>"; };
 		9C5F611E299D6DBE00139265 /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
 		9C85B87029B7A04E005BCA4A /* ProfileSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSettingsView.swift; sourceTree = "<group>"; };
-		9C85B87229B7A56E005BCA4A /* ProfileViewChangePassword.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewChangePassword.swift; sourceTree = "<group>"; };
+		9C85B87229B7A56E005BCA4A /* ChangePasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordView.swift; sourceTree = "<group>"; };
 		9C85B87429B7C66E005BCA4A /* ProfileProviderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileProviderView.swift; sourceTree = "<group>"; };
-		9C85B87629B85982005BCA4A /* ProfileViewDeleteAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewDeleteAccount.swift; sourceTree = "<group>"; };
+		9C85B87629B85982005BCA4A /* DeleteAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteAccountView.swift; sourceTree = "<group>"; };
 		9CF3A2732994318F006E3E5D /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
 		DF0F902A299ABDAF000D9AD1 /* UrlImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UrlImage.swift; sourceTree = "<group>"; };
 		DF0F902C299ABF1D000D9AD1 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
@@ -275,11 +277,12 @@
 			isa = PBXGroup;
 			children = (
 				9C85B87429B7C66E005BCA4A /* ProfileProviderView.swift */,
-				9C85B87029B7A04E005BCA4A /* ProfileSettingsView.swift */,
 				9C3C4DBF29B6D3A600036808 /* ProfileUserView.swift */,
-				9C85B87229B7A56E005BCA4A /* ProfileViewChangePassword.swift */,
-				9C85B87629B85982005BCA4A /* ProfileViewDeleteAccount.swift */,
+				9C85B87029B7A04E005BCA4A /* ProfileSettingsView.swift */,
 				9C5F611E299D6DBE00139265 /* EditProfileView.swift */,
+				6506CFD829BE8A3400127984 /* SavedListingsView.swift */,
+				9C85B87229B7A56E005BCA4A /* ChangePasswordView.swift */,
+				9C85B87629B85982005BCA4A /* DeleteAccountView.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -428,13 +431,14 @@
 				65FE2B4929874C140077F505 /* UIComponents.swift in Sources */,
 				6539608529A46B9E00E4403E /* Constants.swift in Sources */,
 				9C85B87129B7A04E005BCA4A /* ProfileSettingsView.swift in Sources */,
+				6506CFD929BE8A3400127984 /* SavedListingsView.swift in Sources */,
 				65C3EB952981DB7800766659 /* HomeView.swift in Sources */,
 				DFED901129942CC6004E7177 /* ListingDetailView.swift in Sources */,
 				65E992722989E67900C3C5BA /* Listing.swift in Sources */,
 				659462DD298A17AF0093A71D /* ImagePicker.swift in Sources */,
 				6525B9F529AC51AB003C0A99 /* Message.swift in Sources */,
 				65C3EB9C2981DBDE00766659 /* LoginView.swift in Sources */,
-				9C85B87729B85982005BCA4A /* ProfileViewDeleteAccount.swift in Sources */,
+				9C85B87729B85982005BCA4A /* DeleteAccountView.swift in Sources */,
 				65CD36CD29AE7B4900C99253 /* Chat.swift in Sources */,
 				65022E3929A2D852003A3DAA /* SearchBar.swift in Sources */,
 				DF6E81CF29B9389000807BD3 /* CalendarEditView.swift in Sources */,
@@ -446,7 +450,7 @@
 				DF6E81CD29B5609B00807BD3 /* CalenderViewModel.swift in Sources */,
 				DF3A463B29AD2CE800A40FE2 /* CalendarView.swift in Sources */,
 				9C85B87529B7C66E005BCA4A /* ProfileProviderView.swift in Sources */,
-				9C85B87329B7A56E005BCA4A /* ProfileViewChangePassword.swift in Sources */,
+				9C85B87329B7A56E005BCA4A /* ChangePasswordView.swift in Sources */,
 				658D1CBE298854250026DC5B /* Ref.swift in Sources */,
 				65CD36CB29AE7B2F00C99253 /* ChatViewModel.swift in Sources */,
 				65E992762989F5AC00C3C5BA /* ListingDetailViewModel.swift in Sources */,

@@ -36,20 +36,20 @@ struct ProfileSettingsView: View {
                 })
                 .buttonStyle(labelFormatt())
                 //Saved Listings
-                NavigationLink(destination: EmptyView(), label: {
+                NavigationLink(destination: SavedListingsView(), label: {
                     Label("Saved Listings", systemImage: "bookmark")
                         .frame(width: 300, height: 30)
                 })
                 .buttonStyle(labelFormatt())
                 //change password
                 //delete your account
-                NavigationLink(destination: ProfileViewChangePassword(), label: {
+                NavigationLink(destination: ChangePasswordView(), label: {
                     Label("Change Password", systemImage: "key.horizontal")
                         .frame(width: 300, height: 30)
                 })
                 .buttonStyle(labelFormatt())
                 //delete your account
-                NavigationLink(destination: ProfileViewDeleteAccount(), label: {
+                NavigationLink(destination: DeleteAccountView(), label: {
                     Label("Delete Account", systemImage: "trash")
                         .frame(width: 300, height: 30)
                 })
@@ -57,6 +57,7 @@ struct ProfileSettingsView: View {
                 //sign out
                 Button(action: {
                     controls.signoutPressed.toggle()
+                    UIImpactFeedbackGenerator(style: .rigid).impactOccurred()
                 }, label: {
                     Label("Sign Out", systemImage: "figure.walk.motion")
                         .frame(width: 300, height: 30)
@@ -84,6 +85,9 @@ struct ProfileSettingsView: View {
                     //clear local user variables
                     userVM.clearLocalUserVariables()
                 }, secondaryButton: .cancel())
+            }
+            .onAppear {
+                UIImpactFeedbackGenerator(style: .rigid).impactOccurred()
             }
     }
 }

@@ -43,7 +43,7 @@ struct ProfileUserView: View {
                         .font(.system(size: 30)).bold()
                     
                     Text(userVM.localBio.isEmpty ? "No Company Description" : userVM.localBio)
-                        .font(.system(size: 20))
+                        .font(.system(size: 20)).multilineTextAlignment(.center)
                     
                     Text(userVM.localPrimaryLocationServed.isEmpty ? "No Primary Location Specified" : "Location: \(userVM.localPrimaryLocationServed)")
                         .font(.system(size: 15))
@@ -121,6 +121,10 @@ struct ProfileUserView: View {
                     .frame(width: 45, height: 45)
                     .background(.white)
                     .cornerRadius(5)
+                    .overlay(RoundedRectangle(cornerRadius: 5)
+                        .stroke(Color(.label), lineWidth: 1)
+                    )
+                    .shadow(radius: 5)
             })
             .offset(x: Constants.screenWidth / 2.7, y: -45)
         }

@@ -1,5 +1,5 @@
 //
-//  ProfileViewDeleteAccount.swift
+//  DeleteAccountView.swift
 //  ServiceXchange
 //
 //  Created by colton jeffrey on 3/7/23.
@@ -18,7 +18,7 @@ struct ProfileViewMultiTestControls {
     var savePressed = false
 }
 
-struct ProfileViewDeleteAccount: View {
+struct DeleteAccountView: View {
     
     @Environment(\.presentationMode) var presentationMode
     
@@ -35,9 +35,18 @@ struct ProfileViewDeleteAccount: View {
         VStack {
             signInFields()
         }
+        .gesture(DragGesture()
+            .onEnded { value in
+                let direction = detectDirection(value: value)
+                if direction == .left {
+                    presentationMode.wrappedValue.dismiss()
+                }
+            }
+        )
         .navigationBarBackButtonHidden(true)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                HStack {
                     Button {
                         presentationMode.wrappedValue.dismiss()
                     } label: {
@@ -46,8 +55,13 @@ struct ProfileViewDeleteAccount: View {
                                 .font(.system(size: 17)).bold()
                         }.foregroundColor(.black)
                     }
-                }//ToolBarItem
-            }//toolbar
+                    
+                }
+            }
+        }
+        .onAppear {
+            UIImpactFeedbackGenerator(style: .rigid).impactOccurred()
+        }
         .alert(isPresented: $controls.showAlert) {
                 return Alert(title: Text("Delete Account?"), message: Text("Warning: This action cannot be undone."), primaryButton: .destructive(Text("Delete")) {
 
@@ -102,8 +116,8 @@ struct ProfileViewDeleteAccount: View {
  
 }
 
-struct ProfileViewDeleteAccount_Previews: PreviewProvider {
+struct DeleteAccountView_Previews: PreviewProvider {
     static var previews: some View {
-        ProfileViewDeleteAccount()
+        DeleteAccountView()
     }
 }

@@ -48,9 +48,9 @@ struct EditProfileView: View {
     @State var backgroundImageData = Data()
     
     //varibles that autofill the edit prompts if you already have somthing in that variable
-    @State var companyNameTitle: String = "company name"
-    @State var shortBioTitle: String = "short bio"
-    @State var locationServeTitle: String = "location served"
+    @State var companyNameTitle: String = ""
+    @State var shortBioTitle: String = ""
+    @State var locationServeTitle: String = ""
     
     
     @State private var userToPass : User = User(
@@ -117,6 +117,9 @@ struct EditProfileView: View {
                 }
             }
         }
+        .onAppear {
+            UIImpactFeedbackGenerator(style: .rigid).impactOccurred()
+        }
 
             
     } //view structure
@@ -156,11 +159,11 @@ struct EditProfileView: View {
     
     func textEditFields() -> some View {
         return VStack {
-            underlinedTextField(title: "company name: " + companyNameTitle, text: $username, width: 310, height: 20, color: .black)
+            underlinedTextField(title: "Company Name: " + companyNameTitle, text: $username, width: 310, height: 20, color: .black)
                 
-            underlinedTextField(title: "location Served: " + locationServeTitle, text: $locationServe, width: 310, height: 40, color: .black)
-                
-            underlinedTextField(title: "short bio: " + shortBioTitle, text: $shortBio, width: 310, height: 40, color: .black)
+            underlinedTextField(title: "Description: " + shortBioTitle, text: $shortBio, width: 310, height: 40, color: .black)
+            
+            underlinedTextField(title: "Location: " + locationServeTitle, text: $locationServe, width: 310, height: 40, color: .black)
         }
     }//textFields function
     
@@ -291,7 +294,6 @@ struct EditProfileView: View {
         
               return VStack {
                          Button(action: {
-                             print("button pressed")
                              UIImpactFeedbackGenerator(style: .light).impactOccurred()
                              controlsDesc.pickedImageType = "card"
                              controlsDesc.showImagePicker = true
