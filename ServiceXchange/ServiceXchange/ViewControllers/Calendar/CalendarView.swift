@@ -197,7 +197,7 @@ fileprivate struct InfiniteTabPageView: View {
 
 struct CalendarView: View {
     let forUser: String
-    @ObservedObject private var dayObject = DayObject()
+    @StateObject private var dayObject = DayObject()
     var body: some View {
         VStack {
             DatePicker("Schedule for: ",

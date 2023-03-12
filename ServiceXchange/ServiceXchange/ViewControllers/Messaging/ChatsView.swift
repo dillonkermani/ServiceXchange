@@ -25,9 +25,9 @@ struct ChatsView: View {
     @State var controls = MessagesControls()
     @EnvironmentObject var session: SessionStore // Contains currently signed in user's info.
     
-    @ObservedObject var chatVM = ChatViewModel()
+    @StateObject var chatVM = ChatViewModel()
     
-    @ObservedObject var dateFormatter = CustomDateFormatter()
+    @StateObject var dateFormatter = CustomDateFormatter()
 
     var body: some View {
         NavigationView {

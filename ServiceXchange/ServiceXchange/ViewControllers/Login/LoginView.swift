@@ -14,7 +14,7 @@ struct LoginView: View {
     @Environment(\.presentationMode) var presentationMode
      
     
-    @ObservedObject var loginVM = LoginViewModel()
+    @StateObject var loginVM = LoginViewModel()
     
     
     @State var signupPressed = false

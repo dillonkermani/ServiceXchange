@@ -27,7 +27,7 @@ struct CreateListingView: View {
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var session: SessionStore
     
-    @ObservedObject var listingVM = CreateListingViewModel()
+    @StateObject var listingVM = CreateListingViewModel()
     
     @State var controls = CreateListingControls()
     

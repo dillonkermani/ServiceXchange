@@ -189,7 +189,7 @@ struct MessageBubble: View {
 
     var message: Message
     @State private var showTime = false
-    @ObservedObject var dateFormatter = CustomDateFormatter()
+    @StateObject var dateFormatter = CustomDateFormatter()
 
     
     var body: some View {
