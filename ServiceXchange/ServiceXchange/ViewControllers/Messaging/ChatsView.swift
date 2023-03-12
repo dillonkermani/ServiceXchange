@@ -155,30 +155,6 @@ struct ChatsView: View {
             .padding(.bottom, 50)
         }
     }
-    
-    
-    
-    private func newMessageButton() -> some View {
-        Button {
-            controls.showNewMessageScreen.toggle()
-        } label: {
-            HStack {
-                Spacer()
-                Text("+  New Message")
-                    .font(.system(size: 16, weight: .bold))
-                    .padding(15)
-                Spacer()
-            }
-            .background(CustomColor.sxcgreen)
-            .foregroundColor(.black)
-            .cornerRadius(17)
-            .overlay(
-                RoundedRectangle(cornerRadius: 17)
-                    .stroke(.black, lineWidth: 2)
-            )
-            .padding(15)
-        }
-    }
 }
 
 struct ChatsView_Previews: PreviewProvider {
