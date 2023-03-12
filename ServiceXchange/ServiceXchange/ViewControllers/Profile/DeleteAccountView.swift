@@ -93,7 +93,7 @@ struct DeleteAccountView: View {
                     controls.showAlert.toggle()
                    
                 } label: {
-                    Text("delete Account")
+                    Text("Delete Account")
                         .font(.system(size: 17))
                         .foregroundColor(.black)
                         .underline()
