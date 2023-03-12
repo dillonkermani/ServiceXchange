@@ -102,7 +102,7 @@ struct CreateListingView: View {
             }) {
                 HStack {
                     Spacer()
-                    Text(listingVM.categories.count == 0 ? "No Categories Assigned" : "Edit Categories")
+                    Text(listingVM.categories.count == 0 ? "Select Categories" : "Edit Categories")
                         .font(.system(size: 17))
                         .padding(15)
                     
