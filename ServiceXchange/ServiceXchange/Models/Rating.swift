@@ -22,13 +22,16 @@ func getRating(userId: String) async -> Double {
         var totalRating = 0
         let userRef = Ref.FIRESTORE_DOCUMENT_USERID(userId: userId)
         let ratings = try await userRef.collection("ratings").getDocuments()
-        let ratingCount = ratings.count
+        var ratingCount = ratings.count
         if ratingCount == 0 {
             return noRatings
         }
         for review in ratings.documents {
-            let ratingInstance = try Rating(fromDictionary: review.data())
-            totalRating += ratingInstance.stars
+            let ratingInstance = try? Rating(fromDictionary: review.data())
+            if ratingInstance == nil {
+                ratingCount -= 1
+            }
+            totalRating += ratingInstance?.stars ?? 0
         }
         return Double(totalRating) / Double(ratingCount)
         

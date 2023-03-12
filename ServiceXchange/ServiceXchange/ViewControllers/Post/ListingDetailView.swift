@@ -28,9 +28,6 @@ struct ListingDetailView : View {
     
     @EnvironmentObject var session: SessionStore
     
-    @EnvironmentObject var userVM: UserViewModel
-    
-    
     
     @State private var report_clicked = false
     @State var rating = 0.0
@@ -40,14 +37,14 @@ struct ListingDetailView : View {
     @ObservedObject var listingVM = ListingDetailViewModel()
 
     //to be passed to the profile view
-    @State private var userToPass : User = User(
-        userId: "",
-        firstName: "",
-        lastName: "",
-        email: "",
-        isServiceProvider: false,
-        listings: []
-    )
+//    @State private var userToPass : User = User(
+//        userId: "",
+//        firstName: "",
+//        lastName: "",
+//        email: "",
+//        isServiceProvider: false,
+//        listings: []
+//    )
     @State private var thisUser : Bool = false
     
     
@@ -146,7 +143,7 @@ struct ListingDetailView : View {
         .onAppear {
             Task{
                 await listingVM.getListingPoster(posterId: listing.posterId)
-                userToPass = listingVM.poster
+                //userToPass = listingVM.poster
             }
         }
     }//listing Title bar
@@ -228,7 +225,7 @@ struct ListingDetailView : View {
                 //        @State private var thisUser : Bool = false
                 
                 return HStack {
-                    NavigationLink(destination: ProfileProviderView(user : userToPass, rating: rating)){
+                    NavigationLink(destination: ProfileProviderView(user : listingVM.poster, rating: rating)){
                         HStack{
                             UrlImage(url: listingVM.poster.profileImageUrl ?? "")
                                 .scaledToFill()
@@ -249,11 +246,10 @@ struct ListingDetailView : View {
                             }
                         }.task {
                             self.rating = await getRating(userId: listing.posterId)
-                            print("rating = \(self.rating)")
                             await self.listingVM.getListingPoster(posterId: listing.posterId)
                             //await userToPass = listingVM.poster
                         }
-                    }
+                    }.disabled(listingVM.loadingPoster)
                     Spacer()
                     
                 }

@@ -36,12 +36,24 @@ fileprivate struct dayView: View {
         return time >= event.start && time <= event.start.advanced(by: event.duration)
     }
     
+    private func calculateRectOffset(start: Date, dayStart: Date) -> CGFloat {
+        let rectangleOffset = quarterHourHeight * CGFloat(start.timeIntervalSince(dayStart)) / self.quarterHour
+        return max(0,min(rectangleOffset, quarterHourHeight * 4 * 24))
+    }
+    
+    private func calculateRectHeight(duration: CGFloat, offset: CGFloat) -> CGFloat {
+        var res = min(CGFloat( quarterHourHeight * duration / self.quarterHour), quarterHourHeight * 4 * 24 )
+        if res + offset > quarterHourHeight * 4 * 24 {
+            res = max(quarterHourHeight * 4 * 24 - offset, 0)
+        }
+        return min(res, quarterHourHeight * 24 * 4)
+    }
     private func busyOverlayView() -> some View {
         let dayStart = Calendar.current.startOfDay(for: self.day)
         return ZStack(alignment: .topLeading) {
             ForEach(self.notAvailable, id: \.self.0) { event , _  in
-                let rectangleHeight = CGFloat( quarterHourHeight * event.duration / quarterHour)
-                let rectangleOffset = quarterHourHeight * CGFloat(event.start.timeIntervalSince(dayStart)) / quarterHour
+                let rectangleOffset = calculateRectOffset(start: event.start, dayStart: dayStart)
+                let rectangleHeight = calculateRectHeight(duration: event.duration, offset: rectangleOffset)
                 RoundedRectangle(cornerRadius: 10)
                     .foregroundColor( busyColor )
                     .frame(height: rectangleHeight )
@@ -50,8 +62,9 @@ fileprivate struct dayView: View {
             ForEach(self.alwaysNotAvailable.compactMap({(e, id) in
                 return e.getFor(day: day)
             }), id: \.self) { event in
-                let rectangleHeight = CGFloat( quarterHourHeight * event.duration / quarterHour)
-                let rectangleOffset = CGFloat( quarterHourHeight * event.start.timeIntervalSince(dayStart) / quarterHour)
+                
+                let rectangleOffset = calculateRectOffset(start: event.start, dayStart: dayStart)
+                let rectangleHeight = calculateRectHeight(duration: event.duration, offset: rectangleOffset)
                 RoundedRectangle(cornerRadius: 10)
                     .foregroundColor( busyColor )
                     .frame(height: rectangleHeight)

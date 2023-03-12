@@ -19,8 +19,9 @@ struct SelectCategoriesView: View {
                 .environmentObject(filterModel)
             Spacer()
             List {
-                ForEach(0..<filterModel.categories.count) { index in
-                    FilterTag(filterData: filterModel.categories[index])
+                ForEach(filterModel.categories.indices, id: \.self) { index in
+                    let catagory = self.categories[index]
+                    FilterTag(filterData: catagory)
                         .onTapGesture {
                             UIImpactFeedbackGenerator(style: .light).impactOccurred()
                             filterModel.toggleFilter(at: index)
