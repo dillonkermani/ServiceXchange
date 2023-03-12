@@ -244,7 +244,7 @@ struct LoginView: View {
                 }
                 HStack {
                     underlinedTextField(title: "First Name", text: $loginVM.firstName, width: 140, height: 40, color: loginVM.firstName.isEmpty ? .black : CustomColor.sxcgreen)
-                    underlinedTextField(title: "First Name", text: $loginVM.lastName, width: 140, height: 40, color: loginVM.lastName.isEmpty ? .black : CustomColor.sxcgreen)
+                    underlinedTextField(title: "Last Name", text: $loginVM.lastName, width: 140, height: 40, color: loginVM.lastName.isEmpty ? .black : CustomColor.sxcgreen)
                 }
                 underlinedTextField(title: "Email", text: $loginVM.email, width: 310, height: 40, color: loginVM.email.isEmpty ? .black : CustomColor.sxcgreen)
                     .keyboardType(.emailAddress)
