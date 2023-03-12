@@ -123,9 +123,6 @@ func ListingCardView(listing: Listing) -> some View {
             .aspectRatio(contentMode: .fill)
             .frame(width: controls.width, height: controls.height)
             .clipped()
-//         placeholder: {
-//            ShimmerPlaceholderView(width: controls.width, height: controls.height, cornerRadius: 0, animating: true)
-//        }
         
         cardGradient()
             .rotationEffect(.degrees(180))

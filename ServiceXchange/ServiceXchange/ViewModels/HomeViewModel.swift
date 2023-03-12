@@ -107,7 +107,7 @@ class HomeViewModel: ObservableObject {
                         .getDocument { (document, error) in
                             if let document = document, document.exists {
                                 let dict = document.data()
-                                guard let decodedListing = try? Listing.init(fromDictionary: dict) else { return }
+                                guard let decodedListing = try? Listing.init(fromDictionary: dict!) else { return }
                                 self.listings.append(decodedListing)
                             } else {
                                 print("Document does not exist")
