@@ -20,7 +20,7 @@ struct SelectCategoriesView: View {
             Spacer()
             List {
                 ForEach(filterModel.categories.indices, id: \.self) { index in
-                    let catagory = self.categories[index]
+                    let catagory = filterModel.categories[index]
                     FilterTag(filterData: catagory)
                         .onTapGesture {
                             UIImpactFeedbackGenerator(style: .light).impactOccurred()

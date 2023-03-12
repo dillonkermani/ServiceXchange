@@ -161,7 +161,7 @@ struct ProfileProviderView: View {
         return ZStack {
             ProfileBackground(imageStr: user.descriptiveImageStr ?? "")
             
-            ProfileImage(imageStr: user.profileImageUrl ?? "blankprofile", diameter: 125)
+            ProfileImage(imageStr: user.profileImageUrl ?? "", diameter: 125)
                 .offset(y: 80)
             
         }
