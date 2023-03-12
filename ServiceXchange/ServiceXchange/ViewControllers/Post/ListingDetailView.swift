@@ -119,9 +119,7 @@ struct ListingDetailView : View {
             }
             .onAppear {
                 Task{
-                    print("VM LOADING")
                     await listingVM.getListingPoster(posterId: listing.posterId)
-                    print("VM DONE LOADING")
                 }
             }
     }
@@ -163,7 +161,7 @@ struct ListingDetailView : View {
                         Label("Report", systemImage: "flag.fill")
                             .foregroundColor(.red)
                     })
-                    if true {//session.userSession?.userId == listing.posterId { // If currently signed in user is the poster of the Listing
+                    if session.userSession?.userId == listing.posterId { // If currently signed in user is the poster of the Listing
                         Button(role: .none, action: {
                             controls.activeAlert = .deleteListing
                             controls.showAlert.toggle()
