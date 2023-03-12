@@ -12,6 +12,37 @@ struct ProfileProviderViewControls {
     let gridItems = [GridItem(.flexible()), GridItem(.flexible())]
     var width = (UIScreen.main.bounds.width * 0.43)
     var height = (UIScreen.main.bounds.width * 0.43)
+    var showRatingSheet: Bool = false
+    var promptLogin = false
+}
+
+struct RateProfile: View {
+    let forUser: String
+    let byUser: String?
+    @State var showAlert = false
+    @State var currentUserRating: Int = 0
+    var body: some View{
+        VStack{
+            HStack {
+                ForEach(1..<6) { i in
+                    Button( action: {
+                        Task {
+                            guard let currentUser = byUser else {
+                                showAlert = true
+                                return
+                            }
+                            await rateUser(userIdToRate: forUser, raterId: currentUser, rating: i)
+                        }
+                    }, label: {
+                        Image(systemName: "star")
+                    })
+                    
+                }
+            }.alert(isPresented: $showAlert, content: {
+                Alert(title: Text("You must be logged in to rate this account"))
+            })
+        }
+    }
 }
 
 struct ProfileProviderView: View {
@@ -40,6 +71,19 @@ struct ProfileProviderView: View {
                     Text(user.companyName?.isEmpty ?? true ? "No Company Name" : "\(user.companyName!)")
                         .font(.system(size: 30)).bold()
                     RatingView(rating: rating)
+                    Button("rate") {
+                        if session.isLoggedIn {
+                            controls.showRatingSheet = true
+                        } else {
+                            controls.promptLogin = true
+                        }
+                    }.popover(isPresented: $controls.showRatingSheet, content: {
+                        RateProfile(forUser: user.userId, byUser: session.userSession?.userId)
+                    })
+                    .presentationDetents([.fraction(0.2)])
+                    .fullScreenCover(isPresented: $controls.promptLogin) {
+                        LoginView()
+                    }
                     Text(user.bio?.isEmpty ?? true ? "No Company Description" : user.bio!)
                         .font(.system(size: 20))
                     

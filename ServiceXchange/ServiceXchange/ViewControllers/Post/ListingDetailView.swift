@@ -245,12 +245,11 @@ struct ListingDetailView : View {
                                     .font(.system(size: 20))
                                 RatingView(rating: rating)
                                     .padding(.horizontal, 5)
-                                    .task {
-                                        self.rating = await getRating(userId: listing.posterId)
-                                    }
                                 
                             }
                         }.task {
+                            self.rating = await getRating(userId: listing.posterId)
+                            print("rating = \(self.rating)")
                             await self.listingVM.getListingPoster(posterId: listing.posterId)
                             //await userToPass = listingVM.poster
                         }
