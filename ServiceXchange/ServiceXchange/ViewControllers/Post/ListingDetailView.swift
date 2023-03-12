@@ -34,7 +34,7 @@ struct ListingDetailView : View {
     
     @State var controls = ListingDetailViewControls()
     
-    @ObservedObject var listingVM = ListingDetailViewModel()
+    @StateObject var listingVM = ListingDetailViewModel()
 
     //to be passed to the profile view
 //    @State private var userToPass : User = User(
@@ -119,7 +119,9 @@ struct ListingDetailView : View {
             }
             .onAppear {
                 Task{
+                    print("VM LOADING")
                     await listingVM.getListingPoster(posterId: listing.posterId)
+                    print("VM DONE LOADING")
                 }
             }
     }
@@ -220,9 +222,6 @@ struct ListingDetailView : View {
             
             
             func PosterDataView() -> some View {
-                
-                //        @State private var userToPass : User = listingVM.poster
-                //        @State private var thisUser : Bool = false
                 
                 return HStack {
                     NavigationLink(destination: ProfileProviderView(user : listingVM.poster, rating: rating)){
