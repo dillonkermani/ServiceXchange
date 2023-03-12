@@ -67,7 +67,7 @@ struct ProfileViewDeleteAccount: View {
     private func signInFields() -> some View {
         return VStack {
                 HStack {
-                    Text("Enter Password to delete account")
+                    Text("Enter Password to Delete account")
                         .font(.largeTitle)
                         .padding([.top, .bottom], 75)
                 }

@@ -119,9 +119,7 @@ struct ListingDetailView : View {
             }
             .onAppear {
                 Task{
-                    print("VM LOADING")
                     await listingVM.getListingPoster(posterId: listing.posterId)
-                    print("VM DONE LOADING")
                 }
             }
     }
@@ -163,7 +161,7 @@ struct ListingDetailView : View {
                         Label("Report", systemImage: "flag.fill")
                             .foregroundColor(.red)
                     })
-                    if true {//session.userSession?.userId == listing.posterId { // If currently signed in user is the poster of the Listing
+                    if session.userSession?.userId == listing.posterId { // If currently signed in user is the poster of the Listing
                         Button(role: .none, action: {
                             controls.activeAlert = .deleteListing
                             controls.showAlert.toggle()
@@ -226,14 +224,26 @@ struct ListingDetailView : View {
                 return HStack {
                     NavigationLink(destination: ProfileProviderView(user : listingVM.poster, rating: rating)){
                         HStack{
-                            UrlImage(url: listingVM.poster.profileImageUrl ?? "")
-                                .scaledToFill()
-                                .frame(width: 70, height: 70)
-                                .clipShape(Circle())
-                                .overlay(RoundedRectangle(cornerRadius: 35)
-                                    .stroke(Color(.label), lineWidth: 1)
-                                )
-                                .shadow(radius: 5)
+                            if listingVM.poster.profileImageUrl == nil {
+                                Image("blankprofile")
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 70, height: 70)
+                                    .clipShape(Circle())
+                                    .overlay(RoundedRectangle(cornerRadius: 35)
+                                        .stroke(Color(.label), lineWidth: 1)
+                                    )
+                                    .shadow(radius: 5)
+                            } else {
+                                UrlImage(url: listingVM.poster.profileImageUrl ?? "")
+                                    .scaledToFill()
+                                    .frame(width: 70, height: 70)
+                                    .clipShape(Circle())
+                                    .overlay(RoundedRectangle(cornerRadius: 35)
+                                        .stroke(Color(.label), lineWidth: 1)
+                                    )
+                                    .shadow(radius: 5)
+                            }
                             VStack(alignment: .leading) {
                                 Text("\(listingVM.poster.firstName) \(listingVM.poster.lastName)")
                                     .padding(.horizontal, 5)

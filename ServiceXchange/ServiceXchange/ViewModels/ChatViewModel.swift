@@ -55,10 +55,12 @@ class ChatViewModel: ObservableObject {
                         for userId in decodedChat.members { // This for loop only runs at most 2 times because chats currently only support 2 members.
                             if userId != forUser.userId {
                                 Ref.FIRESTORE_COLLECTION_USERS.document(userId).getDocument { (document, err) in
-                                    if document != nil {
-                                        let dict = document!.data()
+                                    if let document = document, document.exists {
+                                        let dict = document.data()
                                         guard let decodedUser = try? User.init(fromDictionary: dict!) else { return }
                                         self.chatUserDict[decodedChat] = decodedUser
+                                    } else {
+                                        print("Document does not exist")
                                     }
                                 }
                             }

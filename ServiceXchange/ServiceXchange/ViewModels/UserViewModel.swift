@@ -244,6 +244,19 @@ class UserViewModel: ObservableObject{
                      } else {
                          print("success reauth-user")
                          
+                         // Delete all user's listings
+                         if self.user.listings != nil {
+                             for listingId in self.user.listings ?? [] {
+                                 Ref.FIRESTORE_COLLECTION_LISTINGS.document(listingId).delete() { err in
+                                     if let err = err {
+                                         print("Error removing document: \(err)")
+                                     } else {
+                                         print("Document successfully removed!")
+                                     }
+                                 }
+                             }
+                         }
+                         
                          //delete the firebase information
                          Ref.FIRESTORE_COLLECTION_USERS.document(self.localUserId).delete() { err in
                              if let err = err {
