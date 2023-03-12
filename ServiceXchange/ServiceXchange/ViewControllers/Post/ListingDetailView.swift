@@ -67,7 +67,7 @@ struct ListingDetailView : View {
                 DetailsView()
                 Spacer()
                 
-                if session.isLoggedIn {
+                if session.isLoggedIn && session.userSession != nil {
                     if session.userSession!.userId != listing.posterId {
                         RequestServiceButton(fromUser: session.userSession!, toUser: listingVM.poster)
                     }
@@ -234,6 +234,10 @@ struct ListingDetailView : View {
                                 .scaledToFill()
                                 .frame(width: 70, height: 70)
                                 .clipShape(Circle())
+                                .overlay(RoundedRectangle(cornerRadius: 35)
+                                    .stroke(Color(.label), lineWidth: 1)
+                                )
+                                .shadow(radius: 5)
                             VStack(alignment: .leading) {
                                 Text("\(listingVM.poster.firstName) \(listingVM.poster.lastName)")
                                     .padding(.horizontal, 5)

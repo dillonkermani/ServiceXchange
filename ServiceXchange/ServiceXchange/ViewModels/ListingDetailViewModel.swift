@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 import FirebaseCore
+import Firebase
 
 fileprivate let skeletonUser = User(
     userId: "",
@@ -63,6 +64,18 @@ class ListingDetailViewModel: ObservableObject {
               }
             }
                 
+        }
+        
+        // Delete listingId from User(listing.posterId).listings[]
+        let userRef = Ref.FIRESTORE_COLLECTION_USERS.document(listing.posterId)
+        userRef.updateData([
+            "listings": FieldValue.arrayRemove([listing.listingId])
+        ]) { err in
+            if let err = err {
+                print("Error updating document: \(err)")
+            } else {
+                print("Document successfully updated")
+            }
         }
 
         Ref.FIRESTORE_COLLECTION_LISTINGS.document(listing.listingId).delete()

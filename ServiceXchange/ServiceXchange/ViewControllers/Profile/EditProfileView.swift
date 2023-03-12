@@ -328,17 +328,6 @@ struct EditProfileView: View {
         
     }
     
-
-    func showDetailImage() -> some View {
-        return VStack {
-          Image("sunsetTest")
-                .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 400.0, height: 250.0, alignment: .top)
-                    .clipShape(Rectangle())
-        }
-    }
-    
   //private func SaveDataButton
     
                                

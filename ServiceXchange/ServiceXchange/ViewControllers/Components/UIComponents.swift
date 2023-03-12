@@ -4,6 +4,21 @@ import SwiftUI
 
 var controls = HomeViewControls()
 
+func ListingsGrid(listings: [Listing]) -> some View {
+    VStack {
+        LazyVGrid(columns: controls.gridItems, alignment: .center, spacing: 15) {
+            ForEach(listings, id: \.listingId) { listing in
+                NavigationLink(destination: ListingDetailView(listing: listing)) {
+                    ListingCardView(listing: listing)
+                }
+                .simultaneousGesture(TapGesture().onEnded{
+                    UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                })
+            }
+        }.padding(.horizontal, 10)
+    }
+}
+
 func RequestServiceButton(fromUser: User, toUser: User) -> some View {
     VStack {
         NavigationLink(destination: MessageDetailView(messagesVM: MessagesViewModel(fromUser: fromUser, toUser: toUser))) {
@@ -55,8 +70,8 @@ func ProfileImage(imageStr : String, diameter: CGFloat) -> some View {
 //returns a 400 x 250 image (either a default or a user image)
 func ProfileBackground(imageStr : String) -> some View {
     return VStack {
-        AsyncImage(url: URL(string:  imageStr.isEmpty ? "sunsetTest" : imageStr)) { image in
-            image
+        if imageStr == "" {
+            Image("sunsetTest")
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .frame(width: Constants.screenWidth - 20, height: Constants.screenHeight * 0.20, alignment: .top)
@@ -66,10 +81,23 @@ func ProfileBackground(imageStr : String) -> some View {
                     .stroke(Color(.label), lineWidth: 1)
                 )
                 .shadow(radius: 5)
-        } placeholder: {
-            LoadingView()
-                .frame(width: Constants.screenWidth - 20, height: Constants.screenHeight * 0.2)
-                .cornerRadius(17)
+        } else {
+            AsyncImage(url: URL(string: imageStr)) { image in
+                image
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: Constants.screenWidth - 20, height: Constants.screenHeight * 0.20, alignment: .top)
+                    .clipShape(Rectangle())
+                    .cornerRadius(17)
+                    .overlay(RoundedRectangle(cornerRadius: 17)
+                        .stroke(Color(.label), lineWidth: 1)
+                    )
+                    .shadow(radius: 5)
+            } placeholder: {
+                LoadingView()
+                    .frame(width: Constants.screenWidth - 20, height: Constants.screenHeight * 0.2)
+                    .cornerRadius(17)
+            }
         }
     }
 }//showDetailImage

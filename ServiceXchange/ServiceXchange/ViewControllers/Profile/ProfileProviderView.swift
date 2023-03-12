@@ -7,12 +7,23 @@
 
 import SwiftUI
 
+struct ProfileProviderViewControls {
+    var pickerSelection = 0
+    let gridItems = [GridItem(.flexible()), GridItem(.flexible())]
+    var width = (UIScreen.main.bounds.width * 0.43)
+    var height = (UIScreen.main.bounds.width * 0.43)
+}
+
 struct ProfileProviderView: View {
     
     var user: User
     let rating: Double
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var session: SessionStore
+    
+    @StateObject var homeVM = HomeViewModel()
+    
+    @State var controls = ProfileProviderViewControls()
 
     
     var body: some View {
@@ -34,15 +45,43 @@ struct ProfileProviderView: View {
                     
                     Text(user.primaryLocationServed?.isEmpty ?? true ? "No Primary Location Specified" : "Location: \(user.primaryLocationServed!)")
                         .font(.system(size: 17))
+                    
+                    Rectangle()
+                        .frame(height: 2)
+                        .padding()
 
                     if session.userSession != nil {
                         if user.userId != session.userSession!.userId {
                             RequestServiceButton(fromUser: session.userSession!, toUser: user)
                         }
                     }
-                    CalendarView(forUser: user.userId)
-                        .frame(minHeight: 300)
-                        .padding()
+                    
+                    VStack {
+                        
+                        CustomSegmentedControl(preselectedIndex: $controls.pickerSelection, options: ["Listings", "Availability"])
+
+                        if controls.pickerSelection == 0 {
+                            if homeVM.isLoading {
+                                LoadingView()
+                            } else if homeVM.listings.isEmpty {
+                                Text("This user has no listings")
+                            } else {
+                                ListingsGrid(listings: homeVM.listings)
+                                    .onAppear {
+                                        UIImpactFeedbackGenerator(style: .soft).impactOccurred()
+                                    }
+                            }
+                        }
+                        
+                        if controls.pickerSelection == 1 {
+                            CalendarView(forUser: user.userId)
+                                .frame(minHeight: 300)
+                                .padding()
+                                .onAppear {
+                                    UIImpactFeedbackGenerator(style: .soft).impactOccurred()
+                                }
+                        }
+                    }
                 }
             }
         }
@@ -69,15 +108,29 @@ struct ProfileProviderView: View {
                     }
                 }
             )
+            .onAppear {
+                homeVM.loadListings(forUser: user)
+            }
     }
     
     private func ProfileHeader() -> some View {
         return ZStack {
-            ProfileBackground(imageStr: user.descriptiveImageStr ?? "sunsetTest")
+            ProfileBackground(imageStr: user.descriptiveImageStr ?? "")
             
             ProfileImage(imageStr: user.profileImageUrl ?? "blankprofile", diameter: 125)
                 .offset(y: 80)
             
+        }
+    }
+    
+    private func TabPicker() -> some View {
+        return VStack {
+            Picker("", selection: $controls.pickerSelection) {
+                Text("Listings").tag(0)
+                Text("Availability").tag(1)
+            }
+            .pickerStyle(.segmented)
+            .padding()
         }
     }
 }

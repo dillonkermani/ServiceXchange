@@ -7,6 +7,13 @@
 
 import SwiftUI
 
+struct ProfileUserViewControls {
+    var pickerSelection = 0
+    let gridItems = [GridItem(.flexible()), GridItem(.flexible())]
+    var width = (UIScreen.main.bounds.width * 0.43)
+    var height = (UIScreen.main.bounds.width * 0.43)
+}
+
 //if you are signed into the app and looking at your own profile
 struct ProfileUserView: View {
     
@@ -15,6 +22,10 @@ struct ProfileUserView: View {
     
     //pass in userSession through sessionStore (not sure if this will presist)
     @EnvironmentObject var session: SessionStore
+    
+    @StateObject var homeVM = HomeViewModel()
+    
+    @State var controls = ProfileUserViewControls()
     
     //to show the settings sheet
     @State private var showingSettingSheet: Bool = false
@@ -36,10 +47,39 @@ struct ProfileUserView: View {
                     
                     Text(userVM.localPrimaryLocationServed.isEmpty ? "No Primary Location Specified" : "Location: \(userVM.localPrimaryLocationServed)")
                         .font(.system(size: 15))
+                    
                     Rectangle()
                         .frame(height: 2)
                         .padding()
-                    CalendarEditView(forUser: userVM.localUserId)
+                    
+                    VStack {
+                        CustomSegmentedControl(preselectedIndex: $controls.pickerSelection, options: ["Listings", "Availability"])
+                            
+    
+                        if controls.pickerSelection == 0 {
+                            if controls.pickerSelection == 0 {
+                                if homeVM.isLoading {
+                                    LoadingView()
+                                } else if homeVM.listings.isEmpty {
+                                    Text("This user has no listings")
+                                } else {
+                                    ListingsGrid(listings: homeVM.listings)
+                                        .onAppear {
+                                            UIImpactFeedbackGenerator(style: .soft).impactOccurred()
+                                        }
+                                }
+                            }
+                        }
+                        
+                        if controls.pickerSelection == 1 {
+                            CalendarEditView(forUser: userVM.localUserId)
+                                .frame(minHeight: 300)
+                                .padding()
+                                .onAppear {
+                                    UIImpactFeedbackGenerator(style: .soft).impactOccurred()
+                                }
+                        }
+                    }
                 }
                 
             }
@@ -50,8 +90,22 @@ struct ProfileUserView: View {
                 if (userVM.initialized == false && session.userSession != nil){
                     userVM.updateLocalUserVariables(user: session.userSession!)
                 }//if uninitailized
+                homeVM.loadListings(forUser: userVM.user)
             }
     }
+    
+    private func TabPicker() -> some View {
+        return VStack {
+            Picker("", selection: $controls.pickerSelection) {
+                Text("Listings").tag(0)
+                Text("Availability").tag(1)
+            }
+            .pickerStyle(.segmented)
+            .padding()
+        }
+    }
+    
+    
     
     private func ProfileHeader() -> some View {
         return ZStack {

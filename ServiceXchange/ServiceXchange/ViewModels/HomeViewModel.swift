@@ -14,6 +14,7 @@ class HomeViewModel: ObservableObject {
     @Published var listings: [Listing] = [] // Only the listings to Display to user
     @Published var isLoading = false
     @Published var loadErrorMsg = ""
+    @Published var pickerSelection = 0
     var searchText: String = ""
     var selectedCategories: [CategoryCell] = []
     
@@ -96,6 +97,25 @@ class HomeViewModel: ObservableObject {
             }
         }
         onSuccess(listings)
+    }
+    
+    func loadListings(forUser: User) {
+        if forUser.listings != nil {
+            if !forUser.listings!.isEmpty {
+                for listingId in forUser.listings! {
+                    Ref.FIRESTORE_COLLECTION_LISTINGS.document(listingId)
+                        .getDocument { (document, error) in
+                            if let document = document, document.exists {
+                                let dict = document.data()
+                                guard let decodedListing = try? Listing.init(fromDictionary: dict) else { return }
+                                self.listings.append(decodedListing)
+                            } else {
+                                print("Document does not exist")
+                            }
+                        }
+                }
+            }
+        }
     }
     
     func loadListings() -> Void {
