@@ -48,8 +48,8 @@ func RequestServiceButton(fromUser: User, toUser: User) -> some View {
 //returns circular profile image (either default or user profile image)
 func ProfileImage(imageStr : String, diameter: CGFloat) -> some View {
     return VStack {
-        AsyncImage(url: URL(string:  imageStr.isEmpty ? "blankprofile" : imageStr)) { image in
-            image
+        if imageStr.isEmpty {
+            Image("blankprofile")
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .frame(width: diameter, height: diameter , alignment: .center)
@@ -58,10 +58,22 @@ func ProfileImage(imageStr : String, diameter: CGFloat) -> some View {
                     .stroke(Color(.label), lineWidth: 1)
                 )
                 .shadow(radius: 5)
-        } placeholder: {
-            LoadingView()
-                .frame(width: diameter, height: diameter)
-                .cornerRadius(.infinity)
+        } else {
+            AsyncImage(url: URL(string: imageStr)) { image in
+                image
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: diameter, height: diameter , alignment: .center)
+                    .clipShape(Circle())
+                    .overlay(RoundedRectangle(cornerRadius: diameter/2)
+                        .stroke(Color(.label), lineWidth: 1)
+                    )
+                    .shadow(radius: 5)
+            } placeholder: {
+                LoadingView()
+                    .frame(width: diameter, height: diameter)
+                    .cornerRadius(.infinity)
+            }
         }
     }
 }

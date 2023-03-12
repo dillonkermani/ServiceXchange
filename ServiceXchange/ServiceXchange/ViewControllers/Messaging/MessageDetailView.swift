@@ -154,10 +154,6 @@ struct MessageDetailView: View {
             VStack(alignment: .leading) {
                 Text("\(messagesVM.toUser.firstName) \(messagesVM.toUser.lastName)")
                     .font(.title).bold()
-                
-                Text("Online")
-                    .font(.caption)
-                    .foregroundColor(.gray)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             

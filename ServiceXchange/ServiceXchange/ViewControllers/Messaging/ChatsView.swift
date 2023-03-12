@@ -45,6 +45,7 @@ struct ChatsView: View {
                     Text("No Chats")
                     Spacer()
                 }
+                Spacer()
             }
             .navigationBarHidden(true)
         }
@@ -60,16 +61,27 @@ struct ChatsView: View {
     
     private func CustomNavBar() -> some View {
         HStack(spacing: 16) {
-            
-            UrlImage(url: session.userSession?.profileImageUrl ?? "")
-                .scaledToFill()
-                .frame(width: 44, height: 44)
-                .clipped()
-                .cornerRadius(44)
-                .overlay(RoundedRectangle(cornerRadius: 44)
-                    .stroke(Color(.label), lineWidth: 1)
-                )
-                .shadow(radius: 5)
+            if ((session.userSession!.profileImageUrl?.isEmpty) != nil) {
+                Image("blankprofile")
+                    .scaledToFill()
+                    .frame(width: 44, height: 44)
+                    .clipped()
+                    .cornerRadius(44)
+                    .overlay(RoundedRectangle(cornerRadius: 44)
+                        .stroke(Color(.label), lineWidth: 1)
+                    )
+                    .shadow(radius: 5)
+            } else {
+                UrlImage(url: session.userSession?.profileImageUrl ?? "")
+                    .scaledToFill()
+                    .frame(width: 44, height: 44)
+                    .clipped()
+                    .cornerRadius(44)
+                    .overlay(RoundedRectangle(cornerRadius: 44)
+                        .stroke(Color(.label), lineWidth: 1)
+                    )
+                    .shadow(radius: 5)
+            }
             
             VStack(alignment: .leading, spacing: 4) {
                 Text(session.userSession?.firstName ?? "")
@@ -87,13 +99,6 @@ struct ChatsView: View {
             }
             
             Spacer()
-            Button {
-                controls.shouldShowLogOutOptions.toggle()
-            } label: {
-                Image(systemName: "gear")
-                    .font(.system(size: 24, weight: .bold))
-                    .foregroundColor(Color(.label))
-            }
         }
         .padding()
         .actionSheet(isPresented: $controls.shouldShowLogOutOptions) {
