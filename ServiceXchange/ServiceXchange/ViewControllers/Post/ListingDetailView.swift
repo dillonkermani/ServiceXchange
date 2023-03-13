@@ -204,16 +204,19 @@ struct ListingDetailView : View {
                             Text("Categories:")
                                 .font(.system(size: 17)).bold()
                             Spacer()
-                        }
-                        HStack {
-                            ForEach(listing.categories ?? [], id: \.self) { category in
-                                FilterTag(filterData: CategoryCell(title: category, imageName: "square.grid.2x2", isSelected: true))
-                                
+                        }.padding(25)
+                        ScrollView(.horizontal) {
+                            HStack {
+                                ForEach(listing.categories ?? [], id: \.self) { category in
+                                    FilterTag(filterData: CategoryCell(title: category, imageName: "square.grid.2x2", isSelected: true))
+                                    
+                                }
+                                Spacer()
                             }
-                            Spacer()
                         }
+                        .scrollIndicators(.never)
                     }
-                }.padding(25)
+                }
                 
             }
             

@@ -24,13 +24,15 @@ class HomeViewModel: ObservableObject {
         if selectedCategories.isEmpty {
             return
         } else {
-            for category in selectedCategories {
-                for listing in self.allListings {
-                    if listing.categories != nil {
-                        if listing.categories!.contains(category.title) {
+            for listing in self.allListings {
+                if listing.categories != nil {
+                    for catagory in selectedCategories {
+                        if listing.categories!.contains(catagory.title) {
                             listings.append(listing)
+                            break
                         }
                     }
+                    
                 }
             }
             self.listings = listings
