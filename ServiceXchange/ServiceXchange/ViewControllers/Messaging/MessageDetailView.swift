@@ -117,10 +117,12 @@ struct MessageDetailView: View {
             CustomTextField(placeholder: Text("Enter your message here"), text: $message)
 
             Button {
-                messagesVM.sendMessage(message: message)
-                message = ""
-                messagesVM.refreshChatParticipantData()
-                UIImpactFeedbackGenerator(style: .rigid).impactOccurred()
+                if !message.isEmpty {
+                    messagesVM.sendMessage(message: message)
+                    message = ""
+                    messagesVM.refreshChatParticipantData()
+                    UIImpactFeedbackGenerator(style: .rigid).impactOccurred()
+                }
             } label: {
                 Image(systemName: "paperplane.fill")
                     .foregroundColor(.white)
