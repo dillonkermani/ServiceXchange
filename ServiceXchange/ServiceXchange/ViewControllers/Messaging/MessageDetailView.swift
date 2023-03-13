@@ -14,6 +14,7 @@ struct MessageDetailView: View {
     @StateObject var messagesVM: MessagesViewModel
     
     @State var message = ""
+    @State var rating = 0.0
     
     @State private var isKeyboardPresented = false
     @State private var keyboardHeight = CGFloat()
@@ -142,25 +143,27 @@ struct MessageDetailView: View {
     }
     
     private func TitleRow() -> some View {
-        HStack(spacing: 20) {
-            UrlImage(url: messagesVM.toUser.profileImageUrl ?? "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png")
-                .scaledToFill()
-                .frame(width: 44, height: 44)
-                .clipped()
-                .cornerRadius(44)
-                .overlay(RoundedRectangle(cornerRadius: 44)
-                    .stroke(Color(.label), lineWidth: 1)
-                )
-                .shadow(radius: 5)
-            
-            VStack(alignment: .leading) {
-                Text("\(messagesVM.toUser.firstName) \(messagesVM.toUser.lastName)")
-                    .font(.title).bold()
+            HStack(spacing: 20) {
+                NavigationLink(destination: ProfileProviderView(user : messagesVM.toUser, rating: rating)){
+                    UrlImage(url: messagesVM.toUser.profileImageUrl ?? "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png")
+                        .scaledToFill()
+                        .frame(width: 44, height: 44)
+                        .clipped()
+                        .cornerRadius(44)
+                        .overlay(RoundedRectangle(cornerRadius: 44)
+                            .stroke(Color(.label), lineWidth: 1)
+                        )
+                        .shadow(radius: 5)
+                }
+                
+                VStack(alignment: .leading) {
+                    Text("\(messagesVM.toUser.firstName) \(messagesVM.toUser.lastName)")
+                        .font(.title).bold()
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            
-        }
-        .padding()
+            .padding()
     }
 }
 
