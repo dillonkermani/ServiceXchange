@@ -93,7 +93,7 @@ class UserViewModel: ObservableObject{
     
     
     //store user data into
-    func update_user_info(userId : String, company_name: String, location_served: String, bio: String, profileImageData: Data, backgroundImageData: Data, onError: @escaping(_ errorMessage: String) -> Void){
+    func update_user_info(userId : String, firstName: String, lastName: String, company_name: String, location_served: String, bio: String, profileImageData: Data, backgroundImageData: Data, onError: @escaping(_ errorMessage: String) -> Void){
         
         self.loadingData = true
         
@@ -107,6 +107,8 @@ class UserViewModel: ObservableObject{
         if bio != "" { self.localBio  = bio }
         if location_served != "" { self.localPrimaryLocationServed = location_served }
         if company_name != "" { self.localCompanyName = company_name }
+        if firstName != "" {self.firstName = firstName}
+        if lastName != "" {self.lastName = lastName }
         
         
         //for user structure
@@ -118,6 +120,8 @@ class UserViewModel: ObservableObject{
         
         //updates all textual data to firebase
         user_ref.updateData( [
+            "firstName" : firstName,
+            "lastName" : lastName,
             "companyName": localCompanyName,
             "primaryLocationServed": localPrimaryLocationServed,
             "bio": localBio,
@@ -203,13 +207,6 @@ class UserViewModel: ObservableObject{
     func asyncClear() async -> Void{
         
         self.initialized = false
-        
-//        self.localUserId = ""
-//        self.localBio = ""
-//        self.localCompanyName = ""
-//        self.localPrimaryLocationServed = ""
-        //self.localProfileImageUrl = ""
-        //self.localDescriptiveImageStr = ""
     }
     
     

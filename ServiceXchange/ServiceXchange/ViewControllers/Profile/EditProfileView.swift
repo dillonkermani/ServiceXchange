@@ -40,6 +40,8 @@ struct EditProfileView: View {
     @Environment(\.presentationMode) var presentationMode
     
     //state varibles
+    @State private var firstName: String = ""
+    @State private var lastName: String = ""
     @State private var username: String = ""
     @State private var locationServe: String = ""
     @State private var shortBio: String = ""
@@ -75,9 +77,10 @@ struct EditProfileView: View {
             VStack{
                 textEditFields()
                     .offset(y: Constants.screenHeight * 0.15)
+                    .padding(.top, 30)
                 
                 saveChangesButton()
-                    .offset(y: Constants.screenHeight * 0.2)
+                    .offset(y: Constants.screenHeight * 0.15)
                 
             }//VStack
             
@@ -92,6 +95,7 @@ struct EditProfileView: View {
             if userVM.localPrimaryLocationServed != "none" {
                 locationServeTitle = userVM.localPrimaryLocationServed
             }
+            
         }
         .navigationBarBackButtonHidden(true)
         .toolbar {
@@ -120,10 +124,20 @@ struct EditProfileView: View {
         return VStack {
             Button(action: {
                 let userId = userVM.localUserId
-                userVM.update_user_info(userId: userId, company_name: username, location_served: locationServe, bio: shortBio, profileImageData: ProfImageData, backgroundImageData: backgroundImageData, onError: { errorMessage in
-                    print("Update user error: \(errorMessage)")
-                    
-                })//userVM.update_user_info
+                userVM.update_user_info(
+                    userId: userId,
+                    firstName: firstName,
+                    lastName: lastName,
+                    company_name: username,
+                    location_served: locationServe,
+                    bio: shortBio,
+                    profileImageData: ProfImageData,
+                    backgroundImageData: backgroundImageData,
+                    onError: { errorMessage in
+                      print("Update user error: \(errorMessage)")
+
+                    }
+                )//userVM.update_user_info
                 
                 //dismiss current view
                 presentationMode.wrappedValue.dismiss()
@@ -151,13 +165,22 @@ struct EditProfileView: View {
     
     func textEditFields() -> some View {
         return VStack {
+            
+            HStack {
+                underlinedTextField(title: "Name: " + userVM.firstName, text: $firstName, width: 137, height: 20, color: .black)
+                
+                underlinedTextField(title: "surname: " + userVM.lastName, text: $lastName, width: 137, height: 20, color: .black)
+            }
+            //.padding(.top, 10)
+            
             underlinedTextField(title: "Company Name: " + companyNameTitle, text: $username, width: 310, height: 20, color: .black)
                 
             underlinedTextField(title: "Description: " + shortBioTitle, text: $shortBio, width: 310, height: 40, color: .black)
             
-            underlinedTextField(title: "Location: " + locationServeTitle, text: $locationServe, width: 310, height: 40, color: .black)
+            underlinedTextField(title: "Location: " + locationServeTitle, text: $locationServe, width: 310, height: 10, color: .black)
         }
     }//textFields function
+    
     
 
     func changeBackgroundIm() -> some View {
@@ -277,50 +300,7 @@ struct EditProfileView: View {
         
     }
     
-    //either make button able to be pressed or make a different button that pulls up the image picker
-    func addDescriptiveImage() -> some View {
-        let screenHeight = UIScreen.main.bounds.height
-        let screenWidth = UIScreen.main.bounds.width
-        let width = screenWidth - 20
-        let height = screenHeight * 0.25
-        
-              return VStack {
-                         Button(action: {
-                             UIImpactFeedbackGenerator(style: .light).impactOccurred()
-                             controlsDesc.pickedImageType = "card"
-                             controlsDesc.showImagePicker = true
-                         }) {
-                             if controlsDesc.pickedImage == Image("user-placeholder") {
-                                 
-                                 //if user does not have a profile picture yet
-                                 if userVM.localDescriptiveImageStr == "" {
-                                     ProfileBackground(imageStr: "")
-                                 }
-                                 else { //they do have a profile image -> display it
-                                     
-                                     ProfileBackground(imageStr: userVM.localDescriptiveImageStr)
-                                 }
-                                 
 
-                             } //if the user has not picked image
-                             
-                             else { //user has picked a new image
-                                 controlsDesc.pickedImage
-                                     .resizable()
-                                         .aspectRatio(contentMode: .fill)
-                                         .frame(width: width, height: height, alignment: .top)
-                                         .clipShape(Rectangle())
-                                         .cornerRadius(20)
-                             }//else
-                         }//label of the button I think
-    
-         }.frame(maxWidth: .infinity, maxHeight: .infinity)
-             .sheet(isPresented: $controlsDesc.showImagePicker, content: {
-                 ImagePicker(showImagePicker: $controlsDesc.showImagePicker, pickedImage: $controlsDesc.pickedImage, imageData: $backgroundImageData, sourceType: .photoLibrary)
-                     
-             })
-        
-    }
     
   //private func SaveDataButton
     
@@ -340,43 +320,7 @@ struct EditProfileView: View {
                                
                                
     //create circular button that once tapped on prompts you to change user proflile image
-    private func addProfilePhoto() -> some View {
-        //let screenHeight = UIScreen.main.bounds.height
-        let screenWidth = UIScreen.main.bounds.width
-        let profileRad: CGFloat = screenWidth * 0.30
-        
-       return ZStack {
-                VStack {
-                        Button(action: {
-                            UIImpactFeedbackGenerator(style: .light).impactOccurred()
-                            controls.pickedImageType = "card"
-                            controls.showImagePicker = true
-                        }) {
-                            if controls.pickedImage == Image("user-placeholder") {
-                                //if user does not have a profile picture yet
-                                if userVM.localProfileImageUrl == "" {
-                                    ProfileImage(imageStr: "", diameter: profileRad)
-                                }
-                                else { //they do have a profile image -> display it
-                                    ProfileImage(imageStr: userVM.localProfileImageUrl, diameter: profileRad)
-                                }
-                            } //if the user has not picked image
-                            
-                            else { //user has picked a new image
-                                controls.pickedImage
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                                    .frame(width: 125.0, height: 125.0, alignment: .center)
-                                    .clipShape(Circle())
-                            }
-                        }
-                }
-        }.frame(maxWidth: .infinity, maxHeight: .infinity)
-            .sheet(isPresented: $controls.showImagePicker, content: {
-                ImagePicker(showImagePicker: $controls.showImagePicker, pickedImage: $controls.pickedImage, imageData: $ProfImageData, sourceType: .photoLibrary)
-                    
-            })
-        }
+ 
 }
 
 struct EditProfileView_Previews: PreviewProvider {
