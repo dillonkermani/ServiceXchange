@@ -35,14 +35,6 @@ struct DeleteAccountView: View {
         VStack {
             signInFields()
         }
-        .gesture(DragGesture()
-            .onEnded { value in
-                let direction = detectDirection(value: value)
-                if direction == .left {
-                    presentationMode.wrappedValue.dismiss()
-                }
-            }
-        )
         .navigationBarBackButtonHidden(true)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
