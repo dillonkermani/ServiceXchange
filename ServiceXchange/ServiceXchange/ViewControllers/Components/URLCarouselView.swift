@@ -11,7 +11,7 @@ struct URLCarouselView: View {
     var urls: [String]
     @State private var index: Int = 0
     @State private var dragging = false
-    @State private var scroll_opacity = 1.0
+    @State private var scrollOpacity = 1.0
     @State private var jobs = [DispatchWorkItem]()
     
     let activeOpacity = 1.0
@@ -52,13 +52,13 @@ struct URLCarouselView: View {
                             })
                     
                     )
-                    .opacity(1 * self.scroll_opacity)
-                    .animation(Animation.linear(duration: 0.2), value: self.scroll_opacity)
+                    .opacity(1 * self.scrollOpacity)
+                    .animation(Animation.linear(duration: 0.2), value: self.scrollOpacity)
             }.background(
                 Rectangle()
                     .cornerRadius(.infinity)
-                    .opacity(0.3 * self.scroll_opacity)
-                    .animation(Animation.linear(duration: 0.2), value: self.scroll_opacity)
+                    .opacity(0.3 * self.scrollOpacity)
+                    .animation(Animation.linear(duration: 0.2), value: self.scrollOpacity)
 
             )
             
@@ -83,7 +83,7 @@ struct URLCarouselView: View {
         }.onChange(of: self.index, perform: { _ in
             //this function require locks, but its a best effort task anyway
             
-            self.scroll_opacity = self.activeOpacity
+            self.scrollOpacity = self.activeOpacity
             let scroll_hides_at = DispatchTime.now() + 1.5
             
             // cancel all previous tasks
@@ -93,7 +93,7 @@ struct URLCarouselView: View {
                 prev_job = self.jobs.popLast()
             }
             let work = DispatchWorkItem {
-                self.scroll_opacity = self.minOpacity
+                self.scrollOpacity = self.minOpacity
             }
             //add new task
             self.jobs.append(work)
@@ -102,7 +102,7 @@ struct URLCarouselView: View {
         }).onAppear(perform: {
             let scroll_hides_at = DispatchTime.now() + self.defaultHideTimeSeconds
             let work = DispatchWorkItem {
-                self.scroll_opacity = minOpacity
+                self.scrollOpacity = minOpacity
             }
             self.jobs.append(work)
             DispatchQueue.main.asyncAfter(deadline: scroll_hides_at, execute: work)

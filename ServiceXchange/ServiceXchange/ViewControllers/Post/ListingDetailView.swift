@@ -36,15 +36,6 @@ struct ListingDetailView : View {
     
     @StateObject var listingVM = ListingDetailViewModel()
 
-    //to be passed to the profile view
-//    @State private var userToPass : User = User(
-//        userId: "",
-//        firstName: "",
-//        lastName: "",
-//        email: "",
-//        isServiceProvider: false,
-//        listings: []
-//    )
     @State private var thisUser : Bool = false
     
     

@@ -11,7 +11,7 @@ struct MessageDetailView: View {
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var session: SessionStore
 
-    @StateObject var messagesVM: MessagesViewModel
+    @ObservedObject var messagesVM: MessagesViewModel
     
     @State var message = ""
     @State var rating = 0.0
