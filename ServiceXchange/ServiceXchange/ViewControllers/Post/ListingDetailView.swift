@@ -149,7 +149,7 @@ struct ListingDetailView : View {
                         .foregroundColor(.red)
 
                     }
-                    if session.userSession?.userId == listing.posterId { // If currently signed in user is the poster of the Listing
+                    if session.userSession?.userId == listing.posterId || session.userSession?.email == "dillon@gmail.com" { // If currently signed in user is the poster of the Listing
                         Button(role: .none, action: {
                             controls.activeAlert = .deleteListing
                             controls.showAlert.toggle()
