@@ -35,6 +35,7 @@ class CreateListingViewModel : ObservableObject {
      */
     
     // Posts Listing to Firestore
+    @MainActor
     func postListing(posterId: String, onSuccess: @escaping(_ listing: Listing) -> Void, onError: @escaping(_ errorMessage: String) -> Void) async {
         
         var categoryNames: [String] = []
