@@ -35,9 +35,6 @@ struct ListingDetailView : View {
     @State var controls = ListingDetailViewControls()
     
     @StateObject var listingVM = ListingDetailViewModel()
-
-    @State private var thisUser : Bool = false
-    
     
     var listing: Listing
     
@@ -141,25 +138,25 @@ struct ListingDetailView : View {
     
             private func ListingMenuButton() -> some View {
                 Menu {
-                    NavigationLink(destination: ChatsView(), label: {
-                        Label("Send Message", systemImage: "paperplane")
-                    })
-                    Button(role: .none, action: {
-                        controls.activeAlert = .reportListing
-                        controls.showAlert.toggle()
-                        
-                    }, label: {
-                        Label("Report", systemImage: "flag.fill")
-                            .foregroundColor(.red)
-                    })
+                    if session.userSession?.userId != listing.posterId {
+                        Button(role: .none, action: {
+                            controls.activeAlert = .reportListing
+                            controls.showAlert.toggle()
+                            
+                        }, label: {
+                            Label("Report", systemImage: "flag.fill")
+                        })
+                        .foregroundColor(.red)
+
+                    }
                     if session.userSession?.userId == listing.posterId { // If currently signed in user is the poster of the Listing
                         Button(role: .none, action: {
                             controls.activeAlert = .deleteListing
                             controls.showAlert.toggle()
                         }, label: {
                             Label("Delete", systemImage: "trash")
-                                .foregroundColor(.black)
                         })
+
                     }
                 }
             label: {
@@ -195,7 +192,7 @@ struct ListingDetailView : View {
                             Text("Categories:")
                                 .font(.system(size: 17)).bold()
                             Spacer()
-                        }.padding(25)
+                        }
                         ScrollView(.horizontal) {
                             HStack {
                                 ForEach(listing.categories ?? [], id: \.self) { category in
@@ -207,7 +204,7 @@ struct ListingDetailView : View {
                         }
                         .scrollIndicators(.never)
                     }
-                }
+                }.padding(25)
                 
             }
             

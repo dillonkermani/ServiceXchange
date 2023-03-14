@@ -90,7 +90,7 @@ struct DeleteAccountView: View {
                         Image(systemName: controls.showPassword ? "eye.slash.fill" : "eye.fill").font(.system(size: 16, weight: .regular))
                             .padding()
                             .foregroundColor(.black)
-                    }).offset(x: -35)
+                    }).offset(x: -35, y: -15)
                 }
                 
             }
