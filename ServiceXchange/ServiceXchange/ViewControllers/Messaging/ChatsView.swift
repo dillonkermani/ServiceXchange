@@ -47,7 +47,6 @@ struct ChatsView: View {
                 }
                 Spacer()
             }
-            .navigationBarHidden(true)
         }
         .onAppear {
             // Check if user has any chats before trying to load chat data.
@@ -57,6 +56,7 @@ struct ChatsView: View {
                 }
             }
         }
+        .navigationBarHidden(true)
     }
     
     private func CustomNavBar() -> some View {
