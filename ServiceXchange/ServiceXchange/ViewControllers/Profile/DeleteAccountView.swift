@@ -16,6 +16,7 @@ struct ProfileViewMultiTestControls {
     var showAlert = false
     var activeAlert2: ActiveAlert2 = .deleteProfile
     var savePressed = false
+    var showPassword = false
 }
 
 struct DeleteAccountView: View {
@@ -77,8 +78,23 @@ struct DeleteAccountView: View {
                         .font(.largeTitle)
                         .padding([.top, .bottom], 75)
                 }
-                passwordTextField(title: "Password", text: $passwordInput, width: 310, height: 40, color: loginVM.password.isEmpty ? .black : CustomColor.sxcgreen)
+            ZStack {
+                passwordTextField(title: "Password", text: $passwordInput, width: 310, height: 40, color: loginVM.password.isEmpty ? .black : CustomColor.sxcgreen, showPassword: $controls.showPassword)
                     .padding(.bottom, 40)
+                HStack {
+                    Spacer()
+                    Button(action: {
+                        controls.showPassword.toggle()
+                        UIImpactFeedbackGenerator(style: .rigid).impactOccurred()
+                    }, label: {
+                        Image(systemName: controls.showPassword ? "eye.slash.fill" : "eye.fill").font(.system(size: 16, weight: .regular))
+                            .padding()
+                            .foregroundColor(.black)
+                    }).offset(x: -35)
+                }
+                
+            }
+            
                 
                 Button {
                     controls.activeAlert2 = .deleteProfile
