@@ -149,18 +149,28 @@ func ListingCardView(listing: Listing) -> some View {
 
 func underlinedTextField(title: String, text: Binding <String>, width: CGFloat, height: CGFloat, color: Color) -> some View {
     return TextField(title, text: text)
-        .frame(width: width, height: height)
-        .padding(.vertical, 10)
-                    .overlay(Rectangle().frame(height: 2).padding(.top, 35).foregroundColor(color))
-                    .padding(10)
+                .frame(width: width, height: height)
+                .padding(.vertical, 10)
+                .overlay(Rectangle().frame(height: 2).padding(.top, 35).foregroundColor(color))
+                .padding(10)
 }
 
-func passwordTextField(title: String, text: Binding <String>, width: CGFloat, height: CGFloat, color: Color) -> some View {
-    return SecureField(title, text: text)
-        .frame(width: width, height: height)
-        .padding(.vertical, 10)
-                    .overlay(Rectangle().frame(height: 2).padding(.top, 35).foregroundColor(color))
-                    .padding(10)
+func passwordTextField(title: String, text: Binding <String>, width: CGFloat, height: CGFloat, color: Color, showPassword: Binding<Bool>) -> some View {
+    return Group {
+        if showPassword.wrappedValue {
+            TextField(title, text: text)
+                .frame(width: width, height: height)
+                .padding(.vertical, 10)
+                .overlay(Rectangle().frame(height: 2).padding(.top, 35).foregroundColor(color))
+                .textContentType(.password)
+        } else {
+            SecureField(title, text: text)
+                .frame(width: width, height: height)
+                .padding(.vertical, 10)
+                .overlay(Rectangle().frame(height: 2).padding(.top, 35).foregroundColor(color))
+                .textContentType(.password)
+        }
+    }
 }
 
 func cardGradient() -> LinearGradient {

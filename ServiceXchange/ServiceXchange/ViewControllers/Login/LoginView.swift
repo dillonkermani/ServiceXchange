@@ -7,6 +7,13 @@
 
 import SwiftUI
 
+struct LoginViewControls {
+    var showPassword1 = false
+    var showPassword2 = false
+    var showPassword3 = false
+
+}
+
 struct LoginView: View {
     
     
@@ -23,6 +30,8 @@ struct LoginView: View {
     @State var showAlert = false
     @State var alertMessage = ""
     @State var dismissLoginView = false
+    
+    @State var controls = LoginViewControls()
     
     var body: some View {
         VStack {
@@ -128,7 +137,7 @@ struct LoginView: View {
                     
                     // Sign In
                     loginVM.signin(onSuccess: {user in
-                        alertMessage = "Sucessfully signed in to \(user.email)"
+                        alertMessage = "Successfully signed in to \(user.email.lowercased())"
                         showAlert.toggle()
                         print(alertMessage)
                         dismissLoginView = true
@@ -140,7 +149,7 @@ struct LoginView: View {
                 } else {
                     // Sign Up
                     loginVM.signup(onSuccess: {user in
-                        alertMessage = "Sucessfully Signed Up!"
+                        alertMessage = "Successfully Signed Up!"
                         showAlert.toggle()
                         print(alertMessage)
                         dismissLoginView = true
@@ -248,10 +257,41 @@ struct LoginView: View {
                 }
                 underlinedTextField(title: "Email", text: $loginVM.email, width: 310, height: 40, color: loginVM.email.isEmpty ? .black : CustomColor.sxcgreen)
                     .keyboardType(.emailAddress)
-                underlinedTextField(title: "Phone", text: $loginVM.phone, width: 310, height: 40, color: loginVM.phone.isEmpty ? .black : CustomColor.sxcgreen)
+                    .autocorrectionDisabled(true)
+                    .autocapitalization(.none)
+                underlinedTextField(title: "Phone (optional)", text: $loginVM.phone, width: 310, height: 40, color: loginVM.phone.isEmpty ? .black : CustomColor.sxcgreen)
                     .keyboardType(.phonePad)
-                passwordTextField(title: "Password", text: $loginVM.password, width: 310, height: 40, color: loginVM.password.isEmpty ? .black : CustomColor.sxcgreen)
-                passwordTextField(title: "Confirm Password", text: $loginVM.confirmPassword, width: 310, height: 40, color: loginVM.confirmPassword.isEmpty ? .black : CustomColor.sxcgreen)
+                
+                ZStack {
+                    passwordTextField(title: "Password", text: $loginVM.password, width: 310, height: 40, color: loginVM.password.isEmpty ? .black : CustomColor.sxcgreen, showPassword: $controls.showPassword1)
+                    HStack {
+                        Spacer()
+                        Button(action: {
+                            controls.showPassword1.toggle()
+                            UIImpactFeedbackGenerator(style: .rigid).impactOccurred()
+                        }, label: {
+                            Image(systemName: controls.showPassword1 ? "eye.slash.fill" : "eye.fill").font(.system(size: 16, weight: .regular))
+                                .padding()
+                                .foregroundColor(.black)
+                        }).offset(x: -35)
+                    }
+                    
+                }
+                
+                ZStack {
+                    passwordTextField(title: "Confirm Password", text: $loginVM.confirmPassword, width: 310, height: 40, color: loginVM.confirmPassword.isEmpty ? .black : CustomColor.sxcgreen, showPassword: $controls.showPassword2)
+                    HStack {
+                        Spacer()
+                        Button(action: {
+                            controls.showPassword2.toggle()
+                            UIImpactFeedbackGenerator(style: .rigid).impactOccurred()
+                        }, label: {
+                            Image(systemName: controls.showPassword2 ? "eye.slash.fill" : "eye.fill").font(.system(size: 16, weight: .regular))
+                                .padding()
+                                .foregroundColor(.black)
+                        }).offset(x: -35)
+                    }
+                }
                 
                 Spacer()
                 
@@ -271,7 +311,22 @@ struct LoginView: View {
                 }
                 underlinedTextField(title: "Email", text: $loginVM.email, width: 310, height: 40, color: loginVM.email.isEmpty ? .black : CustomColor.sxcgreen)
                     .keyboardType(.emailAddress)
-                passwordTextField(title: "Password", text: $loginVM.password, width: 310, height: 40, color: loginVM.password.isEmpty ? .black : CustomColor.sxcgreen)
+                    .autocorrectionDisabled(true)
+                    .autocapitalization(.none)
+                ZStack {
+                    passwordTextField(title: "Password", text: $loginVM.password, width: 310, height: 40, color: loginVM.password.isEmpty ? .black : CustomColor.sxcgreen, showPassword: $controls.showPassword3)
+                    HStack {
+                        Spacer()
+                        Button(action: {
+                            controls.showPassword3.toggle()
+                            UIImpactFeedbackGenerator(style: .rigid).impactOccurred()
+                        }, label: {
+                            Image(systemName: controls.showPassword3 ? "eye.slash.fill" : "eye.fill").font(.system(size: 16, weight: .regular))
+                                .padding()
+                                .foregroundColor(.black)
+                        }).offset(x: -35)
+                    }
+                }
                     .padding(.bottom, 40)
                 
                 Button {

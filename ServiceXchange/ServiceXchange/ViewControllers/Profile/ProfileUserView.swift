@@ -41,9 +41,11 @@ struct ProfileUserView: View {
                     
                     Text(userVM.localCompanyName.isEmpty ? "No Company Name" : "\(userVM.localCompanyName)")
                         .font(.system(size: 30)).bold()
+                        .multilineTextAlignment(.center)
                     
                     Text(userVM.localBio.isEmpty ? "No Company Description" : userVM.localBio)
-                        .font(.system(size: 20)).multilineTextAlignment(.center)
+                        .font(.system(size: 20))
+                        .multilineTextAlignment(.center)
                     
                     Text(userVM.localPrimaryLocationServed.isEmpty ? "No Primary Location Specified" : "Location: \(userVM.localPrimaryLocationServed)")
                         .font(.system(size: 15))

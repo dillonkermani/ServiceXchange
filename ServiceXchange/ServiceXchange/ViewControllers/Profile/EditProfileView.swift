@@ -167,13 +167,13 @@ struct EditProfileView: View {
         return VStack {
             
             HStack {
-                underlinedTextField(title: "Name: " + userVM.firstName, text: $firstName, width: 137, height: 20, color: .black)
+                underlinedTextField(title: "First: " + userVM.firstName, text: $firstName, width: 137, height: 20, color: .black)
                 
-                underlinedTextField(title: "surname: " + userVM.lastName, text: $lastName, width: 137, height: 20, color: .black)
+                underlinedTextField(title: "Last: " + userVM.lastName, text: $lastName, width: 137, height: 20, color: .black)
             }
             //.padding(.top, 10)
             
-            underlinedTextField(title: "Company Name: " + companyNameTitle, text: $username, width: 310, height: 20, color: .black)
+            underlinedTextField(title: "Company: " + companyNameTitle, text: $username, width: 310, height: 20, color: .black)
                 
             underlinedTextField(title: "Description: " + shortBioTitle, text: $shortBio, width: 310, height: 40, color: .black)
             
