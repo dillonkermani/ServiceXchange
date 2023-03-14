@@ -230,14 +230,14 @@ class UserViewModel: ObservableObject{
     
     
     //need to reauth before we can delete a user before you delete their account
-    func reAuthUser(userProvidedPassword: String){
+    func reAuthUserAndDelete(userProvidedPassword: String){
         
         let user = Auth.auth().currentUser
 
         let credential = EmailAuthProvider.credential(withEmail: (user?.email!)!, password: userProvidedPassword)
         user!.reauthenticate(with: credential) {  result, error in
-                     if let error = error {
-                         print("error re-auth user - \(error)")
+                     if let errorUnwrapped = error {
+                         print("error re-auth user - \(errorUnwrapped)")
                      } else {
                          print("success reauth-user")
                          
@@ -248,7 +248,7 @@ class UserViewModel: ObservableObject{
                                      if let err = err {
                                          print("Error removing document: \(err)")
                                      } else {
-                                         print("Document successfully removed!")
+                                         print("Document successfully removed: \(listingId)")
                                      }
                                  }
                              }

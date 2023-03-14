@@ -63,7 +63,7 @@ struct DeleteAccountView: View {
                         await userVM.asyncClear()
                     }
                     //delete the account
-                    userVM.reAuthUser(userProvidedPassword: passwordInput)
+                    userVM.reAuthUserAndDelete(userProvidedPassword: passwordInput)
                     
                 }, secondaryButton: .cancel())
 
