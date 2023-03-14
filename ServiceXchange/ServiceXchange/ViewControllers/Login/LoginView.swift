@@ -248,7 +248,9 @@ struct LoginView: View {
                 }
                 underlinedTextField(title: "Email", text: $loginVM.email, width: 310, height: 40, color: loginVM.email.isEmpty ? .black : CustomColor.sxcgreen)
                     .keyboardType(.emailAddress)
-                underlinedTextField(title: "Phone", text: $loginVM.phone, width: 310, height: 40, color: loginVM.phone.isEmpty ? .black : CustomColor.sxcgreen)
+                    .autocorrectionDisabled(true)
+                    .autocapitalization(.none)
+                underlinedTextField(title: "Phone (optional)", text: $loginVM.phone, width: 310, height: 40, color: loginVM.phone.isEmpty ? .black : CustomColor.sxcgreen)
                     .keyboardType(.phonePad)
                 passwordTextField(title: "Password", text: $loginVM.password, width: 310, height: 40, color: loginVM.password.isEmpty ? .black : CustomColor.sxcgreen)
                 passwordTextField(title: "Confirm Password", text: $loginVM.confirmPassword, width: 310, height: 40, color: loginVM.confirmPassword.isEmpty ? .black : CustomColor.sxcgreen)
@@ -271,6 +273,8 @@ struct LoginView: View {
                 }
                 underlinedTextField(title: "Email", text: $loginVM.email, width: 310, height: 40, color: loginVM.email.isEmpty ? .black : CustomColor.sxcgreen)
                     .keyboardType(.emailAddress)
+                    .autocorrectionDisabled(true)
+                    .autocapitalization(.none)
                 passwordTextField(title: "Password", text: $loginVM.password, width: 310, height: 40, color: loginVM.password.isEmpty ? .black : CustomColor.sxcgreen)
                     .padding(.bottom, 40)
                 
