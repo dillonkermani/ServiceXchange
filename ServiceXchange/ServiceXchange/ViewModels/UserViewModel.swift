@@ -42,8 +42,8 @@ class UserViewModel: ObservableObject{
     
     @Published var initialized: Bool = false
     @Published var localProfileImageUrl: String = ""
-    @Published var firstName: String = ""
-    @Published var lastName: String = ""
+    @Published var localFirstName: String = ""
+    @Published var localLastName: String = ""
     @Published var localCompanyName: String = ""
     @Published var localBio: String = ""
     @Published var localPrimaryLocationServed: String = ""
@@ -58,8 +58,8 @@ class UserViewModel: ObservableObject{
     func updateLocalUserVariables(user : User) {
         
         self.initialized = true
-        self.firstName = user.firstName
-        self.lastName = user.lastName
+        self.localFirstName = user.firstName
+        self.localLastName = user.lastName
         self.localUserId = user.userId
         self.localBio = user.bio ?? "none"
         self.localCompanyName = user.companyName ?? "none"
@@ -107,8 +107,8 @@ class UserViewModel: ObservableObject{
         if bio != "" { self.localBio  = bio }
         if location_served != "" { self.localPrimaryLocationServed = location_served }
         if company_name != "" { self.localCompanyName = company_name }
-        if firstName != "" {self.firstName = firstName}
-        if lastName != "" {self.lastName = lastName }
+        if firstName != "" {self.localFirstName = firstName}
+        if lastName != "" {self.localLastName = lastName }
         
         
         //for user structure
@@ -120,8 +120,8 @@ class UserViewModel: ObservableObject{
         
         //updates all textual data to firebase
         user_ref.updateData( [
-            "firstName" : firstName,
-            "lastName" : lastName,
+            "firstName" : localFirstName,
+            "lastName" : localLastName,
             "companyName": localCompanyName,
             "primaryLocationServed": localPrimaryLocationServed,
             "bio": localBio,
