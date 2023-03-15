@@ -262,7 +262,7 @@ class UserViewModel: ObservableObject{
                                  print("Document successfully removed!")
                              }
                          }
-                         self.deleteUserAccount()
+                         self.deleteUserAccount() //FIXME: RACE CONDITION HERE!
                          
                          
                      }
