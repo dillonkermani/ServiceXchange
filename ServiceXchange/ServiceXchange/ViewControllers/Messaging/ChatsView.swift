@@ -39,11 +39,11 @@ struct ChatsView: View {
                         if !session.userSession!.chats!.isEmpty {
                             AllChatsList()
                         }
+                    } else {
+                        Spacer()
+                        Text("No Chats")
+                        Spacer()
                     }
-                } else {
-                    Spacer()
-                    Text("No Chats")
-                    Spacer()
                 }
                 Spacer()
             }
