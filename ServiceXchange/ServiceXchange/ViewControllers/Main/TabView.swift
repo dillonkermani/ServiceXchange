@@ -93,8 +93,6 @@ struct TabView: View {
                             
                             VStack {
                                 if session.isLoggedIn {
-    
-                                    //ProfileViewMultiTest(user: $userToPass, thisUser : $thisUser)
                                     ProfileUserView()
                                 }
                                 

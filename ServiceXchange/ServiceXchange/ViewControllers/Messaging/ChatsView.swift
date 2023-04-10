@@ -61,27 +61,33 @@ struct ChatsView: View {
     
     private func CustomNavBar() -> some View {
         HStack(spacing: 16) {
-            if session.userSession!.profileImageUrl == nil {
-                Image("blankprofile")
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 44, height: 44)
-                    .clipped()
-                    .cornerRadius(44)
-                    .overlay(RoundedRectangle(cornerRadius: 44)
-                        .stroke(Color(.label), lineWidth: 1)
-                    )
-                    .shadow(radius: 5)
-            } else {
-                UrlImage(url: session.userSession!.profileImageUrl!)
-                    .scaledToFill()
-                    .frame(width: 44, height: 44)
-                    .clipped()
-                    .cornerRadius(44)
-                    .overlay(RoundedRectangle(cornerRadius: 44)
-                        .stroke(Color(.label), lineWidth: 1)
-                    )
-                    .shadow(radius: 5)
+            
+            Button {
+                UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                UserDefaults.standard.set(4, forKey: "selectedTabIndex")
+            } label: {
+                if session.userSession!.profileImageUrl == nil {
+                    Image("blankprofile")
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 44, height: 44)
+                        .clipped()
+                        .cornerRadius(44)
+                        .overlay(RoundedRectangle(cornerRadius: 44)
+                            .stroke(Color(.label), lineWidth: 1)
+                        )
+                        .shadow(radius: 5)
+                } else {
+                    UrlImage(url: session.userSession!.profileImageUrl!)
+                        .scaledToFill()
+                        .frame(width: 44, height: 44)
+                        .clipped()
+                        .cornerRadius(44)
+                        .overlay(RoundedRectangle(cornerRadius: 44)
+                            .stroke(Color(.label), lineWidth: 1)
+                        )
+                        .shadow(radius: 5)
+                }
             }
             
             VStack(alignment: .leading, spacing: 4) {
