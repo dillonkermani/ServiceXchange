@@ -186,17 +186,6 @@ struct ProfileProviderView: View {
             
         }
     }
-    
-    private func TabPicker() -> some View {
-        return VStack {
-            Picker("", selection: $controls.pickerSelection) {
-                Text("Listings").tag(0)
-                Text("Availability").tag(1)
-            }
-            .pickerStyle(.segmented)
-            .padding()
-        }
-    }
 }
 
 struct ProfileProvider_Previews: PreviewProvider {
