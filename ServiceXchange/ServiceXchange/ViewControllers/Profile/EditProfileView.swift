@@ -86,13 +86,13 @@ struct EditProfileView: View {
             
         }//ZStack
         .onAppear{
-            if userVM.localCompanyName != "none" {
+            if userVM.localCompanyName != "" {
                 companyNameTitle = userVM.localCompanyName
             }
-            if userVM.localBio != "none"{
+            if userVM.localBio != ""{
                 shortBioTitle = userVM.localBio
             }
-            if userVM.localPrimaryLocationServed != "none" {
+            if userVM.localPrimaryLocationServed != "" {
                 locationServeTitle = userVM.localPrimaryLocationServed
             }
             

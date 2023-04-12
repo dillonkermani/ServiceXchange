@@ -61,9 +61,9 @@ class UserViewModel: ObservableObject{
         self.localFirstName = user.firstName
         self.localLastName = user.lastName
         self.localUserId = user.userId
-        self.localBio = user.bio ?? "none"
-        self.localCompanyName = user.companyName ?? "none"
-        self.localPrimaryLocationServed = user.primaryLocationServed ?? "none"
+        self.localBio = user.bio ?? ""
+        self.localCompanyName = user.companyName ?? ""
+        self.localPrimaryLocationServed = user.primaryLocationServed ?? ""
         self.localProfileImageUrl = user.profileImageUrl ?? ""
         self.localDescriptiveImageStr = user.descriptiveImageStr ?? ""
         
@@ -71,11 +71,11 @@ class UserViewModel: ObservableObject{
         
         
         //updateing the skeleton user
-        self.user.bio = user.bio ?? "none"
-        self.user.companyName = user.companyName ?? "none"
-        self.user.primaryLocationServed = user.primaryLocationServed ?? "none"
-        self.user.profileImageUrl = user.profileImageUrl ?? "none"
-        self.user.descriptiveImageStr = user.descriptiveImageStr ?? "none"
+        self.user.bio = user.bio ?? ""
+        self.user.companyName = user.companyName ?? ""
+        self.user.primaryLocationServed = user.primaryLocationServed ?? ""
+        self.user.profileImageUrl = user.profileImageUrl ?? ""
+        self.user.descriptiveImageStr = user.descriptiveImageStr ?? ""
         
     }//update local user variables fucntion
     
