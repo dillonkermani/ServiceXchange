@@ -17,7 +17,6 @@ struct LoginViewControls {
 struct LoginView: View {
     
     
-    //@EnvironmentObject var session: SessionStore
     @Environment(\.presentationMode) var presentationMode
      
     
